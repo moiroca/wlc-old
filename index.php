@@ -6,7 +6,9 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
 $db = DbConnection::connect()->getConnection(); 
 Login::sessionStart();
 
-if (Login::isLoggedIn()) {  Login::redirectToHome(); }
+if (Login::isLoggedIn()) { 
+  Login::redirectToHome(); 
+}
 
 if (Login::getLoggedInType() == "Admin"){
   $out = '<a href="php/logout.php"> Sign out </a>';  
@@ -36,7 +38,7 @@ if (Login::getLoggedInType() == "Admin"){
       
       
 
-      <form class="form-horizontal templatemo-signin-form" role="form" action="php/logincheck.php" method="post">
+      <form class="form-horizontal templatemo-signin-form" role="form" action="Controllers/Login.php" method="post">
         <div class="form-group">
           <div class="col-md-12">
               <?php if (Login::checkIfLoginHasError()) { ?>
