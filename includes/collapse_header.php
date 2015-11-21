@@ -13,7 +13,7 @@
     <div class="navbar-collapse collapse templatemo-sidebar">
       <ul class="templatemo-sidebar-menu"><br>
         
-        <li class="active"><a href="#"><i class="fa fa-home"></i>Home</a></li><br>
+        <li class="active"><a href="<?php echo Link::createUrl('Pages/home.php'); ?>"><i class="fa fa-home"></i>Home</a></li><br>
         
         <?php if (Login::getLoggedInType() == CONSTANT::USER_ADMIN) { ?>
           <li><a href="<?php echo Link::createUrl('Controllers/logout.php'); ?>"> Sign out </a></li> 
