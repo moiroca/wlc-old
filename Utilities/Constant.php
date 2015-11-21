@@ -11,5 +11,8 @@ Class Constant {
 		DB_NAME = 'wlcinventory',
 		DB_HOST = 'localhost',
 		DB_USER = 'moiroca',
-		DB_PASS = '';
+		DB_PASS = '',
+
+		// User Types
+		USER_ADMIN = 'Admin';
 }
