@@ -15,9 +15,6 @@ if (Login::checkIfUsernamePasswordSet()) {
 	Login::redirectToLogin();
 }
 
-echo $username;
-echo $password;
-
 $result = $db->query("SELECT * FROM user WHERE user_email = '".$username."' AND user_status = 'Active' AND user_pass= '".$password."' "); 
 
 if ($user = $result->fetch_assoc()){ 
