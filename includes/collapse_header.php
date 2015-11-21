@@ -1,8 +1,3 @@
-<?php
-  include_once("php/config.php");
-  
-?>
-
 <div class="navbar navbar-inverse" role="navigation">
   <div class="navbar-header">
     <div class="logo"><h1>WLC FACILITIES AND EQUIPMENT - Inventory and Monitoring System</h1></div>
@@ -19,6 +14,9 @@
       <ul class="templatemo-sidebar-menu"><br>
         
         <li class="active"><a href="#"><i class="fa fa-home"></i>Home</a></li><br>
-        <li><?php echo $out?></li>
+        
+        <?php if (Login::getLoggedInType() == CONSTANT::USER_ADMIN) { ?>
+          <li><a href="<?php echo Link::createUrl('Controllers/logout.php'); ?>"> Sign out </a></li> 
+        <?php } ?>
       </ul>
     </div><!--/.navbar-collapse -->
