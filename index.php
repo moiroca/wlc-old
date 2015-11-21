@@ -1,17 +1,18 @@
 <?php
-session_start();
-  include_once("php/configure.php");
-  
-  /*if(!isset($_SESSION['login'])){
-    header("Location: index.php");
-  }*/
 
-  if(isset($_SESSION['login']) && $_SESSION['login'] == "Admin"){
-    $out = '<a href="php/logout.php"> Sign out </a>';  
-  }
-  else{
-    $out = '<a href="../index.php"> Sign out </a>';
-  }
+include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
+
+$db = DbConnection::connect()->getConnection(); 
+Login::sessionStart();
+
+if (Login::isLoggedIn()) {  Login::redirectToHome(); }
+
+if (Login::getLoggedInType() == "Admin"){
+  $out = '<a href="php/logout.php"> Sign out </a>';  
+} else { 
+  $out = '<a href="../index.php"> Sign out </a>'; 
+}
 
 ?>
 <!DOCTYPE html>
@@ -32,13 +33,22 @@ session_start();
     </div>
   
     <div class="template-page-wrapper">
+      
+      
 
       <form class="form-horizontal templatemo-signin-form" role="form" action="php/logincheck.php" method="post">
         <div class="form-group">
           <div class="col-md-12">
-            <label for="uname" class="col-sm-2 control-label">Username</label>
+              <?php if (Login::checkIfLoginHasError()) { ?>
+                    <div class="alert alert-danger">
+                        <p> Username or Password Does Not Match any Record. </p>
+                    </div>
+              <?php } ?>
+          </div>
+          <div class="col-md-12">
+            <label for="username" class="col-sm-2 control-label">Username</label>
             <div class="col-sm-10">
-              <input type="text" name="uname" class="form-control" id="username" placeholder="Username">
+              <input type="text" name="username" class="form-control" id="username" placeholder="Username">
             </div>
           </div>              
         </div>
@@ -46,7 +56,7 @@ session_start();
           <div class="col-md-12">
             <label for="password" class="col-sm-2 control-label">Password</label>
             <div class="col-sm-10">
-              <input type="password" name="pword" class="form-control" id="password" placeholder="Password">
+              <input type="password" name="password" class="form-control" id="password" placeholder="Password">
             </div>
           </div>
         </div>
