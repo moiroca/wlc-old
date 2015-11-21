@@ -26,7 +26,7 @@ Login::sessionStart();
          <div class="row">       
 
               <div class="row">
-              <div class="col-md-6 col-sm-6">
+              <div class="col-md-12 col-sm-12">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist" id="templatemo-tabs">
                   <li class="active"><a href="#file" role="tab" data-toggle="tab">File</a></li>
@@ -40,7 +40,7 @@ Login::sessionStart();
                 <div class="tab-content">
                   <div class="tab-pane fade in active" id="file">
                     <center>
-                      <a href="items/allitems.php" class="list-group-item"> Item </a>
+                      <a href="<?php echo Link::createUrl('Pages/Items/items.php'); ?>" class="list-group-item"> Item </a>
                       <!--<a href="#" class="list-group-item"> Category </a> -->
                       <a href="department/alldepartment.php" class="list-group-item"> Department </a>
                     </center>
