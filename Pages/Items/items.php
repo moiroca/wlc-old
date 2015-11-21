@@ -31,36 +31,43 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <div class="row">
             <div class="col-md-12">
               <div class="table-responsive">
-                <?php $result = $db->query("SELECT * FROM items join area_dept on `area_dept`.`area_id`=`Items`.`area_id` where item_status !='Deleted'"); ?>
-                
+                <?php $result = $db->query("SELECT * FROM items join area_dept on `area_dept`.`area_id`=`items`.`area_id` where item_status != 'Deleted'") or die(mysqli_error($db)); ?>
                 <table class="table table-striped table-hover table-bordered">
                   <thead>
-                      <?php if ($result) { ?>
-                            <tr id='th'>
-                              <th> ID</th>
-                              <th> Area/Department</th>
-                              <th> Room Area</th>
-                              <th> Description</th>
-                              <th> Quantity</th>
-                              <th> Remarks</th>
-                              <th> Action</th>
-                            </tr>
-                      <?php } ?>
+                      <tr id='th'>
+                        <th> ID</th>
+                        <th> Area/Department</th>
+                        <th> Room Area</th>
+                        <th> Description</th>
+                        <th> Quantity</th>
+                        <th> Remarks</th>
+                        <th> Action</th>
+                      </tr>
                   </thead>
                   <tbody>
-                    <?php  while ($item = $result->fetch_assoc()) { ?>
-                      <tr>
-                        <td> <?php echo $item['item_id']; ?></td>
-                        <td> <?php echo $item['area_name']; ?></td>
-                        <td> <?php echo $item['item_area']; ?></td>
-                        <td> <?php echo $item['item_description'] ?></td>
-                        <td> <?php echo $item['item_quantity']; ?></td>
-                        <td> <?php echo $item['item_status']; ?></td>
-                        <td> 
-                          <a type="button" class="btn btn-primary btn-sm" href='#'>Edit</a> 
-                          <a type="button" class="btn btn-warning btn-sm" href='#'>Delete</a> 
-                        </td>
-                      </tr>  
+                    <?php if ($result) { ?>
+                        <?php  while ($item = $result->fetch_assoc()) { ?>
+                          <tr>
+                            <td> <?php echo $item['item_id']; ?></td>
+                            <td> <?php echo $item['area_name']; ?></td>
+                            <td> <?php echo $item['item_area']; ?></td>
+                            <td> <?php echo $item['item_description'] ?></td>
+                            <td> <?php echo $item['item_quantity']; ?></td>
+                            <td> <?php echo $item['item_status']; ?></td>
+                            <td> 
+                              <a type="button" class="btn btn-primary btn-sm" href='#'>Edit</a> 
+                              <a type="button" class="btn btn-warning btn-sm" href='#'>Delete</a> 
+                            </td>
+                          </tr>  
+                        <?php } ?>
+                    <?php } else { ?>
+                          <tr>
+                              <td colspan=7>
+                                  <div class="alert alert-info">
+                                      There are no items found.
+                                  </div>
+                              </td>
+                          </tr>
                     <?php } ?>
                   </tbody>
                 </table>
