@@ -1,7 +1,6 @@
 <?php
 
-include './Utilities/Constant.php';
-include './Database/Db.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Utilities/Constant.php';
 
 /**
  * @since November 2015 
