@@ -23,7 +23,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
       <div class="templatemo-content-wrapper">
         <div class="templatemo-content">
           <ol class="breadcrumb">
-            <li><a href="item_add.php">Add Record</a></li>
+            <li><a href="<?php echo Link::createUrl('Pages/Items/add.php'); ?>">Add Record</a></li>
             <li class="active">Manage Items</li>
           </ol>
           <h1>EQUIPMENT, TOOLS AND MATERIALS</h1>
@@ -32,6 +32,20 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
             <div class="col-md-12">
               <div class="table-responsive">
                 <?php $result = $db->query("SELECT * FROM items join area_dept on `area_dept`.`area_id`=`items`.`area_id` where item_status != 'Deleted'") or die(mysqli_error($db)); ?>
+
+                <?php if (isset($_SESSION['record_successful_added'])) { ?>
+                <?php unset($_SESSION['record_successful_added']); ?>
+                    <div class="alert alert-success">
+                        Item Record Succesfully Added.
+                    </div>
+                <?php } ?>
+
+                <?php if (isset($_SESSION['record_already_exist'])) { ?>
+                <?php unset($_SESSION['record_already_exist']); ?>
+                    <div class="alert alert-danger">
+                        Item ID Already Exist.
+                    </div>
+                <?php } ?>
                 <table class="table table-striped table-hover table-bordered">
                   <thead>
                       <tr id='th'>
