@@ -1,17 +1,23 @@
 <?php
-session_start();
-include_once("php/config.php");
+
+include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Assets.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
+
+$db = DbConnection::connect()->getConnection(); 
+Login::sessionStart();
   
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />       
-  <link rel="stylesheet" href="css/templatemo_main.css">
-  <script language="javascript" src="../javascript/confirm.js" type="text/javascript"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />     
+  <?php Assets::renderCss('templatemo_main.css'); ?>
+  <?php Assets::renderJs('confirm.js'); ?>
 </head>
 <body>
-  <?php include("includes/header4.php");?>
+    <?php include $_SERVER['DOCUMENT_ROOT']."/includes/collapse_header.php" ;?>
     <div class="templatemo-content-wrapper">
       <div class="templatemo-content">
         <h1>Western Leyte College of Ormoc, Inc.</h1>
@@ -112,23 +118,24 @@ include_once("php/config.php");
       </div>
     </footer>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/templatemo_script.js"></script>
+    <?php Assets::renderJs('jquery.min.js'); ?>
+    <?php Assets::renderJs('bootstrap.min.js'); ?>
+    <?php Assets::renderJs('templatemo_script.js'); ?>
+
     <script type="text/javascript">
     
-    $('#myTab a').click(function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-    });
+      $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+      });
 
-    $('#loading-example-btn').click(function () {
-      var btn = $(this);
-      btn.button('loading');
-      // $.ajax(...).always(function () {
-      //   btn.button('reset');
-      // });
-  });
-  </script>
+      $('#loading-example-btn').click(function () {
+          var btn = $(this);
+          btn.button('loading');
+          // $.ajax(...).always(function () {
+          //   btn.button('reset');
+          // });
+      });
+    </script>
 </body>
 </html>
