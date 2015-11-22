@@ -14,6 +14,7 @@ Class Constant {
 		DB_PASS = '',
 
 		// User Types
+		USER_GSD_OFFICER 		= 'GSD Officer',
 		USER_INVENTORY_OFFICER 	= 'Inventory Officer',
 		USER_PRESIDENT 			= 'President',
 		USER_DEAN 				= 'Dean';
