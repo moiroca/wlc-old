@@ -19,10 +19,10 @@ $result = $db->query("SELECT * FROM user WHERE user_email = '".$username."' AND 
 
 if ($user = $result->fetch_assoc()){ 
 
-	Log::saveLogin($db, $row['user_id']);
+	Log::saveLogin($db, $user['user_id']);
 	Log::updateUserLog($db, $user['user_email']);
 
-	$_SESSION['login'] 	= Constant::USER_ADMIN;
+	$_SESSION['login'] 	= $user['user_type'];
 	$_SESSION['user']	= $user['user_email'];
 	$_SESSION['last']	= $user['user_lastname'];
 	$_SESSION['first']	= $user['user_firstname'];
