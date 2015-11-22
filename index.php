@@ -2,6 +2,7 @@
 
 include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Assets.php';
 
 $db = DbConnection::connect()->getConnection(); 
 Login::sessionStart();
@@ -12,59 +13,77 @@ if (Login::isLoggedIn()) {
 
 ?>
 <!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Inventory System</title>
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-  <meta name="viewport" content="width=device-width">        
-  <link rel="stylesheet" href="css/templatemo_main.css">
-</head>
-<body>
-  <div id="main-wrapper">
-    <div class="navbar navbar-inverse" role="navigation">
-      <div class="navbar-header">
-        <div class="logo"><h1>WLC FACILITIES AND EQUIPMENT - Inventory and Monitoring System</h1></div>
-      </div>   
-    </div>
-  
-    <div class="template-page-wrapper">
-      
-      
 
-      <form class="form-horizontal templatemo-signin-form" role="form" action="Controllers/Login.php" method="post">
-        <div class="form-group">
-          <div class="col-md-12">
-              <?php if (Login::checkIfLoginHasError()) { ?>
-                    <div class="alert alert-danger">
-                        <p> Username or Password Does Not Match any Record. </p>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>WLC FACILITIES AND EQUIPMENT - Inventory and Monitoring System</title>
+
+    <!-- Bootstrap Core CSS -->
+    <?php Assets::renderCss('bootstrap.min.css'); ?>
+
+    <!-- Custom CSS -->
+    <?php Assets::renderCss('sb-admin-2.css'); ?>
+
+    <!-- Custom Fonts -->
+    <?php Assets::renderCss('font-awesome.min.css'); ?>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
                     </div>
-              <?php } ?>
-          </div>
-          <div class="col-md-12">
-            <label for="username" class="col-sm-2 control-label">Username</label>
-            <div class="col-sm-10">
-              <input type="text" name="username" class="form-control" id="username" placeholder="Username">
+                    <div class="panel-body">
+                        <form role="form" action="Controllers/Login.php" method="post">
+                            <fieldset>
+                                <div class="form-group">
+                                    <?php if (Login::checkIfLoginHasError()) { ?>
+                                          <div class="alert alert-danger">
+                                              <p> Account Does Not Exist. </p>
+                                          </div>
+                                    <?php } ?>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Username" name="username" type="text" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <button type='submit' class="btn btn-lg btn-success btn-block">Login</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>              
         </div>
-        <div class="form-group">
-          <div class="col-md-12">
-            <label for="password" class="col-sm-2 control-label">Password</label>
-            <div class="col-sm-10">
-              <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-12">
-            <div class="col-sm-offset-2 col-sm-10">
-              <input type="submit" name="login" value="Sign in" class="formbutton">
-            </div>
-          </div>
-        </div>
-      </form>
     </div>
-  </div>
+
+    <!-- jQuery -->
+    <?php Assets::renderJs('jquery.min.js'); ?>
+
+    <!-- Bootstrap Core JavaScript -->
+    <?php Assets::renderJs('bootstrap.min.js'); ?>
+
+    <!-- Custom Theme JavaScript -->
+    <?php Assets::renderJs('sb-admin-2.js'); ?>
 </body>
+
 </html>
