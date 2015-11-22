@@ -3,6 +3,7 @@
 include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Core/Assets.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
 
 $db = DbConnection::connect()->getConnection(); 
 Login::sessionStart();
@@ -51,7 +52,7 @@ if (Login::isLoggedIn()) {
                         <h3 class="panel-title">Please Sign In</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form" action="Controllers/Login.php" method="post">
+                        <form role="form" action="<?php echo Link::createUrl('Controllers/Login.php'); ?>" method="post">
                             <fieldset>
                                 <div class="form-group">
                                     <?php if (Login::checkIfLoginHasError()) { ?>
