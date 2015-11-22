@@ -21,10 +21,10 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <i class="fa fa-dashboard"></i>  <a href="#">Stocks</a>
               </li>
               <li class="active">
-                  <i class="fa fa-table"></i> Tools
+                  <i class="fa fa-table"></i> <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>">Tools</a>
               </li>
               <li>
-                  <i class='fa fa-tasks'></i> <a href="">Add A Tool</a>
+                  <i class='fa fa-tasks'></i> <a href="<?php echo Link::createUrl('Pages/Stocks/add.php'); ?>">Add Item</a>
               </li>
           </ol>
       </div>
@@ -44,13 +44,13 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 stocks 
               JOIN 
                 areas 
-              ON `areas`.`id`=`stocks`.`id`
+              ON `areas`.`id`=`stocks`.`area_id`
               WHERE 
                 status != 'Deleted'
-              GROUP BY
-                `stocks`.`name`
               AND
-                `stocks`.`datetime_added`");
+                `stocks`.`type` = '".Constant::ITEM_TOOL."'
+              GROUP BY
+                `stocks`.`name`, `stocks`.`datetime_added`");
         ?>
 
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
@@ -60,10 +60,10 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
             </div>
         <?php } ?>
 
-        <?php if (isset($_SESSION['record_already_exist'])) { ?>
-        <?php unset($_SESSION['record_already_exist']); ?>
+        <?php if (isset($_SESSION['something_wrong'])) { ?>
+        <?php unset($_SESSION['something_wrong']); ?>
             <div class="alert alert-danger">
-                Item ID Already Exist.
+                The System is still in development mode. Expect more bugs to come. 
             </div>
         <?php } ?>
         <table class="table table-striped table-hover table-bordered">
@@ -76,7 +76,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
               </tr>
           </thead>
           <tbody>
-            <?php if ($result) { ?>
+            <?php if ($result && 0 != $result->num_rows) { ?>
                 <?php  while ($item = $result->fetch_assoc()) { ?>
                   <tr>
                     <td> <?php echo $item['area_name']; ?></td>
