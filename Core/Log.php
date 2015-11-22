@@ -26,7 +26,7 @@ Class Log
 	 * @param DB_Connection $db
 	 * @param String $user_email
 	 */
-	public function updateUserLog($db, $user_email)
+	public static function updateUserLog($db, $user_email)
 	{
 		$query = "UPDATE user SET user_logs = now() WHERE user_email = $user_email";
 		$db->query($query);
