@@ -38,9 +38,9 @@ Class Base {
 			$sql = 'SELECT * FROM '.$this->table;
 		}
 
-		$data = $this->connection->query($sql) or die(mysqli_error($this->connection));
+		$data = $this->connection->query($sql);
 
-		return $data->fetch_assoc();
+		return $data;
 	}
 
 	/**
