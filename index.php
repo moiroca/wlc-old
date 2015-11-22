@@ -10,12 +10,6 @@ if (Login::isLoggedIn()) {
   Login::redirectToHome(); 
 }
 
-if (Login::getLoggedInType() == CONSTANT::USER_ADMIN){
-  $out = '<a href="php/logout.php"> Sign out </a>';  
-} else { 
-  $out = '<a href="../index.php"> Sign out </a>'; 
-}
-
 ?>
 <!DOCTYPE html>
 <head>
