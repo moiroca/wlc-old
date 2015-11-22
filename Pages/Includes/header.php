@@ -280,7 +280,19 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                         <!-- /.Inventory Officer Menus -->
                         <?php if (LoggedInUser::type() == Constant::USER_INVENTORY_OFFICER) { ?>
                             <li>
-                                <a href="#"><i class="fa fa-edit fa-fw"></i> Stocks</a>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stocks<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#"> Tools</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> Equipment</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> Materials</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requesition<span class="fa arrow"></span></a>
