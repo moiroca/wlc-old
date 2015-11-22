@@ -16,22 +16,17 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
     <title>WLC FACILITIES AND EQUIPMENT - Inventory and Monitoring System</title>
 
     <!-- Bootstrap Core CSS -->
-    <?php Assets::renderCss('bootstrap.min.css'); ?>
+    <?php 
 
-    <!-- MetisMenu CSS -->
-    <?php Assets::renderCss('metisMenu.min.css'); ?>
-
-    <!-- Timeline CSS -->
-    <?php Assets::renderCss('timeline.css'); ?>
-
-    <!-- Custom CSS -->
-    <?php Assets::renderCss('sb-admin-2.css'); ?>
-
-    <!-- Morris Charts CSS -->
-    <?php Assets::renderCss('morris.css'); ?>
-
-    <!-- Custom Fonts -->
-    <?php Assets::renderCss('font-awesome.min.css'); ?>
+        Assets::renderCss([
+            'bootstrap.min.css', 
+            'metisMenu.min.css',
+            'timeline.css',
+            'sb-admin-2.css',
+            'morris.css',
+            'font-awesome.min.css'
+        ]); 
+    ?>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

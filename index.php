@@ -24,14 +24,14 @@ if (Login::isLoggedIn()) {
 
     <title>WLC FACILITIES AND EQUIPMENT - Inventory and Monitoring System</title>
 
-    <!-- Bootstrap Core CSS -->
-    <?php Assets::renderCss('bootstrap.min.css'); ?>
+    <?php 
 
-    <!-- Custom CSS -->
-    <?php Assets::renderCss('sb-admin-2.css'); ?>
-
-    <!-- Custom Fonts -->
-    <?php Assets::renderCss('font-awesome.min.css'); ?>
+        Assets::renderCss([
+            'bootstrap.min.css', 
+            'sb-admin-2.css',
+            'font-awesome.min.css'
+        ]); 
+    ?>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -76,14 +76,13 @@ if (Login::isLoggedIn()) {
         </div>
     </div>
 
-    <!-- jQuery -->
-    <?php Assets::renderJs('jquery.min.js'); ?>
-
-    <!-- Bootstrap Core JavaScript -->
-    <?php Assets::renderJs('bootstrap.min.js'); ?>
-
-    <!-- Custom Theme JavaScript -->
-    <?php Assets::renderJs('sb-admin-2.js'); ?>
+    <?php 
+        Assets::renderJs([
+            'jquery.min.js',
+            'bootstrap.min.js',
+            'sb-admin-2.js'
+        ]); 
+    ?>
 </body>
 
 </html>

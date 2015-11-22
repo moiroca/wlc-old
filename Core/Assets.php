@@ -12,10 +12,12 @@ Class Assets
 	 *
 	 * @param String $filename
 	 */
-	public static function renderCss($filename)
+	public static function renderCss($filenames)
 	{
-		$filename = 'http://'.$_SERVER['HTTP_HOST'].'/css/'.$filename;
-		echo "<link rel='stylesheet' href=$filename />";
+		foreach ($filenames as $filename) {
+			$filename = 'http://'.$_SERVER['HTTP_HOST'].'/css/'.$filename;
+			echo "<link rel='stylesheet' href=$filename />";
+		}
 	}
 
 	/**
@@ -23,9 +25,11 @@ Class Assets
 	 *
 	 * @param String $filename
 	 */
-	public static function renderJs($filename)
+	public static function renderJs($filenames)
 	{
-		$filename = 'http://'.$_SERVER['HTTP_HOST'].'/js/'.$filename;
-		echo "<script src=$filename type='text/javascript'></script>";
+		foreach ($filenames as $filename) {
+			$filename = 'http://'.$_SERVER['HTTP_HOST'].'/js/'.$filename;
+			echo "<script src=$filename type='text/javascript'></script>";
+		}
 	}
 }
