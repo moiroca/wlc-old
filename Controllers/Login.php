@@ -15,18 +15,18 @@ if (Login::checkIfUsernamePasswordSet()) {
 	Login::redirectToLogin();
 }
 
-$result = $db->query("SELECT * FROM user WHERE user_email = '".$username."' AND user_status = 'Active' AND user_pass= '".$password."' "); 
+$result = $db->query("SELECT * FROM users WHERE email = '".$username."' AND status = 'Active' AND password = '".$password."' "); 
 
 if ($user = $result->fetch_assoc()){ 
 
-	Log::saveLogin($db, $user['user_id']);
-	Log::updateUserLog($db, $user['user_email']);
+	Log::saveLogin($db, $user['id']);
+	Log::updateUserLog($db, $user['email']);
 
-	$_SESSION['login'] 	= $user['user_type'];
-	$_SESSION['user']	= $user['user_email'];
-	$_SESSION['last']	= $user['user_lastname'];
-	$_SESSION['first']	= $user['user_firstname'];
-	$_SESSION['mid']	= $user['user_middle'];
+	$_SESSION['type'] 		= $user['type'];
+	$_SESSION['email']		= $user['email'];
+	$_SESSION['lastname']	= $user['lastname'];
+	$_SESSION['firstname']	= $user['firstname'];
+	$_SESSION['middlename']	= $user['middlename'];
 
 	Login::redirectToHome();
 
