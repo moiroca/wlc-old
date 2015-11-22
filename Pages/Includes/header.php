@@ -283,6 +283,9 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stocks<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
+                                    </li>
+                                    <li>
                                         <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>"> Tools</a>
                                     </li>
                                     <li>
