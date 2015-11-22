@@ -14,6 +14,6 @@ Class LoggedInUser
 	 */
 	public static function type()
 	{
-		return isset($_SESSION['login']) ? $_SESSION['login'] : null;
+		return isset($_SESSION['type']) ? $_SESSION['type'] : null;
 	}
 }

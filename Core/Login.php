@@ -14,16 +14,6 @@ Class Login {
 	}
 
 	/**
-	 * Get User Login Type
-	 * 
-	 * @return mixed
-	 */
-	public static function getLoggedInType()
-	{
-		return isset($_SESSION['login']) ? $_SESSION['login'] : false;
-	}
-
-	/**
 	 * Check if Username and Password Set
 	 *
 	 * @return Boolean
@@ -96,6 +86,6 @@ Class Login {
 	 */
 	public static function isLoggedIn()
 	{
-		return isset($_SESSION['login']);
+		return isset($_SESSION['type']);
 	}
 }
