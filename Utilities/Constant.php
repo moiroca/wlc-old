@@ -14,8 +14,13 @@ Class Constant {
 		DB_PASS = '',
 
 		// User Types
+		USER_ADMIN 				= 'Admin',
 		USER_GSD_OFFICER 		= 'GSD Officer',
 		USER_INVENTORY_OFFICER 	= 'Inventory Officer',
 		USER_PRESIDENT 			= 'President',
-		USER_DEAN 				= 'Dean';
+		USER_DEAN 				= 'Dean',
+
+		// User Status
+		USER_ACTIVE	= 'Active',
+		USER_DELETED = 'Deleted';
 }
