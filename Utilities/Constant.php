@@ -22,5 +22,16 @@ Class Constant {
 
 		// User Status
 		USER_ACTIVE	= 'Active',
-		USER_DELETED = 'Deleted';
+		USER_DELETED = 'Deleted',
+
+		// Stock Status
+		STOCK_GOOD = 'Good Condition',
+		STOCK_REPAIR = 'For Repair',
+		STOCK_REPLACE = 'For Replace',
+		STOCK_DELETED = 'Deleted',
+
+		// Item Type
+		ITEM_EQUIPMENT = 'Equipment',
+		ITEM_TOOL      = 'Tools',
+		ITEM_MATERIAL  = 'Material';
 }
