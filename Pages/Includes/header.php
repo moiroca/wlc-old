@@ -292,7 +292,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                                         <a href="<?php echo Link::createUrl('Pages/Stocks/Equipments/equipments.php'); ?>"> Equipments</a>
                                     </li>
                                     <li>
-                                        <a href="#"> Materials</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Materials/materials.php'); ?>"> Materials</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->

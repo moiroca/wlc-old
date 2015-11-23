@@ -15,13 +15,13 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 <?php Template::header(); ?>
   <div class="row">
       <div class="col-lg-12">
-          <h1 class="page-header">Equipments</h1>
+          <h1 class="page-header">Materials</h1>
           <ol class="breadcrumb">
               <li>
                   <i class="fa fa-dashboard"></i>  <a href="#">Stocks</a>
               </li>
               <li class="active">
-                  <i class="fa fa-table"></i> <a href="<?php echo Link::createUrl('Pages/Stocks/Equipments/equipments.php'); ?>">Equipments</a>
+                  <i class="fa fa-table"></i> <a href="<?php echo Link::createUrl('Pages/Stocks/Materials/materials.php'); ?>">Materials</a>
               </li>
               <li>
                   <i class='fa fa-tasks'></i> <a href="<?php echo Link::createUrl('Pages/Stocks/add.php'); ?>">Add Item</a>
@@ -35,7 +35,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
         <?php 
 
-            $result = $stocks->getAllByType(Constant::ITEM_EQUIPMENT);
+            $result = $stocks->getAllByType(Constant::ITEM_MATERIAL);;
         ?>
 
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
