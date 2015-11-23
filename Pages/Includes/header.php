@@ -289,7 +289,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                                         <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>"> Tools</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Equipments/equipments.php'); ?>"> Equipment</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Equipments/equipments.php'); ?>"> Equipments</a>
                                     </li>
                                     <li>
                                         <a href="#"> Materials</a>
