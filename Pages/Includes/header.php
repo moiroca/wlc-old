@@ -310,6 +310,12 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
+                                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Areas</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Departments</a>
+                            </li>
+                            <li>    
                                 <a href="#"><i class="fa fa-table fa-fw"></i> User Accounts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
