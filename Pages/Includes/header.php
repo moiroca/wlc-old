@@ -301,10 +301,10 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requesition<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="Pages/Requisitions/items.php">Item Requesition</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/items.php'); ?>">Item Requesition</a>
                                     </li>
                                     <li>
-                                        <a href="Pages/Requisitions/jobs.php">Job Requesition</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/jobs.php'); ?>">Job Requesition</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
