@@ -18,7 +18,9 @@ Class Requisitions extends Base
 	{
     $sql = "SELECT 
                 `$this->table`.`purpose` as requisition_purpose,
+                `$this->table`.`control_identifier` as requisition_control_identifier,
                 `$this->table`.`datetime_added` as requisition_datetime_added,
+                `$this->table`.`datetime_provided` as requisition_datetime_provided,
                 `users`.`firstname` as user_firstname,
                 `users`.`middlename` as user_middlename,
                 `users`.`lastname` as user_lastname,

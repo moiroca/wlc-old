@@ -40,6 +40,7 @@ Class Constant {
 		REQUISITION_JOB  = 'Job',
 
 		// Requisition Status
+		REQUISITION_APPROVED = 'Approved',
 		REQUISITION_PENDING = 'Pending',
 		REQUISITION_FINISHED = 'Finished',
 		REQUISITION_ONGOING = 'On Goind';
