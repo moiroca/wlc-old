@@ -23,7 +23,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <i class="fa fa-dashboard"></i>  <a href="#">Requisitions</a>
               </li>
               <li class='active'>
-                  <i class="fa fa-table"></i>  <a href="#">Item Requisition</a>
+                  <i class="fa fa-table"></i>  <a href="#">Job Requisition</a>
               </li>
           </ol>
       </div>
@@ -34,7 +34,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
         <?php 
 
-            $result = $requisitions->getAllRequesition(Constant::REQUISITION_ITEM);
+            $result = $requisitions->getAllRequesition(Constant::REQUISITION_JOB);
         ?>
 
         <?php if (isset($_SESSION['record_successful_added'])) { ?>

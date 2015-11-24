@@ -304,10 +304,10 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                                         <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/items.php'); ?>">Item Requisition</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php'); ?>">Item Requisition</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/jobs.php'); ?>">Job Requisition</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Jobs/listing.php'); ?>">Job Requisition</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
