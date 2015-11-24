@@ -37,5 +37,10 @@ Class Constant {
 
 		// Requisition Type
 		REQUISITION_ITEM = 'Item',
-		REQUISITION_JOB  = 'Job';
+		REQUISITION_JOB  = 'Job',
+
+		// Requisition Status
+		REQUISITION_PENDING = 'Pending',
+		REQUISITION_FINISHED = 'Finished',
+		REQUISITION_ONGOING = 'On Goind';
 }
