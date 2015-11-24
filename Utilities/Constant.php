@@ -43,5 +43,5 @@ Class Constant {
 		REQUISITION_APPROVED = 'Approved',
 		REQUISITION_PENDING = 'Pending',
 		REQUISITION_FINISHED = 'Finished',
-		REQUISITION_ONGOING = 'On Goind';
+		REQUISITION_ONGOING = 'On Going';
 }

@@ -92,7 +92,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </select>
                         <p class="help-block"></p>
                     </div>
-                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Tool" type="submit" />
+                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Stock" type="submit" />
                 </form>
            </fieldset>
           </div>

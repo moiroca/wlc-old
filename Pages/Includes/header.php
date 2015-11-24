@@ -298,13 +298,16 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requesition<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/items.php'); ?>">Item Requesition</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/jobs.php'); ?>">Job Requesition</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/items.php'); ?>">Item Requisition</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/jobs.php'); ?>">Job Requisition</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
