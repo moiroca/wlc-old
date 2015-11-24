@@ -27,9 +27,9 @@ Class Base {
 			if ($where) {
 
 				$whereClause = [];
-
+				$sql .= ' WHERE ';
 				foreach ($where as $column => $value) {
-					$whereClause[] = "`$column`=$value";
+					$whereClause[] = "`$this->table`.`$column`='$value'";
 				}
 
 				$sql .= ' '.implode(',', $whereClause);

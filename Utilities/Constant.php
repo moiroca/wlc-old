@@ -33,5 +33,9 @@ Class Constant {
 		// Item Type
 		ITEM_EQUIPMENT = 'Equipment',
 		ITEM_TOOL      = 'Tools',
-		ITEM_MATERIAL  = 'Material';
+		ITEM_MATERIAL  = 'Material',
+
+		// Requisition Type
+		REQUISITION_ITEM = 'Item',
+		REQUISITION_JOB  = 'Job';
 }
