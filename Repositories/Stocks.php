@@ -35,4 +35,31 @@ Class Stocks extends Base
 
 		return $result;
 	}
+
+  /**
+   * Get Item By Control Number
+   */
+  public function getByControlNumber($contolNumber)
+  {
+    $result = $this->raw("
+              SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`status` as stock_status,
+                `areas`.`name` as area_name
+              FROM 
+                stocks 
+              JOIN 
+                areas 
+              ON `areas`.`id`=`stocks`.`area_id`
+              WHERE 
+                status != 'Deleted'
+              AND
+                `stocks`.`control_number` 
+                LIKE '%".$contolNumber."%'") or die(mysqli_error($this->connection));
+
+    return $result;
+  }
 }
