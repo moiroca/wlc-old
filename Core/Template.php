@@ -18,7 +18,7 @@ Class Template
 	/**
 	 * Footer
 	 */
-	public static function footer()
+	public static function footer($scripts)
 	{
 		include $_SERVER['DOCUMENT_ROOT'].'/Pages/Includes/footer.php';
 	}

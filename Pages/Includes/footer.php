@@ -3,7 +3,6 @@
 
     </div>
     <!-- /#wrapper -->
-
     <?php 
         Assets::renderJs([
             'jquery.min.js',
@@ -12,6 +11,10 @@
             'raphael-min.js',
             'sb-admin-2.js'
         ]); 
+
+        if (isset($scripts) && is_array($scripts)) {
+            Assets::renderJs($scripts);
+        }
     ?>
 </body>
 
