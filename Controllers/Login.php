@@ -22,6 +22,7 @@ if ($user = $result->fetch_assoc()){
 	Log::saveLogin($db, $user['id']);
 	Log::updateUserLog($db, $user['email']);
 
+	$_SESSION['id']			= $user['id'];
 	$_SESSION['type'] 		= $user['type'];
 	$_SESSION['email']		= $user['email'];
 	$_SESSION['lastname']	= $user['lastname'];

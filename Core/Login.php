@@ -78,6 +78,12 @@ Class Login {
 	 */
 	public static function destroySession()
 	{
+		unset($_SESSION['id']);
+		unset($_SESSION['type']);
+		unset($_SESSION['email']);
+		unset($_SESSION['lastname']);
+		unset($_SESSION['firstname']); 
+		unset($_SESSION['middlename']);
 		session_destroy();
 	}
 
