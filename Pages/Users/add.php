@@ -103,7 +103,13 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
                         <div class="control-group">
                             <label class='control-label' for="name"> Password</label>    
-                            <input class='form-control' name="password" id="password" type="text" placeholder="Password" required="required" value="" />
+                            <input class='form-control' name="password" id="password" type="password" placeholder="Password" required="required" value="" />
+                            <p class="help-block"></p>
+                        </div>
+
+                        <div class="control-group">
+                            <label class='control-label' for="name"> Confirm Password</label>    
+                            <input class='form-control' name="cpassword" id="cpassword" type="password" placeholder="Confirm Password" required="required" value="" />
                             <p class="help-block"></p>
                         </div>
                     </fieldset>
