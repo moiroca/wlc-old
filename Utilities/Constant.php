@@ -42,6 +42,7 @@ Class Constant {
 		// Requisition Status
 		REQUISITION_APPROVED = 'Approved',
 		REQUISITION_PENDING = 'Pending',
+		REQUISITION_SENT = 'Sent',
 		REQUISITION_FINISHED = 'Finished',
 		REQUISITION_ONGOING = 'On Going';
 }
