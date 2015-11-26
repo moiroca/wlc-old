@@ -251,7 +251,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="<?php echo Link::createUrl('Controllers/logout.php'); ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="<?php echo Link::createUrl('Controllers/Logout.php'); ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                 </li>

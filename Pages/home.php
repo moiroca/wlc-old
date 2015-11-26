@@ -8,6 +8,8 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
 $db = DbConnection::connect()->getConnection(); 
 Login::sessionStart();
 
+if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
+
 ?>
 
 <?php Template::header(); ?>
