@@ -322,13 +322,16 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
                                 <a href="#"><i class="fa fa-table fa-fw"></i> User Accounts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#"> General Services</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Users/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
                                     </li>
                                     <li>
-                                        <a href="#"> President</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Users/GeneralServices/listing.php'); ?>"> General Services</a>
                                     </li>
                                     <li>
-                                        <a href="#"> Dean</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Users/Presidents/listing.php'); ?>"> President</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Users/Deans/listing.php'); ?>"> Dean</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
