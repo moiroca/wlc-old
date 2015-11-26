@@ -57,9 +57,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 <th> Control Identifier </th>
                 <th> Requester Name </th>
                 <th> Purpose </th>
-                <th> Date and Time Added </th>
-                <th> Date and Time Approved </th>
                 <th> Status </th>
+                <th> Action </th>
               </tr>
           </thead>
           <tbody>
@@ -80,20 +79,27 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <td> <?php echo $item['requisition_control_identifier']; ?></td>
                     <td> <?php echo RequesterUtility::getFullName($item); ?></td>
                     <td> <?php echo $item['requisition_purpose']; ?></td>
-                    <td> <?php echo $item['requisition_datetime_added']; ?></td>
+                    <!-- <td> <?php echo $item['requisition_datetime_added']; ?></td>
                     <td>
                         <?php if ($item['requisition_datetime_provided']) { ?>
                             <?php echo $item['requisition_datetime_provided']; ?>
                         <?php } else { ?>
                             <i class='label label-info'>Datetime not available</i>
                         <?php } ?>
-                    </td>
+                    </td> -->
                     <td> 
                       <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED) { ?> 
                         <i class='label label-success'><?php echo $item['requisition_status']; ?></i>
                       <?php } else { ?> 
                         <i class='label label-info'><?php echo $item['requisition_status']; ?></i>
                       <?php } ?>
+                    </td>
+                    <td>
+                        <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) { ?> 
+                          <a href="#" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                        <?php } ?>
+                        <a href="#" class='btn btn-sm btn-default'> <i class='fa fa-edit'></i> Edit</a>
+                        <a href="#" class='btn btn-sm btn-warning'> <i class='fa fa-edit'></i> Delete</a>
                     </td>
                   </tr>  
                 <?php } ?>

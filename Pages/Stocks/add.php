@@ -11,6 +11,9 @@ include $_SERVER['DOCUMENT_ROOT'].'/Utilities/StockUtility.php';
 Login::sessionStart();
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
+$areaObj   = new Area();
+$areas = $areaObj->getAll();
+
 ?>
 <?php Template::header(); ?>
   <div class="row">
@@ -35,13 +38,9 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
             <h4 class="panel-title">Add Item</h4>
           </div>
           <div class="panel-body">
-            <?php
-                $areaObj   = new Area();
-                $areas = $areaObj->getAll();
-            ?>
+            <?php if ($areas && 0 != $areas->num_rows) { ?>
             <fieldset>
-                <form action ="<?php echo Link::createUrl('Controllers/AddStock.php'); ?>" method="post">
-                    
+                <form action ="<?php echo Link::createUrl('Controllers/AddStock.php'); ?>" method="post">                    
                     <div class="control-group">
                         <label class='control-label' for="type">Item Type</label>
                         <select class='form-control' name='type' required>
@@ -95,6 +94,9 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Stock" type="submit" />
                 </form>
            </fieldset>
+           <?php } else { ?>
+                <div class="alert alert-info"> Please Add Area First Before Adding Item To Stock. </div>
+            <?php } ?>
           </div>
         </div>                
       </div>
