@@ -59,7 +59,6 @@ CREATE TABLE `areas` (
 
 LOCK TABLES `areas` WRITE;
 /*!40000 ALTER TABLE `areas` DISABLE KEYS */;
-INSERT INTO `areas` VALUES (1,'Good Condition'),(2,'For Repair'),(3,'For Replace'),(4,'Deleted');
 /*!40000 ALTER TABLE `areas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +83,6 @@ CREATE TABLE `departments` (
 
 LOCK TABLES `departments` WRITE;
 /*!40000 ALTER TABLE `departments` DISABLE KEYS */;
-INSERT INTO `departments` VALUES (1,'CICTE(Office)','Mrs. Cheryl M. Tarre, MST. DBA (cand.)'),(2,'HRM','Mr. Jose Randy R. Lupango, MMBM'),(4449,'Education','Mr. Ramon R. Romano'),(4451,'Law','Atty. Evergisto S. Escalon');
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,14 +95,16 @@ DROP TABLE IF EXISTS `requisitions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `requisitions` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
-  `type` int(50) NOT NULL,
+  `type` varchar(10) NOT NULL,
   `requester_id` varchar(50) NOT NULL,
   `provider_id` varchar(100) NOT NULL,
-  `purpose` int(50) NOT NULL,
-  `datetime_added` date NOT NULL,
-  `datetime_provided` enum('Ongoing','Pending','Solved') NOT NULL,
+  `purpose` varchar(255) NOT NULL,
+  `datetime_added` datetime NOT NULL,
+  `datetime_provided` datetime NOT NULL,
+  `status` varchar(45) NOT NULL,
+  `control_identifier` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE `requisitions` (
 
 LOCK TABLES `requisitions` WRITE;
 /*!40000 ALTER TABLE `requisitions` DISABLE KEYS */;
-INSERT INTO `requisitions` VALUES (40,1,'212 ','Lab 4  ',1,'2015-09-22','Pending'),(39,1,'212 ','Lab 4  ',1,'2015-09-22','Pending'),(38,1,'212 ','Lab 4  ',1,'2015-09-22','Pending'),(37,1,'366 ','Lab 4 ',3,'2015-09-22','Pending'),(36,1,'366 ','Lab 4 ',1,'2015-09-22','Pending'),(34,1,'503 ','Physics Lab ',4,'2015-09-22','Pending'),(35,1,'12121 ','Physics Lab ',10,'2015-09-22','Pending'),(41,1,'12121 ','Physics Lab ',10,'2015-09-22','Pending'),(42,1,'366 ','Lab 4 ',2,'2015-09-22','Pending'),(43,1,'366 ','Lab 4 ',2,'2015-09-22','Pending'),(44,1,'212 ','Lab 4  ',1,'2015-09-22','Pending'),(45,1,'366 ','Lab 4 ',3,'2015-09-22','Pending'),(46,1,'366 ','Lab 4 ',4,'2015-09-22','Pending'),(47,1,'366 ','Lab 4 ',2,'2015-09-22','Pending'),(48,1,'366 ','Lab 4 ',1,'2015-09-22','Pending'),(49,1,'212 ','Lab 4  ',2,'2015-09-22','Pending'),(50,1,'366 ','Lab 4 ',4,'2015-09-22','Pending'),(51,1,'212 ','Lab 4  ',2,'2015-09-22','Pending'),(52,1,'366 ','Lab 4 ',2,'2015-09-22','Pending'),(53,1,'366 ','Lab 4 ',2,'2015-09-22','Pending');
+INSERT INTO `requisitions` VALUES (76,'Item','444','','Testing Item Requisition','2015-11-26 20:53:30','0000-00-00 00:00:00','Sent','1518906806622924'),(75,'Job','444','','Testing','2015-11-26 20:35:37','0000-00-00 00:00:00','Sent','1518905681778803');
 /*!40000 ALTER TABLE `requisitions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,7 +157,7 @@ CREATE TABLE `stocks` (
   `datetime_deleted` datetime NOT NULL,
   `type` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1448121716 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,7 +166,6 @@ CREATE TABLE `stocks` (
 
 LOCK TABLES `stocks` WRITE;
 /*!40000 ALTER TABLE `stocks` DISABLE KEYS */;
-INSERT INTO `stocks` VALUES (366,'Lab 4','Eraser','Good Condition',1,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(369,'Lab 1','CCTV','Good Condition',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(377,'Chemistry Lab','Chairs','Good Condition',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(503,'Physics Lab','Table','Good Condition',1,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(9900,'Lab 4','CD','Good Condition',1,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(1,'Chemistry Lab','Testing','For Replace',1,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(12121,'Physics Lab','Tester','For Repair',1,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(212,'Lab 4 ','Floor wax','Good Condition',1,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(99001,'Lab 4','CD','Deleted',1,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(45454,'Llb3004','Chairs','Good Condition',4451,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(90000,'Room 107','White Board','Good Condition',4449,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(1448121146,'32','12','For Repair',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(1448121616,'21312','12312','For Repair',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(1448121696,'123','1','For Repair',2,'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',''),(1448121697,'1518558011233115','Testing','Good Condition',1,'2015-11-23 00:29:33','0000-00-00 00:00:00','0000-00-00 00:00:00','Material'),(1448121698,'1518558114502889','Testing','Good Condition',1,'2015-11-23 00:31:11','0000-00-00 00:00:00','0000-00-00 00:00:00','Material'),(1448121699,'1518558114520880','Testing','Good Condition',1,'2015-11-23 00:31:11','0000-00-00 00:00:00','0000-00-00 00:00:00','Material'),(1448121700,'1518559317836782','Tool Name','For Replace',1,'2015-11-23 00:50:19','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121701,'1518559317917582','Tool Name','For Replace',1,'2015-11-23 00:50:19','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121702,'1518559317918189','Tool Name','For Replace',1,'2015-11-23 00:50:19','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121703,'1518559317918863','Tool Name','For Replace',1,'2015-11-23 00:50:19','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121704,'1518559335916316','Tool Name','For Replace',1,'2015-11-23 00:50:36','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121705,'1518559335919421','Tool Name','For Replace',1,'2015-11-23 00:50:36','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121706,'1518559335923562','Tool Name','For Replace',1,'2015-11-23 00:50:36','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121707,'1518559335925015','Tool Name','For Replace',1,'2015-11-23 00:50:36','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121708,'1518559471639683','Testing Tool','For Replace',3,'2015-11-23 00:52:46','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121709,'1518559471640278','Testing Tool','For Replace',3,'2015-11-23 00:52:46','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121710,'1518559471640731','Testing Tool','For Replace',3,'2015-11-23 00:52:46','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121711,'1518559514506178','Kamaguchi','For Repair',4,'2015-11-23 00:53:26','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121712,'1518559514506790','Kamaguchi','For Repair',4,'2015-11-23 00:53:26','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121713,'1518559514508451','Kamaguchi','For Repair',4,'2015-11-23 00:53:26','0000-00-00 00:00:00','0000-00-00 00:00:00','Tools'),(1448121714,'1518559554696470','Testing','Good Condition',1,'2015-11-23 00:54:05','0000-00-00 00:00:00','0000-00-00 00:00:00','Material'),(1448121715,'1518559554697747','Testing','Good Condition',1,'2015-11-23 00:54:05','0000-00-00 00:00:00','0000-00-00 00:00:00','Material');
 /*!40000 ALTER TABLE `stocks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,4 +214,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-11-23  1:20:18
+-- Dump completed on 2015-11-26 22:28:21
