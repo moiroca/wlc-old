@@ -22,16 +22,17 @@ $(document).ready(function() {
 		item.find('td:last-child button').removeClass('add_item').addClass('remove_item');
 		item.find('td:last-child button').html('<i class="fa fa-minus"> Remove</i>');
 
-		$('#item_list').prepend($('<tr/>', { 'data-id': item.attr('data-id') }).append(item.children()));
+		$('#item_list').prepend(
+			$('<tr/>', { 'data-id': item.attr('data-id'), 'data-control_number' : item.attr('data-control_number') })
+				.append(item.children())
+				.append($('<input />', { 'type' : 'hidden', 'name' : 'items[]'}).val(item.attr('data-id')))
+		);
 		
 		item.attr('data-id', 0);
+		item.attr('data-control_number', 0);
 		$('.remove_item').bind('click', removeItemFromItemList);
 		$(this).unbind('click', appendResultToItemList);
 	}
-
-	$('#requisition_form').on('submit', function(e) {
-		e.preventDefault();
-	});
 
 	$('#requisition_type').on('change', function() {
 		var requisitionType = $(this);
@@ -52,14 +53,29 @@ $(document).ready(function() {
 
 	$('#search_control_number').on('click', function() {
 
-		var itemControlNumber = $('#item_control_number');
+		var itemControlNumber = $('#item_control_number'),
+			itemsList = $('#item_list').find('tr'),
+			isExistInItemsList = false;
+
+		$.each(itemsList, function(index, itemInList) {
+			if (itemControlNumber.val() == $(itemInList).attr('data-control_number')) {
+				isExistInItemsList = true;
+				return false;
+			}
+		})
+
+		if (isExistInItemsList) {
+			$('#attached_item_group').find('p.help-block').show();
+			$('#attached_item_group').find('p.help-block').text('Item Control Number Already Exist.');
+			return false;
+		}
 
 		if (0 === itemControlNumber.val().length) {
 			$('#attached_item_group').find('p.help-block').show();
 			$('#attached_item_group').find('p.help-block').addClass('warning').text('Please Enter Item Control Number.');
 			return false;
 		} else {
-			$('#attached_item_group').find('p.help-block').hide();
+			$('#attached_item_group').find('p.help-block').text('Item Control Numbe Required').hide();
 		}
 
 		$('#item_table').show();
@@ -82,6 +98,8 @@ $(document).ready(function() {
 						var tr = $('#result');
 
 						tr.attr('data-id', data.stock_id);
+						tr.attr('data-control_number', data.stock_control_number);
+
 						tr.prepend('<td><button type="button" class="add_item btn btn-sm btn-primary"><i class="fa fa-plus"></i> Add </button></td>');
 						tr.prepend('<td>'+data.stock_type+'</td>');
 						tr.prepend('<td>'+data.stock_status+'</td>');

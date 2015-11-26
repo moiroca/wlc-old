@@ -5,7 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
 /**
  * Class Stock Service
  *
- * @since Stock Service
+ * @since November 2015
  */
 class StockService
 {
@@ -42,10 +42,10 @@ class StockService
 								datetime_added) 
 						VALUES (
 							".hexdec(uniqid()).",
-							".$stocks['area_id'].", 
-							'".$stocks['name']."',
-							'".$stocks['type']."',
-							'".$stocks['status']."',
+							".$this->connection->real_escape_string($stocks['area_id']).", 
+							'".$this->connection->real_escape_string($stocks['name'])."',
+							'".$this->connection->real_escape_string($stocks['type'])."',
+							'".$this->connection->real_escape_string($stocks['status'])."',
 							'".$datetime_added."')";
 			
 			$resultQuery = $this->connection->query($query) or die(mysqli_error($this->connection));

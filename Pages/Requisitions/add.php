@@ -55,12 +55,12 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     </div>
 
                     <div id='attached_item_group' class="control-group" style='display:none'>
-                        <label class='control-label' for="purpose"> Search Item by Control Identifier</label>    
+                        <label class='control-label' for="purpose"> Attach Item by searching Item by Control Identifier</label>    
                         <div class="form-group input-group">
                                 <span class="input-group-addon">
                                   Item Control Number
                                 </span>
-                                <input required placeholder='Enter Control Number' id='item_control_number' type="text" class="form-control">
+                                <input placeholder='Enter Control Number' id='item_control_number' type="text" class="form-control">
                                 <span class="input-group-btn">
                                   <button type='button' id='search_control_number' class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
@@ -76,8 +76,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                                     <th>Area</th>
                                     <th>Item Condition</th>
                                     <th>Item Type</th>
-                                    <th>Action</th>
-                                </tr>
+                                        <th>Action</th>
+                                 </tr>
                                 <tr id='empty' class='info'>
                                     <td colspan=6 align=center><label class='label label-primary'>No Item Found</label></td>
                                 </tr>

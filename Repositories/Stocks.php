@@ -29,7 +29,7 @@ Class Stocks extends Base
               WHERE 
                 status != 'Deleted'
               AND
-                `stocks`.`type` = '".$type."'
+                `stocks`.`type` = '".$this->connection->real_escape_string($type)."'
               GROUP BY
                 `stocks`.`name`, `stocks`.`datetime_added`");
 
@@ -58,7 +58,7 @@ Class Stocks extends Base
                 status != 'Deleted'
               AND
                 `stocks`.`control_number` 
-                LIKE '%".$contolNumber."%'") or die(mysqli_error($this->connection));
+                LIKE '%".$this->connection->real_escape_string($contolNumber)."%'") or die(mysqli_error($this->connection));
 
     return $result;
   }

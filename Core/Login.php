@@ -94,4 +94,12 @@ Class Login {
 	{
 		return isset($_SESSION['type']);
 	}
+
+	/**
+	 * Get User Logged In Id
+	 */
+	public static function getUserLoggedInId()
+	{
+		return $_SESSION['id'];
+	}
 }
