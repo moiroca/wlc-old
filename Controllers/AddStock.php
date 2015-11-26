@@ -30,6 +30,15 @@ Login::sessionStart();
         $_SESSION['something_wrong'] = true;
       }
 
-      header('location: '.Link::createUrl('Pages/Stocks/Tools/tools.php'));
+      if (isset($_POST['type'])) {
+        if ($_POST['type'] == Constant::ITEM_TOOL) {
+          header('location: '.Link::createUrl('Pages/Stocks/Tools/tools.php'));
+        } else if($_POST['type'] == Constant::ITEM_EQUIPMENT) {
+          header('location: '.Link::createUrl('Pages/Stocks/Equipments/equipments.php'));
+        } else {
+          header('location: '.Link::createUrl('Pages/Stocks/Materials/materials.php'));
+        }
+      }
+      
   }
 ?>

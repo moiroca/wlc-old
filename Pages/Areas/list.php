@@ -60,7 +60,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <tr>
                     <td> <?php echo $item['name']; ?></td>
                     <td> 
-                      <a class="btn btn-sm btn-info"> Edit </a>
+                      <a class="btn btn-large btn-info"> <i class='fa fa-eye'></i> View Stocks </a>
+                      <a class="btn btn-sm btn-default"> <i class='fa fa-edit'></i> Edit </a>
                       <a class="btn btn-sm btn-warning"> Delete </a>
                     </td>
                   </tr>  

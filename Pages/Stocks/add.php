@@ -54,7 +54,7 @@ $areas = $areaObj->getAll();
 
                     <div class="control-group">
                         <label class='control-label' for="name"> Name</label>    
-                        <input class='form-control' name="name" id="name" type="text" placeholder="Tool Name" required="required" value="" />
+                        <input class='form-control' name="name" id="name" type="text" placeholder="Item Name" required="required" value="" />
                         <p class="help-block"></p>
                     </div>
                     
