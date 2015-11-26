@@ -38,8 +38,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 <form id='requisition_form' action ="<?php echo Link::createUrl('Controllers/AddArea.php'); ?>" method="post">
 
                     <div class="control-group">
-                        <label class='control-label' for="purpose"> Name</label>    
-                        <input type='text' name='purpose' class='form-control' required />
+                        <label class='control-label' for="name"> Name</label>    
+                        <input type='text' name='name' class='form-control' required />
                         <p class="help-block"></p>
                     </div>
 
