@@ -60,4 +60,37 @@ Class Stocks extends Base
 
     return $result;
   }
+
+  /**
+   * Get All Stocks
+   * 
+   * @param Array $where
+   *    [`field` => value, `value`, `andOrWhere`]
+   *    
+   */
+  public function getStocks($where)
+  {
+      $sql  = "SELECT 
+                `stocks`.`control_number` as stock_control_number, 
+                `stocks`.`name` as stock_name, 
+                `stocks`.`status` as stock_status,
+                `areas`.`name` as area_name
+              FROM 
+                stocks 
+              JOIN 
+                areas 
+              ON `areas`.`id`=`stocks`.`area_id`";
+
+      foreach ($where as $index => $param) {
+        $operator = ($param['isEqual']) ? '=' : '!=';
+        if ($index == 0) {
+          $sql .= ' WHERE ';
+          $sql .= ' '.$param['field'].' '.$operator.' "'.$this->connection->real_escape_string($param['value']).'" ';
+        } else {
+          $sql .= ' '.$param['andOrWhere'].' '.$param['field'].' '.$operator.' "'.$this->connection->real_escape_string($param['value']).'"';
+        }
+      }
+
+      return $this->raw($sql);
+  }
 }

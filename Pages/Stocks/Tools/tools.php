@@ -4,7 +4,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
 Login::sessionStart();
 
-$tools = new Tools();
+$stocks = new Stocks();
 
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
@@ -32,22 +32,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
         <?php 
 
-            $result = $tools->raw("
-              SELECT 
-                `stocks`.`name` as stock_name, 
-                COUNT(*) as stock_quantity,
-                `areas`.`name` as area_name
-              FROM 
-                stocks 
-              JOIN 
-                areas 
-              ON `areas`.`id`=`stocks`.`area_id`
-              WHERE 
-                status != 'Deleted'
-              AND
-                `stocks`.`type` = '".Constant::ITEM_TOOL."'
-              GROUP BY
-                `stocks`.`name`, `stocks`.`datetime_added`");
+            $result = $stocks->getAllByType(Constant::ITEM_TOOL);
         ?>
 
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
@@ -80,7 +65,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <td> <?php echo $item['stock_name']; ?></td>
                     <td> <?php echo $item['stock_quantity']; ?></td>
                     <td> 
-                      <a type="button" class="btn btn-info btn-sm" href='#'> View All <?php echo ucfirst($item['stock_name']); ?> Tools</a> 
+                      <a type="button" class="btn btn-info btn-sm" href='<?php echo Link::createUrl('Pages/Stocks/listing.php?name='.urlencode($item['stock_name']).'&type='.Constant::ITEM_TOOL); ?>'> View All <?php echo ucfirst($item['stock_name']); ?> Tools</a>
                     </td>
                   </tr>  
                 <?php } ?>

@@ -65,7 +65,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <td> <?php echo $item['stock_name']; ?></td>
                     <td> <?php echo $item['stock_quantity']; ?></td>
                     <td> 
-                      <a type="button" class="btn btn-info btn-sm" href='#'> View All <?php echo ucfirst($item['stock_name']); ?> Tools</a> 
+                      <a type="button" class="btn btn-info btn-sm" href='<?php echo Link::createUrl('Pages/Stocks/listing.php?name='.urlencode($item['stock_name']).'&type='.Constant::ITEM_EQUIPMENT); ?>'> View All <?php echo ucfirst($item['stock_name']); ?> Equipments</a>
                     </td>
                   </tr>  
                 <?php } ?>
