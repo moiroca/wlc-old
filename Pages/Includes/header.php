@@ -1,8 +1,3 @@
-<?php 
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Assets.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/LoggedInUser.php';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

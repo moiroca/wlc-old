@@ -119,4 +119,22 @@ $(document).ready(function() {
 				}
 			});
 	});
+	
+	/**
+	 * Approve Item Requisition
+	 */
+	$('.approve_item_requisition').on('click', function(e) {
+		var item = $(this).closest('tr');
+
+		Requisition.approve(item.attr('data-id'), item.attr('data-type'), {
+			beforeSend: function() {
+				console.log(3);
+			},
+			success: function(data) {
+				console.log(data);
+			}
+		});
+
+		e.preventDefault();
+	});
 });

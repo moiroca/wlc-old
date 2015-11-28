@@ -1,11 +1,6 @@
 <?php 
 
-include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Requisitions.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Template.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
-
-include $_SERVER['DOCUMENT_ROOT'].'/Utilities/RequesterUtility.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
 Login::sessionStart();
 
@@ -64,7 +59,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <tbody>
             <?php if ($result && 0 != $result->num_rows) { ?>
                 <?php  while ($item = $result->fetch_assoc()) { ?>
-                  <tr>
+                  <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                     <td> 
                       <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED ) { ?>
                         <a 
@@ -79,8 +74,9 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <td> <?php echo $item['requisition_control_identifier']; ?></td>
                     <td> <?php echo RequesterUtility::getFullName($item); ?></td>
                     <td> <?php echo $item['requisition_purpose']; ?></td>
-                    <!-- <td> <?php echo $item['requisition_datetime_added']; ?></td>
-                    <td>
+                    <!-- <td> <?php $date = new DateTime($item['requisition_datetime_added']);
+                    echo $date->format('Y-m-d H:i:s'); ?></td> -->
+                    <!-- <td>
                         <?php if ($item['requisition_datetime_provided']) { ?>
                             <?php echo $item['requisition_datetime_provided']; ?>
                         <?php } else { ?>
@@ -96,7 +92,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     </td>
                     <td>
                         <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) { ?> 
-                          <a href="#" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                          <a href="<?php echo Link::createUrl('Pages/Requisitions/Items/approve.php?control_identifier='.$item['requisition_control_identifier']); ?>" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Approve</a>
                         <?php } ?>
                         <a href="#" class='btn btn-sm btn-default'> <i class='fa fa-edit'></i> Edit</a>
                         <a href="#" class='btn btn-sm btn-warning'> <i class='fa fa-edit'></i> Delete</a>
@@ -114,7 +110,10 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
             <?php } ?>
           </tbody>
         </table>
+        <span>
+            <input type='hidden' id='approval_item_requisition_link' value='<?php echo Link::createUrl('Controllers/ApproveRequisition.php'); ?>'>
+        </span>
       </div>
     </div>
   </div>
-<?php Template::footer(); ?>
+<?php Template::footer(['requisition.js', 'Requisition/requisition.js']); ?>

@@ -1,7 +1,5 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Base.php';
-
 Class Stocks extends Base
 {
 	public $table = 'stocks';

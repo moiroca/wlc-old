@@ -1,11 +1,7 @@
 <?php 
 
-include $_SERVER['DOCUMENT_ROOT'].'/Repositories/User.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Template.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
-include $_SERVER['DOCUMENT_ROOT'].'/Utilities/UserUtility.php';
 Login::sessionStart();
 
 $userObj = new User();

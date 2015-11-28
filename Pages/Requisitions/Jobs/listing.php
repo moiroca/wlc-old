@@ -1,11 +1,6 @@
 <?php 
 
-include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Requisitions.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Template.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
-
-include $_SERVER['DOCUMENT_ROOT'].'/Utilities/RequesterUtility.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
 Login::sessionStart();
 

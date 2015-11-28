@@ -1,11 +1,6 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Template.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
-
-include $_SERVER['DOCUMENT_ROOT'].'/Utilities/Constant.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Utilities/RequisitionUtility.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
 Login::sessionStart();
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }

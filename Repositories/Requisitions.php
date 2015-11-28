@@ -1,7 +1,5 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Base.php';
-
 Class Requisitions extends Base
 {
 	public $table = 'requisitions';
@@ -17,6 +15,7 @@ Class Requisitions extends Base
 	public function getAllRequesition($type)
 	{
     $sql = "SELECT 
+                `$this->table`.`id` as requisition_id,
                 `$this->table`.`purpose` as requisition_purpose,
                 `$this->table`.`control_identifier` as requisition_control_identifier,
                 `$this->table`.`datetime_added` as requisition_datetime_added,

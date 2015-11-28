@@ -1,10 +1,6 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Assets.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
-
-include $_SERVER['DOCUMENT_ROOT'].'/Services/RequisitionService.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
 Login::sessionStart();
 

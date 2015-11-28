@@ -1,7 +1,5 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
-
 /**
  * Class Requisition Service
  *
@@ -66,5 +64,13 @@ class RequisitionService
 		}
 
 		return $insertRequistionQUery;
+	}
+
+	/**
+	 * Approve Requisition
+	 */
+	public function approve($data)
+	{
+		
 	}
 }

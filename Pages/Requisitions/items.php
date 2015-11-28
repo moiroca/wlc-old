@@ -1,11 +1,6 @@
 <?php 
 
-include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Requisitions.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Template.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Link.php';
-
-include $_SERVER['DOCUMENT_ROOT'].'/Utilities/RequesterUtility.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
 Login::sessionStart();
 
@@ -65,7 +60,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <tbody>
             <?php if ($result && 0 != $result->num_rows) { ?>
                 <?php  while ($item = $result->fetch_assoc()) { ?>
-                  <tr>
+                  <tr data-id="<?php echo $item['id']; ?>">
                     <td> 
                       <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED ) { ?>
                         <a 

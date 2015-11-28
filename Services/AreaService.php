@@ -1,7 +1,5 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
-
 /**
  * Class Area Service
  *

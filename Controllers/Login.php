@@ -1,8 +1,6 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Login.php';
-include $_SERVER['DOCUMENT_ROOT'].'/Core/Log.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
 $db = DbConnection::connect()->getConnection(); 
 Login::sessionStart();

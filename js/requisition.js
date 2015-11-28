@@ -30,10 +30,24 @@ var Requisition = function($){
 		},
 
 		/**
-		 * Save Requisition
+		 * Approve Requisition
 		 */
-		save: function() {
-
-		},
+		approve: function(requistion_id, type, callback) {
+			$.ajax({
+				method: 'POST',
+				url : $('#approval_item_requisition_link').val(),
+				data: {
+					requistion_id : requistion_id,
+					type : type
+				},
+				datatype: 'application/json',
+				beforeSend: function() {
+					callback.beforeSend();
+				},
+				success: function(data) {
+					callback.success(data);
+				}
+			});
+		}
 	};
 }(jQuery);

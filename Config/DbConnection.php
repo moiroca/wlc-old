@@ -1,7 +1,5 @@
 <?php
 
-include $_SERVER['DOCUMENT_ROOT'].'/Utilities/Constant.php';
-
 /**
  * @since November 2015 
  */
@@ -27,7 +25,7 @@ Class DbConnection{
 	
 		// Error handling
 		if(mysqli_connect_error()) {
-			trigger_error("Failed to conencto to MySQL: " . mysql_connect_error(),
+			trigger_error("Failed to conencto to MySQL: " . mysqli_connect_error(),
 				 E_USER_ERROR);
 		}
 	}

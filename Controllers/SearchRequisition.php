@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Stocks.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 
 $stockRepo = new Stocks();
 
