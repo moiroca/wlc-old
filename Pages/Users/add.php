@@ -7,6 +7,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
 ?>
 <?php Template::header(); ?>
+  <style type="text/css">.help-block{ color: #f00;}</style>
   <div class="row">
       <div class="col-lg-12">
           <h1 class="page-header">Users</h1>
@@ -30,27 +31,26 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           </div>
           <div class="panel-body">
             <?php
-                $areaObj   = new Area();
-                $areas = $areaObj->getAll();
+                $departmentObj   = new Department();
+                $departments = $departmentObj->getAll();
             ?>
-            
-                <form action ="<?php echo Link::createUrl('Controllers/AddStock.php'); ?>" method="post">
+                <form action ="<?php echo Link::createUrl('Controllers/AddUser.php'); ?>" method="post">
                     <fieldset>
                       <legend>User Information</legend>
                       <div class="control-group">
-                          <label class='control-label' for="name"> First Name</label>    
-                          <input class='form-control' name="name" id="first_name" type="text" placeholder="First Name" required="required" value="" />
-                          <p class="help-block"></p>
+                          <label class='control-label' for="first_name"> First Name</label>    
+                          <input class='form-control' name="first_name" id="first_name" type="text" placeholder="First Name" required="required" value="" />
+                          <p class="help-block"><?php echo (isset($_SESSION['errors']['first_name'])) ? $_SESSION['errors']['first_name'] : ''; ?></p>
                       </div>
                       <div class="control-group">
-                          <label class='control-label' for="name"> Last Name</label>    
-                          <input class='form-control' name="name" id="last_name" type="text" placeholder="Last Name" required="required" value="" />
-                          <p class="help-block"></p>
+                          <label class='control-label' for="last_name"> Last Name</label>    
+                          <input class='form-control' name="last_name" id="last_name" type="text" placeholder="Last Name" required="required" value="" />
+                          <p class="help-block"><?php echo (isset($_SESSION['errors']['last_name'])) ? $_SESSION['errors']['last_name'] : ''; ?></p>
                       </div>
                       <div class="control-group">
-                          <label class='control-label' for="name"> Middle Name</label>    
-                          <input class='form-control' name="name" id="middle_name" type="text" placeholder="Middle Name" required="required" value="" />
-                          <p class="help-block"></p>
+                          <label class='control-label' for="middle_name"> Middle Name</label>    
+                          <input class='form-control' name="middle_name" id="middle_name" type="text" placeholder="Middle Name" required="required" value="" />
+                          <p class="help-block"><?php echo (isset($_SESSION['errors']['middle_name'])) ? $_SESSION['errors']['middle_name'] : ''; ?></p>
                       </div>
                     </fieldset>
 
@@ -58,31 +58,32 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <legend>School Information</legend>
 
                         <div class="control-group">
-                            <label class='control-label' for="status"> User Type</label>
-                            <select class='form-control' name='status' required> 
+                            <label class='control-label' for="user_type"> User Type</label>
+                            <select class='form-control' name='user_type' required> 
                                 <option value=''>Select User Type</option>
-                                <?php foreach (StockUtility::getStockStatus() as $status) { ?>
-                                  <option value="<?php echo $status; ?>" ><?php echo $status; ?></option>
+                                <?php foreach (UserUtility::getUserTypes() as $type) { ?>
+                                  <option value="<?php echo $type; ?>" ><?php echo $type; ?></option>
+                                  <?php ?>
                                 <?php } ?>
                             </select>
-                            <p class="help-block"></p>
+                            <p class="help-block"><?php echo (isset($_SESSION['errors']['user_type'])) ? $_SESSION['errors']['user_type'] : ''; ?></p>
                         </div>
 
                         <div class="control-group">
-                          <label>Area</label>    
-                          <select name='area_id' class='form-control' required>
-                              <option value=''>Select Area</option>
+                          <label>Department</label>    
+                          <select name='department_id' class='form-control' required>
+                              <option value=''>Select Department</option>
                               <?php 
-                                  if ($areas) {
-                                    while ($area =  $areas->fetch_assoc()) {
+                                  if ($departments) {
+                                    while ($department =  $departments->fetch_assoc()) {
                                       ?>
-                                        <option value='<?php echo $area['id']; ?>' ><?php echo $area['name']; ?></option>
+                                        <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
                                       <?php
                                     }
                                   } 
                               ?>
                           </select>
-                          <p class="help-block"></p>
+                          <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
                       </div>
                     </fieldset>
 
@@ -92,24 +93,26 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <div class="control-group">
                             <label class='control-label' for="name"> Username</label>    
                             <input class='form-control' name="username" id="username" type="text" placeholder="Username" required="required" value="" />
-                            <p class="help-block"></p>
+                            <p class="help-block"><?php echo (isset($_SESSION['errors']['username'])) ? $_SESSION['errors']['username'] : ''; ?></p>
                         </div>
 
                         <div class="control-group">
                             <label class='control-label' for="name"> Password</label>    
                             <input class='form-control' name="password" id="password" type="password" placeholder="Password" required="required" value="" />
-                            <p class="help-block"></p>
+                            <p class="help-block"><?php echo (isset($_SESSION['errors']['password'])) ? $_SESSION['errors']['password'] : ''; ?></p>
                         </div>
 
                         <div class="control-group">
                             <label class='control-label' for="name"> Confirm Password</label>    
                             <input class='form-control' name="cpassword" id="cpassword" type="password" placeholder="Confirm Password" required="required" value="" />
-                            <p class="help-block"></p>
+                            <p class="help-block"><?php echo (isset($_SESSION['errors']['cpassword'])) ? $_SESSION['errors']['cpassword'] : ''; ?></p>
+                            <p class="help-block"><?php echo (isset($_SESSION['errors']['matching'])) ? $_SESSION['errors']['matching'] : ''; ?></p>
                         </div>
                     </fieldset>
 
-                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Stock" type="submit" />
+                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save User" type="submit" />
                 </form>
+                <?php if (isset($_SESSION['errors'])) { unset($_SESSION['errors']); }; ?>
           </div>
         </div>                
       </div>
