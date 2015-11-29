@@ -33,4 +33,22 @@ class UserUtility
 			return '<label class="label label-danger">Deleted</label>';
 		}
 	}
+
+	/**
+	 * Get User Types
+	 *
+	 * @return Array
+	 */
+	public static function getUserTypes($isInventoryOffice = true)
+	{
+		$userTypes = [
+			Constant::USER_GSD_OFFICER,
+			Constant::USER_PRESIDENT,
+			Constant::USER_DEAN
+		];
+
+		if (!$isInventoryOffice) { $userTypes[] = Constant::USER_INVENTORY_OFFICER; }
+
+		return $userTypes;
+	}
 }
