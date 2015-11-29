@@ -27,7 +27,7 @@ class StockService
 
 		$resultQuery = false;
 
-		for ($i = 0; $i <= $stocks['quantity'] ; $i++) { 
+		for ($i = 1; $i <= $stocks['quantity'] ; $i++) { 
 
 			$query = "INSERT 
 						INTO 
