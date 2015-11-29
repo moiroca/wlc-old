@@ -31,5 +31,6 @@ include $_SERVER['DOCUMENT_ROOT'].'/Services/AreaService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/DepartmentService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/StockService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/RequisitionService.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Services/UserService.php';
 
 ?>
