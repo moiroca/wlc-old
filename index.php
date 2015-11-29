@@ -73,14 +73,6 @@ if (Login::isLoggedIn()) {
             </div>
         </div>
     </div>
-
-    <?php 
-        Assets::renderJs([
-            'jquery.min.js',
-            'bootstrap.min.js',
-            'sb-admin-2.js'
-        ]); 
-    ?>
 </body>
 
 </html>
