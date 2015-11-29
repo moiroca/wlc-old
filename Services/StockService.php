@@ -33,14 +33,12 @@ class StockService
 						INTO 
 							stocks(
 								control_number,
-								area_id, 
 								name, 
 								type, 
 								status, 
 								datetime_added) 
 						VALUES (
 							".hexdec(uniqid()).",
-							".$this->connection->real_escape_string($stocks['area_id']).", 
 							'".$this->connection->real_escape_string($stocks['name'])."',
 							'".$this->connection->real_escape_string($stocks['type'])."',
 							'".$this->connection->real_escape_string($stocks['status'])."',

@@ -13,7 +13,6 @@ Login::sessionStart();
       $stockServiceObj = new StockService();
 
       $result = $stockServiceObj->save([
-                  'area_id' => $_POST['area_id'],
                   'name'    => $_POST['name'],
                   'quantity'=> $_POST['quantity'],
                   'status'  => $_POST['status'],

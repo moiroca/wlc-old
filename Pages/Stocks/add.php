@@ -5,9 +5,6 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 Login::sessionStart();
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
-$areaObj   = new Area();
-$areas = $areaObj->getAll();
-
 ?>
 <?php Template::header(); ?>
   <div class="row">
@@ -32,7 +29,6 @@ $areas = $areaObj->getAll();
             <h4 class="panel-title">Add Item</h4>
           </div>
           <div class="panel-body">
-            <?php if ($areas && 0 != $areas->num_rows) { ?>
             <fieldset>
                 <form action ="<?php echo Link::createUrl('Controllers/AddStock.php'); ?>" method="post">                    
                     <div class="control-group">
@@ -53,23 +49,6 @@ $areas = $areaObj->getAll();
                     </div>
                     
                     <div class="control-group">
-                        <label>Area</label>    
-                        <select name='area_id' class='form-control' required>
-                            <option value=''>Select Area</option>
-                            <?php 
-                                if ($areas) {
-                                  while ($area =  $areas->fetch_assoc()) {
-                                    ?>
-                                      <option value='<?php echo $area['id']; ?>' ><?php echo $area['name']; ?></option>
-                                    <?php
-                                  }
-                                } 
-                            ?>
-                        </select>
-                        <p class="help-block"></p>
-                    </div>
-
-                    <div class="control-group">
                         <label>Quantity:</label>
                         <input class='form-control' min=1 name="quantity" id="quantity" type="number" placeholder="Quantity" required="required"/>
                         <p class="help-block"></p>
@@ -87,10 +66,7 @@ $areas = $areaObj->getAll();
                     </div>
                     <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Stock" type="submit" />
                 </form>
-           </fieldset>
-           <?php } else { ?>
-                <div class="alert alert-info"> Please Add Area First Before Adding Item To Stock. </div>
-            <?php } ?>
+            </fieldset>
           </div>
         </div>                
       </div>

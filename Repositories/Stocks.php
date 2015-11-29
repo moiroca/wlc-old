@@ -17,13 +17,9 @@ Class Stocks extends Base
 		$result = $this->raw("
               SELECT 
                 `stocks`.`name` as stock_name, 
-                COUNT(*) as stock_quantity,
-                `areas`.`name` as area_name
+                COUNT(*) as stock_quantity
               FROM 
                 stocks 
-              JOIN 
-                areas 
-              ON `areas`.`id`=`stocks`.`area_id`
               WHERE 
                 status != 'Deleted'
               AND
@@ -45,13 +41,9 @@ Class Stocks extends Base
                 `stocks`.`type` as stock_type,
                 `stocks`.`control_number` as stock_control_number,
                 `stocks`.`name` as stock_name,
-                `stocks`.`status` as stock_status,
-                `areas`.`name` as area_name
+                `stocks`.`status` as stock_status
               FROM 
-                stocks 
-              JOIN 
-                areas 
-              ON `areas`.`id`=`stocks`.`area_id`
+                stocks
               WHERE 
                 status != 'Deleted'
               AND
@@ -73,13 +65,9 @@ Class Stocks extends Base
       $sql  = "SELECT 
                 `stocks`.`control_number` as stock_control_number, 
                 `stocks`.`name` as stock_name, 
-                `stocks`.`status` as stock_status,
-                `areas`.`name` as area_name
+                `stocks`.`status` as stock_status
               FROM 
-                stocks 
-              JOIN 
-                areas 
-              ON `areas`.`id`=`stocks`.`area_id`";
+                stocks";
 
       foreach ($where as $index => $param) {
         $operator = ($param['isEqual']) ? '=' : '!=';

@@ -73,8 +73,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
         <table class="table table-striped table-hover table-bordered">
           <thead>
               <tr id='th'>
+                <th> #</th>
                 <th> Control Number </th>
-                <th> Area</th>
                 <th> Name</th>
                 <th> Item Status</th>
                 <th> Action </th>
@@ -82,10 +82,11 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           </thead>
           <tbody>
             <?php if ($result && 0 != $result->num_rows) { ?>
+                <?php $number = 1; ?>
                 <?php  while ($item = $result->fetch_assoc()) { ?>
                   <tr>
+                    <td> <?php echo $number; ?></td>
                     <td> <?php echo $item['stock_control_number']; ?></td>
-                    <td> <?php echo $item['area_name']; ?></td>
                     <td> <?php echo $item['stock_name']; ?></td>
                     <td> <?php echo $item['stock_status']; ?></td>
                     <td> 
@@ -97,6 +98,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       </a>
                     </td>
                   </tr>  
+                <?php $number++; ?>
                 <?php } ?>
             <?php } else { ?>
                   <tr>
