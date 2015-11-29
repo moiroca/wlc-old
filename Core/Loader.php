@@ -24,6 +24,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Stocks.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/User.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Tools.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Area.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Repositories/ItemRequisition.php';
 
 /* Load All Services */
 include $_SERVER['DOCUMENT_ROOT'].'/Services/AreaService.php';
