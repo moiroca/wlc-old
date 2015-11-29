@@ -40,7 +40,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 'status',
                 'datetime_added'
               ], [
-                'type' => Constant::USER_ADMIN
+                'type' => Constant::USER_GSD_OFFICER
               ]);
         ?>
 

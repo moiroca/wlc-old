@@ -17,7 +17,7 @@ Login::sessionStart();
       if (!isset($_POST['last_name'])) { $errors['last_name'] = 'Last Name is Required'; }
       if (!isset($_POST['middle_name'])) { $errors['middle_name'] = 'Middle Name is Required'; }
       if (!isset($_POST['user_type'])) { $errors['user_type'] = 'User Type is Required'; }
-      if (!isset($_POST['area_id'])) { $errors['area_id'] = 'Area is Required'; }
+      if (!isset($_POST['department_id'])) { $errors['department_id'] = 'Department is Required'; }
       if (!isset($_POST['username'])) { $errors['username'] = 'Username is Required'; }
       if (!isset($_POST['password'])) { $errors['password'] = 'Password is Required'; }
       if (!isset($_POST['cpassword'])) { $errors['cpassword'] = 'Confirm Password is Required';}
