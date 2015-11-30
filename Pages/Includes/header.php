@@ -29,7 +29,6 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
 
 <body>
@@ -177,21 +176,42 @@
                     </ul>
                 </li> -->
                 <!-- /.Tasks For Inventory Officer-->
-                <!-- <li class="dropdown">
+                <?php 
+                    $notificationObj = new Notification();
+                    $notification = $notificationObj->getAllByRecepient(Login::getUserLoggedInId());
+                ?>
+                <li class="dropdown" <?php echo ($notification) ? "id='view_notif'" :'' ?>>
+                    <input type='hidden' value="<?php echo Link::createUrl('Controllers/ChangeNotificationStatus.php'); ?>">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <?php if ($notification->num_rows): ?>
+                            <label style='color:#fff; background-color:red;' class='badge'><?php echo $notification->num_rows; ?></label>
+                        <?php endif ?>
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
+                        <?php if (0 != $notification->num_rows): ?>
+                            <?php while ($notif = $notification->fetch_assoc()): ?>
+                                <li data-id='<?php echo $notif['notification_id']; ?>'>
+                                    <a href="#">
+                                        <div>
+                                            <i class="fa fa-info fa-fw"></i> <?php echo $notif['notification_msg'];  ?>
+                                            <span class="pull-right text-muted small"><?php echo date_create($notif['notification_datetime_sent'])->format('Y-m-d'); ?></span>
+                                        </div>
+                                    </a>
+                                </li>
+                            <?php endwhile ?>
+                        <?php else: ?>
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <i class="fa fa-info fa-fw"></i> There are <label class='label label-info'>no</label> notifications available.
+                                        <span class="pull-right text-muted small"></span>
+                                    </div>
+                                </a>
+                            </li>    
+                        <?php endif ?>
+                        
+                        <!-- <li>
                             <a href="#">
                                 <div>
                                     <i class="fa fa-twitter fa-fw"></i> 3 New Followers
@@ -232,9 +252,9 @@
                                 <strong>See All Alerts</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
-                </li> -->
+                </li>
                 <!-- /.Notifications For Approved/Decline Item Requeisition -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -269,6 +289,9 @@
                         </li> -->
                         <!-- /.Search Bar -->
                         <li>
+                            <a href="javascript:void(0)"><i class="fa fa-user fa-fw"></i> Welcome: <b><?php echo $_SESSION['type']; ?></b></a>
+                        </li>
+                        <li>
                             <a href="<?php echo Link::createUrl('Pages/home.php'); ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         
@@ -295,6 +318,9 @@
                             <li>
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#"> <i class='fa fa-table'></i> My Request</a>
+                                    </li>
                                     <li>
                                         <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
                                     </li>
@@ -338,14 +364,102 @@
                         
                         <!-- /.General Services Menus -->
                         <?php if (LoggedInUser::type() == Constant::USER_GSD_OFFICER) { ?>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#"> <i class='fa fa-table'></i> My Request</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stocks<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>"> Tools</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Equipments/equipments.php'); ?>"> Equipments</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Materials/materials.php'); ?>"> Materials</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                            </li>
                         <?php } ?>
 
                         <!-- /.President Menus -->
                         <?php if (LoggedInUser::type() == Constant::USER_PRESIDENT) { ?>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#"> <i class='fa fa-table'></i> My Request</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stocks<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>"> Tools</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Equipments/equipments.php'); ?>"> Equipments</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Materials/materials.php'); ?>"> Materials</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                            </li>
                         <?php } ?>
 
                         <!-- /.Dean Menus -->
                         <?php if (LoggedInUser::type() == Constant::USER_DEAN) { ?>
+
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#"> <i class='fa fa-table'></i> My Request</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stocks<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>"> Tools</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Equipments/equipments.php'); ?>"> Equipments</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Materials/materials.php'); ?>"> Materials</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                            </li>
                         <?php } ?>
                     </ul>
                 </div>

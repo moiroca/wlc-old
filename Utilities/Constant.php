@@ -44,5 +44,9 @@ Class Constant {
 		REQUISITION_PENDING = 'Pending',
 		REQUISITION_SENT = 'Sent',
 		REQUISITION_FINISHED = 'Finished',
-		REQUISITION_ONGOING = 'On Going';
+		REQUISITION_ONGOING = 'On Going',
+
+		// Notifications Status
+		NOTIFICATION_VIEWED = 'True',
+		NOTIFICATION_NOT_VIEWED = 'False';
 }
