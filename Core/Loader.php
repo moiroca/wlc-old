@@ -6,6 +6,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Utilities/StockUtility.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Utilities/UserUtility.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Utilities/RequesterUtility.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Utilities/RequisitionUtility.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Utilities/PageUtility.php';
 
 /* Load All Core */
 include $_SERVER['DOCUMENT_ROOT'].'/Config/DbConnection.php';
@@ -25,6 +26,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Repositories/User.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Tools.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Area.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/ItemRequisition.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Notification.php';
 
 /* Load All Services */
 include $_SERVER['DOCUMENT_ROOT'].'/Services/AreaService.php';
@@ -32,5 +34,6 @@ include $_SERVER['DOCUMENT_ROOT'].'/Services/DepartmentService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/StockService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/RequisitionService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/UserService.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Services/NotificationService.php';
 
 ?>

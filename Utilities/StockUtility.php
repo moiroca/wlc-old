@@ -13,7 +13,7 @@ class StockUtility
 	 *
 	 * @return Array
 	 */
-	public function getStockStatus()
+	public static function getStockStatus()
 	{
 		return [
 			Constant::STOCK_GOOD,
@@ -28,7 +28,7 @@ class StockUtility
 	 *
 	 * @return Array
 	 */
-	public function getStockTypes()
+	public static function getStockTypes()
 	{
 		return [
 			Constant::ITEM_MATERIAL,

@@ -1,7 +1,5 @@
 <?php
-
 include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
-
 $db = DbConnection::connect()->getConnection(); 
 Login::sessionStart();
 

@@ -69,8 +69,57 @@ class RequisitionService
 	/**
 	 * Approve Requisition
 	 */
-	public function approve($data)
+	public function approveByPresident($data)
 	{
-		
+		$updateStatusQuery = "
+			UPDATE 
+				`requisitions` 
+			SET 
+				`status`='".Constant::REQUISITION_APPROVED."' 
+			WHERE 
+				`id`=".$this->connection->real_escape_string($data['requisition_id'])."
+		";
+
+		$this->connection->query($updateStatusQuery);
+
+		$updateQuery = "
+			UPDATE 
+				`approved_requisition` 
+			SET 
+				`is_approved_by_president`='True' 
+			WHERE 
+				`requisition_id`='".$this->connection->real_escape_string($data['requisition_id'])."'
+			AND
+				`approver_type` = '".Constant::USER_GSD_OFFICER."'";		
+
+		$this->connection->query($updateQuery);
+
+		$query = "
+			INSERT
+				INTO
+					`approved_requisition`(
+							`requisition_id`,
+							`user_id`,
+							`approver_type`,
+							`approved_datetime`,
+							`is_approved_by_president`
+						)
+				VALUES(
+						".$this->connection->real_escape_string($data['requisition_id']).",
+						".$data['user_id'].",
+						'".$data['approver_type']."',
+						'".$data['approved_datetime']."',
+						'True'
+					)
+		";
+
+		$notificationService = new NotificationService();
+		$notificationService->saveNotificationsApprovedByPresident([
+				'sender_id' => $data['user_id'], 
+				'recepient_id' => $data['requesterId']
+
+			]);
+
+		return $this->connection->query($query);
 	}
 }

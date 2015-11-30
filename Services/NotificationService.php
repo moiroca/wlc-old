@@ -32,6 +32,34 @@ class NotificationService
 
 		return $this->connection->query($sql);
 	}
+
+	/** 
+	 * Insert New Notifications Approved By President
+	 */
+	public function saveNotificationsApprovedByPresident($data)
+	{
+		$date = new Datetime();
+
+		$sql = "
+			INSERT 
+				INTO 
+				 	`notifications` (
+				 		`sender_id`,
+				 		`recepient_id`,
+				 		`viewed`,
+				 		`datetime_sent`,
+				 		`msg`
+				 	) 
+				 VALUES (
+				 	".$data['sender_id'].", 
+				 	".$data['recepient_id'].",
+				 	'False',
+				 	'".$date->format('Y-m-d H:i:s')."',
+				 	'".Constant::NOTIFICATION_APPROVED_BY_PRESIDENT_MSG."'
+				 	)";
+
+		$this->connection->query($sql) or die(mysqli_error($this->connection));;		
+	}
 }
 
 ?>

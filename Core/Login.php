@@ -102,4 +102,12 @@ Class Login {
 	{
 		return $_SESSION['id'];
 	}
+
+	/**
+	 * Get User Type If Logged In
+	 */
+	public static function getUserLoggedInType()
+	{
+		return $_SESSION['type'];
+	}
 }

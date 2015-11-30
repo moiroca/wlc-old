@@ -33,7 +33,8 @@ class UserService
 							firstname,
 							middlename,
 							type,
-							datetime_added
+							datetime_added,
+							department_id
 						) 
 					VALUES (
 						'".$this->connection->real_escape_string($user['username'])."',
@@ -42,7 +43,8 @@ class UserService
 						'".$this->connection->real_escape_string($user['first_name'])."',
 						'".$this->connection->real_escape_string($user['middle_name'])."',
 						'".$this->connection->real_escape_string($user['user_type'])."',
-						'".$date->format('Y-m-d H:i:s')."')";
+						'".$date->format('Y-m-d H:i:s')."',
+						'".$this->connection->real_escape_string($user['department_id'])."')";
 		
 		$resultQuery = $this->connection->query($query) or die(mysqli_error($this->connection));
 

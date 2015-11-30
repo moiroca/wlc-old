@@ -56,6 +56,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <th> Control Identifier </th>
                   <th> Approved By </th>
                   <th> Purpose </th>
+                  <th> Requisition Type </th>
                   <th> Action </th>
                 <?php else: ?>
                   <th> View Items </th>
@@ -71,10 +72,11 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <tbody>
             <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
               <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/ApproveRequisitionByPresident.php'); ?>" />
+              <input type="hidden" id="declined_item_requisition_url" value="<?php echo Link::createUrl('Controllers/DeclinedRequisitionByPresident.php'); ?>" />
               <input type="hidden" id="requisition_type" value="<?php echo Constant::REQUISITION_ITEM; ?>"/>
               <?php if ($result && 0 != $result->num_rows) { ?>
                   <?php  while ($item = $result->fetch_assoc()) { ?>
-                    <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
+                    <tr data-requesterId="<?php echo $item['requisition_requester_id']; ?>"  data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                       <td> 
                         <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED ) { ?>
                           <a 
@@ -91,6 +93,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       </td>
                       <td> <?php echo '<b>'.$item['approver_type'].'</b>'.': '.RequesterUtility::getFullName($item); ?></td>
                       <td> <?php echo $item['requisition_purpose']; ?></td>
+                      <td> <?php echo $item['requisition_type']; ?> </td>
                       <!-- <td> <?php $date = new DateTime($item['requisition_datetime_added']);
                       echo $date->format('Y-m-d H:i:s'); ?></td> -->
                       <!-- <td>

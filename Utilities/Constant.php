@@ -42,11 +42,16 @@ Class Constant {
 		// Requisition Status
 		REQUISITION_APPROVED = 'Approved',
 		REQUISITION_PENDING = 'Pending',
+		REQUISITION_PARTIALLY_APPROVED = 'Partially Approved',
 		REQUISITION_SENT = 'Sent',
 		REQUISITION_FINISHED = 'Finished',
 		REQUISITION_ONGOING = 'On Going',
+		REQUISITION_DECLINED = 'Declined',
 
 		// Notifications Status
 		NOTIFICATION_VIEWED = 'True',
-		NOTIFICATION_NOT_VIEWED = 'False';
+		NOTIFICATION_NOT_VIEWED = 'False',
+
+		// Notifications Messages
+		NOTIFICATION_APPROVED_BY_PRESIDENT_MSG = "Your request has been approved by the President.";
 }

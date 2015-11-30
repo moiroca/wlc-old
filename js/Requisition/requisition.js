@@ -37,11 +37,7 @@ $(document).ready(function() {
 	$('#requisition_type').on('change', function() {
 		var requisitionType = $(this);
 
-		if (requisitionType.val() == 'Job') {
-			Requisition.$attachedItemGroup.show();
-		} else {	
-			Requisition.$attachedItemGroup.hide();
-		}
+		Requisition.$attachedItemGroup.show();
 	});
 
 	$('#item_control_number').on('keyup', function(e) {
@@ -133,6 +129,102 @@ $(document).ready(function() {
 			success: function(data) {
 				console.log(data);
 			}
+		});
+
+		e.preventDefault();
+	});
+
+	/**
+	 * Add More Item To Approve Item Requisition
+	 */
+	$('#add_more_item').on('click', function(e) {
+		
+		var item = $('.approve_requisition_item').first();
+		
+		$('#approve_requisition_items').append($('<div />', { 'class' : 'col-lg-3'}).append(item));
+		e.preventDefault();
+	});
+
+	/**
+	 * Attach Item to Item Requisition
+	 */
+	$('#attach_item_to_item_requisition_btn').on('click', function(e) {
+		var requisition = $('#approve_requisition_items_template');
+
+		var area_id = requisition.find('#area_id'),
+			status = requisition.find('#status'),
+			type = requisition.find('#type'),
+			quantity = requisition.find('#quantity'),
+			name = requisition.find('#name');
+
+		if (!area_id.val()) {
+			console.log('Area ID required');
+			return false;
+		}
+
+		if (!status.val()) {
+			console.log('Status required');
+			return false;
+		}
+
+		if (!type.val()) {
+			console.log('Type required');
+			return false;
+		}
+
+		if (!quantity.val()) {
+			console.log('Quantity required');
+			return false;
+		}
+
+		if (!name.val()) {
+			console.log('Name required');
+			return false;
+		}
+
+		
+		e.preventDefault();
+	});
+
+	/**
+	 * Approve Item By President
+	 */
+	$('.approve_item_by_president_btn').on('click', function(e) {
+		var item = $(this).closest('tr'),
+			btn = $(this);
+
+		Requisition.approveRequisitionByPresident(
+			item.attr('data-id'), 
+			item.attr('data-requesterId'),
+			{
+				beforeSend : function() {
+					btn.text('Approving...');
+				},
+				success: function(data) {
+					btn.removeClass('btn-primary');
+					btn.addClass('btn-success');
+					btn.text('Approved');
+					btn.attr('disabled', 'disabled');
+					btn.next().remove();
+				}
+			});
+		e.preventDefault();
+	});
+
+	/**
+	 * Declined 
+	 */
+	$('.declined_item_by_president_btn').on('click', function(e) {
+		var item = $(this).closest('tr'),
+			btn = $(this);
+
+		Requisition.declinedRequisitionByPresident($(item).attr('data-id'), {
+			beforeSend: function() {
+
+			},
+			success: function(data) {
+				console.log(data);
+			}	
 		});
 
 		e.preventDefault();
