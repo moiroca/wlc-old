@@ -42,6 +42,25 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </select>
                         <p class="help-block"></p>
                     </div>
+                    <?php 
+                      $areaObj = new Area(); 
+                      $areas = $areaObj->getAll();
+                    ?>
+
+                    <div class="control-group">
+                      <?php if (0 != $areas->num_rows): ?>
+                              <label class='control-label' for="type">Area</label>
+                              <select id='area_id' class='form-control' name='area_id' required>
+                                  <option value=''>Select Area</option>
+                                  <?php while ( $area = $areas->fetch_assoc()) { ?>
+                                    <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
+                                  <?php } ?>
+                              </select>
+                              <p class="help-block"></p>
+                      <?php else : ?>
+                          <div class='alert alert-info'> <i class='fa fa-info'></i> There are no areas yet. Please Add Area First. </div>
+                      <?php endif ?>
+                    </div>
 
                     <div class="control-group">
                         <label class='control-label' for="purpose"> Purpose</label>    

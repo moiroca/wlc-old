@@ -16,6 +16,7 @@ Login::sessionStart();
       $result = $requisitionServiceObj->save([
                   'type' 	=> $_POST['type'],
                   'purpose'  => $_POST['purpose'],
+                  'area_id'   => (int)$_POST['area_id'],
                   'items'    	=> (isset($_POST['items']) && 0 != sizeof($_POST['items']) && is_array($_POST['items'])) ? $_POST['items'] : null
                 ]);
 

@@ -52,13 +52,11 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <thead>
               <tr id='th'>
                 <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
-                  <th> View Items </th>
                   <th> Control Identifier </th>
                   <th> Approved By </th>
                   <th> Purpose </th>
                   <th> Action </th>
                 <?php else: ?>
-                  <th> View Items </th>
                   <th> Control Identifier </th>
                   <th> Requester Name </th>
                   <th> Purpose </th>
@@ -75,17 +73,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
               <?php if ($result && 0 != $result->num_rows) { ?>
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
-                      <td> 
-                        <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED ) { ?>
-                          <a 
-                            class='btn btn-success btn-sm' 
-                            href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php?control_identifier='.$item['requisition_control_identifier']); ?>">
-                            <i class='fa fa-table'></i> View Items
-                          </a> 
-                        <?php } else { ?> 
-                          <i class='label label-info'>Items Not Available</i> 
-                        <?php } ?>
-                      </td>
                       <td> 
                           <a title="View Details Of Requisition" href="#"><?php echo $item['requisition_control_identifier']; ?></a>
                       </td>
@@ -123,17 +110,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
               <?php if ($result && 0 != $result->num_rows) { ?>
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
-                      <td> 
-                        <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED ) { ?>
-                          <a 
-                            class='btn btn-success btn-sm' 
-                            href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php?control_identifier='.$item['requisition_control_identifier']); ?>">
-                            <i class='fa fa-table'></i> View Items
-                          </a> 
-                        <?php } else { ?> 
-                          <i class='label label-info'>Items Not Available</i> 
-                        <?php } ?>
-                      </td>
                       <td> 
                           <a title="View Details Of Requisition" href="#"><?php echo $item['requisition_control_identifier']; ?></a>
                       </td>

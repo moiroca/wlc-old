@@ -35,14 +35,16 @@ class RequisitionService
 							type, 
 							status, 
 							datetime_added,
-							control_identifier) 
+							control_identifier,
+							area_id) 
 					VALUES (
 						".$this->connection->real_escape_string($requester_id).",
 						'".$this->connection->real_escape_string($data['purpose'])."', 
 						'".$this->connection->real_escape_string($data['type'])."',
-						'".Constant::REQUISITION_SENT."',
+						'".Constant::REQUISITION_PENDING."',
 						'".$datetime_added."',
-						'".hexdec(uniqid())."')";
+						'".hexdec(uniqid())."',
+						".$this->connection->real_escape_string($data['area_id']).")";
 
 		$insertRequistionQUery = $this->connection->query($query) or die(mysqli_error($this->connection));
 
