@@ -193,19 +193,19 @@ $(document).ready(function() {
 		var item = $(this).closest('tr'),
 			btn = $(this);
 
+			td = $(this).closest('td');
+
 		Requisition.approveRequisitionByPresident(
 			item.attr('data-id'), 
 			item.attr('data-requesterId'),
 			{
 				beforeSend : function() {
-					btn.text('Approving...');
+					td.attr('align', 'center').empty().append('<i class="fa fa-spinner fa-spin"></i>');
 				},
 				success: function(data) {
-					btn.removeClass('btn-primary');
-					btn.addClass('btn-success');
-					btn.text('Approved');
-					btn.attr('disabled', 'disabled');
-					btn.next().remove();
+					td.siblings('.status').empty().append('<label class="label label-success">Approved By President</label>')
+
+					td.empty().append('<label class="label label-info"> <i class="fa fa-info"></i> There are no actions available.</label>');
 				}
 			});
 		e.preventDefault();

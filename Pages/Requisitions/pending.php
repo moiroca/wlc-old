@@ -51,22 +51,12 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
         <table class="table table-striped table-hover table-bordered">
           <thead>
               <tr id='th'>
-                <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
-                  <th> View Items </th>
                   <th> Control Identifier </th>
                   <th> Approved By </th>
                   <th> Purpose </th>
+                  <th> Status</th>
                   <th> Requisition Type </th>
                   <th> Action </th>
-                <?php else: ?>
-                  <th> View Items </th>
-                  <th> Control Identifier </th>
-                  <th> Requester Name </th>
-                  <th> Purpose </th>
-
-                  <th> Status </th>
-                  <th> Action </th>
-                <?php endif ?>
               </tr>
           </thead>
           <tbody>
@@ -78,38 +68,15 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr data-requesterId="<?php echo $item['requisition_requester_id']; ?>"  data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                       <td> 
-                        <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED ) { ?>
-                          <a 
-                            class='btn btn-success btn-sm' 
-                            href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php?control_identifier='.$item['requisition_control_identifier']); ?>">
-                            <i class='fa fa-table'></i> View Items
-                          </a> 
-                        <?php } else { ?> 
-                          <i class='label label-info'>Items Not Available</i> 
-                        <?php } ?>
-                      </td>
-                      <td> 
                           <a title="View Details Of Requisition" href="#"><?php echo $item['requisition_control_identifier']; ?></a>
                       </td>
-                      <td> <?php echo '<b>'.$item['approver_type'].'</b>'.': '.RequesterUtility::getFullName($item); ?></td>
+                      <td> GSD Officer: <a href="javascript:void(0)"> <?php echo RequesterUtility::getFullName($item); ?></a> </td>
                       <td> <?php echo $item['requisition_purpose']; ?></td>
+                      <td class='status'> <label class="label label-success">Approved By GSD Officer</label> </td>
                       <td> <?php echo $item['requisition_type']; ?> </td>
-                      <!-- <td> <?php $date = new DateTime($item['requisition_datetime_added']);
-                      echo $date->format('Y-m-d H:i:s'); ?></td> -->
-                      <!-- <td>
-                          <?php if ($item['requisition_datetime_provided']) { ?>
-                              <?php echo $item['requisition_datetime_provided']; ?>
-                          <?php } else { ?>
-                              <i class='label label-info'>Datetime not available</i>
-                          <?php } ?>
-                      </td> -->
                       <td>
-                          <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) { ?> 
                             <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning'> <i class='fa fa-thumbs-down'></i> Decline</a>
-                          <?php } ?>
-                          <!-- <a href="#" class='btn btn-sm btn-default'> <i class='fa fa-edit'></i> Edit</a>
-                          <a href="#" class='btn btn-sm btn-warning'> <i class='fa fa-edit'></i> Delete</a> -->
                       </td>
                     </tr>  
                   <?php } ?>

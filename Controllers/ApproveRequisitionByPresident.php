@@ -10,10 +10,10 @@ if (isset($_POST['type']) && isset($_POST['requisitionId'])) {
 	$data = [
 		'requisition_id' => (int)$_POST['requisitionId'],
 		'requesterId' => $_POST['requesterId'],
-		'user_id'		 => Login::getUserLoggedInId(),
+		'approved_by'		 => Login::getUserLoggedInId(),
 		'approver_type'  => Constant::USER_PRESIDENT,
 		'approved_datetime' => date_create()->format('Y-m-d H:i:s')
 	];
 
-	$requisitionService->approveByPresident($data);	
+	$requisitionService->approve($data);	
 }

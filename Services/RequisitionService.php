@@ -85,7 +85,16 @@ class RequisitionService
 					`id`=".$data['requistion_id']."
 			";
 		} else {
-
+			$updateStatusQuery = "
+				UPDATE 
+					`requisitions` 
+				SET 
+					`status`='".Constant::REQUISITION_APPROVED."',
+					`datetime_approveddeclined_by_president` = '".date_create()->format('Y-m-d H:i:s')."',
+					`president_id`=".$data['approved_by']."
+				WHERE 
+					`id`=".$data['requisition_id']."
+			";
 		}
 
 		return $this->connection->query($updateStatusQuery);
