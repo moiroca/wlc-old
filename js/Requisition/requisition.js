@@ -229,4 +229,31 @@ $(document).ready(function() {
 
 		e.preventDefault();
 	});
+
+	/**
+	 * Approve Requisition By GSD Officer
+	 */
+	$('.approve_item_by_gsd_officer').on('click', function(e) {
+		var item = $(this).closest('tr'),
+			btn = $(this),
+			td = $(this).parents('td');
+
+		Requisition.approve({
+			requisition_id: $(item).attr('data-id'),
+			type: $('#requisition_type').val()
+		}, {
+			beforeSend: function() {
+				td.attr('align', 'center').empty().append("<i class='fa fa-spinner fa-spin fa-2x'></i>");	
+			},
+			success: function(data) {
+				if (!data.error) {
+					td.prev().empty().append('<label class="label label-success">Approved</label>')
+					td.attr('align', 'center').empty().append("<label class='label label-info'> <i class='fa fa-info'></i> There is no action available</label>");	
+				} else {
+					console.log('Error');
+				}
+			}
+		});
+		e.preventDefault();
+	});
 });

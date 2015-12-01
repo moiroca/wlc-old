@@ -16,6 +16,4 @@ if (isset($_POST['type']) && isset($_POST['requisitionId'])) {
 	];
 
 	$requisitionService->approveByPresident($data);	
-} else {
-
 }

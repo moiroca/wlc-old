@@ -28,8 +28,11 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
       <div class="table-responsive">
 
         <?php 
-
-            $result = $requisitions->getAllRequesition(Constant::REQUISITION_JOB);
+            if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT) {
+                $result = $requisitions->getAllRequesitionForApprovalByPresident(Constant::REQUISITION_JOB);  
+            } else {
+                $result = $requisitions->getAllRequesition(Constant::REQUISITION_JOB);
+            }
         ?>
 
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
@@ -45,59 +48,100 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 The System is still in development mode. Expect more bugs to come. 
             </div>
         <?php } ?>
+        <span>
+            <input type="hidden" id="requisition_type" value="<?php echo Constant::REQUISITION_JOB; ?>"/>
+        </span>
         <table class="table table-striped table-hover table-bordered">
           <thead>
               <tr id='th'>
-                <th> Control Identifier </th>
-                <th> Requester Name </th>
-                <th> Purpose </th>
-                <!-- <th> Date and Time Added </th>
-                <th> Date and Time Approved </th> -->
-                <th> Status </th>
-                <th> Action </th>
+                <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
+                  <th> Control Identifier </th>
+                  <th> Approved By </th>
+                  <th> Purpose </th>
+                  <th> Action </th>
+                <?php elseif (Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
+                  <th> Control Identifier </th>
+                  <th> Requester Name </th>
+                  <th> Purpose </th>
+
+                  <th> Status </th>
+                  <th> Action </th>
+                <?php endif ?>
               </tr>
           </thead>
           <tbody>
-            <?php if ($result && 0 != $result->num_rows) { ?>
-                <?php  while ($item = $result->fetch_assoc()) { ?>
-                  <tr>
-                    <td> <?php echo $item['requisition_control_identifier']; ?></td>
-                    <td> <?php echo RequesterUtility::getFullName($item); ?></td>
-                    <td> <?php echo $item['requisition_purpose']; ?></td>
-                    <!-- <td> <?php echo $item['requisition_datetime_added']; ?></td>
-                    <td>
-                        <?php if ($item['requisition_datetime_provided']) { ?>
-                            <?php echo $item['requisition_datetime_provided']; ?>
-                        <?php } else { ?>
-                            <i class='label label-info'>Datetime not available</i>
-                        <?php } ?>
-                    </td> -->
-                    <td align=center> 
-                      <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED) { ?> 
-                        <i class='label label-success'><?php echo $item['requisition_status']; ?></i>
-                      <?php } else { ?> 
-                        <i class='label label-info'><?php echo $item['requisition_status']; ?></i>
-                      <?php } ?>
-                    </td>
-                    <td>
-                        <a href="#" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Approve</a>
-                        <a href="#" class='btn btn-sm btn-default'> <i class='fa fa-edit'></i> Edit</a>
-                        <a href="#" class='btn btn-sm btn-warning'> <i class='fa fa-edit'></i> Delete</a>
-                    </td>
-                  </tr>  
-                <?php } ?>
-            <?php } else { ?>
-                  <tr>
-                      <td colspan=7>
-                          <div class="alert alert-info">
-                              There are no items found.
-                          </div>
+            <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
+              <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/ApproveRequisitionByPresident.php'); ?>" />
+              <?php if ($result && 0 != $result->num_rows) { ?>
+                  <?php  while ($item = $result->fetch_assoc()) { ?>
+                    <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
+                      <td> 
+                          <a title="View Details Of Requisition" href="#"><?php echo $item['requisition_control_identifier']; ?></a>
                       </td>
-                  </tr>
-            <?php } ?>
+                      <td> <?php echo '<b>'.$item['approver_type'].'</b>'.': '.RequesterUtility::getFullName($item); ?></td>
+                      <td> <?php echo $item['requisition_purpose']; ?></td>
+                      <td>
+                          <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) { ?> 
+                            <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                            <a href="javascript:void(0)" class='btn btn-sm btn-warning'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php } ?>
+                      </td>
+                    </tr>  
+                  <?php } ?>
+              <?php } else { ?>
+                    <tr>
+                        <td colspan=7>
+                            <div class="alert alert-info">
+                                There are no items found.
+                            </div>
+                        </td>
+                    </tr>
+              <?php } ?>
+            <?php elseif (Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
+              <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/ApproveRequisitionByGSDOfficer.php'); ?>" />
+              <?php if ($result && 0 != $result->num_rows) { ?>
+                  <?php  while ($item = $result->fetch_assoc()) { ?>
+                    <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
+                      <td> 
+                          <a title="View Details Of Requisition" href="#"><?php echo $item['requisition_control_identifier']; ?></a>
+                      </td>
+                      <td> <?php echo RequesterUtility::getFullName($item); ?></td>
+                      <td> <?php echo $item['requisition_purpose']; ?></td>
+                      <td> 
+                        <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED) { ?> 
+                          <i class='label label-success'><?php echo $item['requisition_status']; ?></i>
+                        <?php } else { ?> 
+                          <i class='label label-info'><?php echo $item['requisition_status']; ?></i>
+                        <?php } ?>
+                      </td>
+                      <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) : ?> 
+                        <td>
+                              <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_gsd_officer'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                              <a href="javascript:void(0)" class='btn btn-sm btn-warning'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                        </td>    
+                      <?php else: ?>
+                        <td>
+                            <span class='label label-info'> <i class='fa fa-info'></i> There is no action available.</span>
+                        </td>
+                      <?php endif ?>
+                    </tr>  
+                  <?php } ?>
+              <?php } else { ?>
+                    <tr>
+                        <td colspan=7>
+                            <div class="alert alert-info">
+                                There are no items found.
+                            </div>
+                        </td>
+                    </tr>
+              <?php } ?>
+            <?php endif ?>
           </tbody>
         </table>
+        <span>
+            <input type='hidden' id='approval_item_requisition_link' value='<?php echo Link::createUrl('Controllers/ApproveRequisition.php'); ?>'>
+        </span>
       </div>
     </div>
   </div>
-<?php Template::footer(); ?>
+<?php Template::footer(['requisition.js', 'Requisition/requisition.js']); ?>

@@ -10,18 +10,20 @@ $isError = false;
 $errorMSG = '';
 
 if (isset($_POST['requistion_id']) && isset($_POST['type'])) {
+
+	$requisitionService = new RequisitionService();
 	$data = [
-			'requistion_id'	=> isset($_POST['requistion_id']) ? $_POST['requistion_id'] : null,
+			'requistion_id'	=> isset($_POST['requistion_id']) ? (int)$_POST['requistion_id'] : null,
 			'approved_by'	=> Login::getUserLoggedInId(),
+			'approver_type' => Login::getUserLoggedInType(),
 			'type' 			=> isset($_POST['type']) ? $_POST['type'] : null,
 		];
 
-	$requisitionService = new RequisitionService();		
 
 	$result = $requisitionService->approve($data);
 } else {
 	$isError = true;
-	$errorMSG = 'Something Went Wrong'
+	$errorMSG = 'Something Went Wrong';
 }
 
 echo json_encode([

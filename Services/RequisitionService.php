@@ -71,57 +71,25 @@ class RequisitionService
 	/**
 	 * Approve Requisition
 	 */
-	public function approveByPresident($data)
+	public function approve($data)
 	{
-		$updateStatusQuery = "
-			UPDATE 
-				`requisitions` 
-			SET 
-				`status`='".Constant::REQUISITION_APPROVED."' 
-			WHERE 
-				`id`=".$this->connection->real_escape_string($data['requisition_id'])."
-		";
+		if ($data['approver_type'] == Constant::USER_GSD_OFFICER) {
+			$updateStatusQuery = "
+				UPDATE 
+					`requisitions` 
+				SET 
+					`status`='".Constant::REQUISITION_APPROVED."',
+					`datetime_approveddeclined_by_gsd_officer` = '".date_create()->format('Y-m-d H:i:s')."',
+					`gsd_officer_id`=".$data['approved_by']."
+				WHERE 
+					`id`=".$data['requistion_id']."
+			";
+		} else {
 
-		$this->connection->query($updateStatusQuery);
+		}
 
-		$updateQuery = "
-			UPDATE 
-				`approved_requisition` 
-			SET 
-				`is_approved_by_president`='True' 
-			WHERE 
-				`requisition_id`='".$this->connection->real_escape_string($data['requisition_id'])."'
-			AND
-				`approver_type` = '".Constant::USER_GSD_OFFICER."'";		
-
-		$this->connection->query($updateQuery);
-
-		$query = "
-			INSERT
-				INTO
-					`approved_requisition`(
-							`requisition_id`,
-							`user_id`,
-							`approver_type`,
-							`approved_datetime`,
-							`is_approved_by_president`
-						)
-				VALUES(
-						".$this->connection->real_escape_string($data['requisition_id']).",
-						".$data['user_id'].",
-						'".$data['approver_type']."',
-						'".$data['approved_datetime']."',
-						'True'
-					)
-		";
-
-		$notificationService = new NotificationService();
-		$notificationService->saveNotificationsApprovedByPresident([
-				'sender_id' => $data['user_id'], 
-				'recepient_id' => $data['requesterId']
-
-			]);
-
-		return $this->connection->query($query);
+		return $this->connection->query($updateStatusQuery);
 	}
+
+
 }

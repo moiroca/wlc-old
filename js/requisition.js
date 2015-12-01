@@ -34,13 +34,13 @@ var Requisition = function($){
 		/**
 		 * Approve Requisition
 		 */
-		approve: function(requistion_id, type, callback) {
+		approve: function(data, callback) {
 			$.ajax({
 				method: 'POST',
 				url : $('#approval_item_requisition_link').val(),
 				data: {
-					requistion_id : requistion_id,
-					type : type
+					requistion_id : data.requisition_id,
+					type : data.type
 				},
 				datatype: 'application/json',
 				beforeSend: function() {
