@@ -28,7 +28,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
       <div class="table-responsive">
 
         <?php 
-            $result = $areas->getAll();
+            $result = $areas->getAllAreaWithDeparment();
         ?>
 
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
@@ -48,6 +48,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <thead>
               <tr id='th'>
                 <th> Name</th>
+                <th> Department</th>
                 <th> Action </th>
               </tr>
           </thead>
@@ -55,7 +56,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
             <?php if ($result && 0 != $result->num_rows) { ?>
                 <?php  while ($item = $result->fetch_assoc()) { ?>
                   <tr>
-                    <td> <?php echo $item['name']; ?></td>
+                    <td> <?php echo $item['area_name']; ?></td>
+                    <td> <?php echo $item['department_name']; ?></td>
                     <td> 
                       <a class="btn btn-large btn-info"> <i class='fa fa-eye'></i> View Stocks </a>
                       <a class="btn btn-sm btn-default"> <i class='fa fa-edit'></i> Edit </a>

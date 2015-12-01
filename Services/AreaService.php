@@ -29,8 +29,15 @@ class AreaService
 					VALUES (
 						'".$this->connection->real_escape_string($area['name'])."')";
 		
-		$resultQuery = $this->connection->query($query) or die(mysqli_error($this->connection));
+		$resultQuery = $this->connection->query($query);
 
-		return $resultQuery;
+		$area_id = mysqli_insert_id($this->connection);
+
+		$departmentAreaService = new DepartmentAreaService();
+
+		return $departmentAreaService->save([
+				'department_id' => $area['department_id'],
+				'area_id'	=> $area_id
+			]);
 	}
 }

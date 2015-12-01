@@ -5,6 +5,9 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 Login::sessionStart();
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
+$departmentObj   = new Department();
+$departments = $departmentObj->getAll();
+
 ?>
 <?php Template::header(); ?>
   <div class="row">
@@ -31,6 +34,22 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <div class="panel-body">
             <fieldset>
                 <form id='requisition_form' action ="<?php echo Link::createUrl('Controllers/AddArea.php'); ?>" method="post">
+                    <div class="control-group">
+                          <label>Department</label>    
+                          <select name='department_id' class='form-control' required>
+                            <option value=''>Select Department</option>
+                            <?php 
+                                if ($departments) {
+                                  while ($department =  $departments->fetch_assoc()) {
+                                    ?>
+                                      <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
+                                    <?php
+                                  }
+                                } 
+                            ?>
+                        </select>
+                        <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
+                    </div>
 
                     <div class="control-group">
                         <label class='control-label' for="name"> Name</label>    

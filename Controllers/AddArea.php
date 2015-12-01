@@ -13,7 +13,8 @@ Login::sessionStart();
       $areaServiceObj = new AreaService();
 
       $result = $areaServiceObj->save([
-                  'name'    => $_POST['name']
+                  'name'    => $_POST['name'],
+                  'department_id' => $_POST['department_id']
                 ]);
 
       if ($result) {
