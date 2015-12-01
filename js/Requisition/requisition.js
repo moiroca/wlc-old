@@ -200,7 +200,7 @@ $(document).ready(function() {
 			item.attr('data-requesterId'),
 			{
 				beforeSend : function() {
-					td.attr('align', 'center').empty().append('<i class="fa fa-spinner fa-spin"></i>');
+					td.empty().append('<i class="fa fa-spinner fa-spin"></i>');
 				},
 				success: function(data) {
 					td.siblings('.status').empty().append('<label class="label label-success">Approved By President</label>')
@@ -243,12 +243,12 @@ $(document).ready(function() {
 			type: $('#requisition_type').val()
 		}, {
 			beforeSend: function() {
-				td.attr('align', 'center').empty().append("<i class='fa fa-spinner fa-spin fa-2x'></i>");	
+				td.empty().append("<i class='fa fa-spinner fa-spin fa-2x'></i>");	
 			},
 			success: function(data) {
 				if (!data.error) {
 					td.prev().empty().append('<label class="label label-success">Approved</label>')
-					td.attr('align', 'center').empty().append("<label class='label label-info'> <i class='fa fa-info'></i> There is no action available</label>");	
+					td.empty().append("<label class='label label-info'> <i class='fa fa-info'></i> There is no action available</label>");	
 				} else {
 					console.log('Error');
 				}
