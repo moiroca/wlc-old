@@ -66,4 +66,36 @@ Class Requisitions extends Base
 
     return $result;
   }
+
+  /**
+   * Get Requisition By Control Identifier
+   */
+  public function getRequisitionByControlIdentifier($controlIdentifier)
+  {
+    $sql = "SELECT 
+                `$this->table`.`id` as requisition_id,
+                `$this->table`.`purpose` as requisition_purpose,
+                `$this->table`.`type` as requisition_type,
+                `$this->table`.`requester_id` as requisition_requester_id,
+                `$this->table`.`control_identifier` as requisition_control_identifier,
+                `$this->table`.`datetime_approveddeclined_by_president` as requisition_datetime_approveddeclined_by_president,
+                `$this->table`.`datetime_approveddeclined_by_gsd_officer` as requisition_datetime_approveddeclined_by_gsd_officer,
+                `$this->table`.`datetime_added` as requisition_datetime_added,
+                `$this->table`.`status` as requisition_status,
+                `$this->table`.`president_id` as requisition_president_id,
+                `$this->table`.`gsd_officer_id` as requisition_gsd_officer_id,
+                `areas`.`name` as requisition_area_name
+              FROM 
+                `$this->table`
+              JOIN
+                `areas`
+              ON
+                `$this->table`.`area_id` = `areas`.`id`
+              WHERE
+                `$this->table`.`control_identifier` = $controlIdentifier";
+
+    $result = $this->raw($sql);
+
+    return $result;
+  }
 }

@@ -68,7 +68,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr data-requesterId="<?php echo $item['requisition_requester_id']; ?>"  data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                       <td> 
-                          <a title="View Details Of Requisition" href="#"><?php echo $item['requisition_control_identifier']; ?></a>
+                          <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
                       </td>
                       <td> GSD Officer: <a href="javascript:void(0)"> <?php echo RequesterUtility::getFullName($item); ?></a> </td>
                       <td> <?php echo $item['requisition_purpose']; ?></td>

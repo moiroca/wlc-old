@@ -45,7 +45,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr>
                       <td> 
-                          <a title="View Details Of Requisition" href="#"><?php echo $item['control_identifier']; ?></a>
+                          <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['control_identifier']); ?>"><?php echo $item['control_identifier']; ?></a>
                       </td>
                       <td> 
                           <?php if ($item['gsd_officer_id']): ?>
