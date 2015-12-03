@@ -82,7 +82,7 @@ class RequisitionService
 					`datetime_approveddeclined_by_gsd_officer` = '".date_create()->format('Y-m-d H:i:s')."',
 					`gsd_officer_id`=".$data['approved_by']."
 				WHERE 
-					`id`=".$data['requistion_id']."
+					`id`=".$data['requisition_id']."
 			";
 		} else {
 			$updateStatusQuery = "

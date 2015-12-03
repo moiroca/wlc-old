@@ -195,9 +195,10 @@ $(document).ready(function() {
 
 			td = $(this).closest('td');
 
-		Requisition.approveRequisitionByPresident(
-			item.attr('data-id'), 
-			item.attr('data-requesterId'),
+		Requisition.approve({
+				requisition_id: $(item).attr('data-id'),
+				type: $('#requisition_type').val()
+			},
 			{
 				beforeSend : function() {
 					td.empty().append('<i class="fa fa-spinner fa-spin"></i>');
@@ -214,13 +215,14 @@ $(document).ready(function() {
 	/**
 	 * Declined 
 	 */
-	$('.declined_item_by_president_btn').on('click', function(e) {
+	$('.decline_requisition').on('click', function(e) {
+
 		var item = $(this).closest('tr'),
 			btn = $(this);
 
 		Requisition.declinedRequisitionByPresident($(item).attr('data-id'), {
 			beforeSend: function() {
-
+				console.log('Declining...')
 			},
 			success: function(data) {
 				console.log(data);

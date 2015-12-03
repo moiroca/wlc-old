@@ -39,7 +39,7 @@ var Requisition = function($){
 				method: 'POST',
 				url : $('#approval_item_requisition_link').val(),
 				data: {
-					requistion_id : data.requisition_id,
+					requisition_id : data.requisition_id,
 					type : data.type
 				},
 				datatype: 'application/json',
@@ -76,7 +76,7 @@ var Requisition = function($){
 			});
 		},
 
-		approveRequisitionByPresident: function(requisitionId, requesterId, callback) {  
+		approveRequisition: function(requisitionId, requesterId, callback) {  
 			$.ajax({
 				url: $('#approve_item_requisition_url').val(),
 				method: 'POST',

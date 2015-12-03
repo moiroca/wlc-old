@@ -52,9 +52,11 @@ Class Constant {
 		NOTIFICATION_NOT_VIEWED = 'False',
 
 		// Notifications Messages
-		NOTIFICATION_APPROVED_BY_PRESIDENT_MSG = "Your requesition has been approved by the President.",
+		NOTIFICATION_APPROVED_BY_PRESIDENT = "Your requesition has been approved by the President.",
 		NOTIFICATION_APPROVED_BY_GSD_OFFICER   = "Your requesition has been approved by the GSD Officer.",
 		NOTIFICATION_NEW_ITEM_REQUISITION 	   = "New Item Requisition",
 		NOTIFICATION_NEW_JOB_REQUISITION 	   = "New Job Requisition",
-		NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT = "New Requistion For Approval";
+		NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT = "New Requistion For Approval",
+		NOTIFICATION_REQUISTION_DECLINED_BY_GSD_OFFICER	   = "You requisition has been declined by GSD Officer",
+		NOTIFICATION_REQUISTION_DECLINED_BY_President	   = "You requisition has been declined by President";
 }

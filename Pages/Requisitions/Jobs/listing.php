@@ -72,6 +72,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <tbody>
             <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
               <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/ApproveRequisitionByPresident.php'); ?>" />
+              <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/DeclineRequisition.php'); ?>" />
               <?php if ($result && 0 != $result->num_rows) { ?>
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
@@ -83,7 +84,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       <td>
                           <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) { ?> 
                             <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
-                            <a href="javascript:void(0)" class='btn btn-sm btn-warning'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                            <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php } ?>
                       </td>
                     </tr>  
@@ -99,6 +100,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
               <?php } ?>
             <?php elseif (Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
               <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/ApproveRequisitionByGSDOfficer.php'); ?>" />
+              <input type="hidden" id="declined_item_requisition_url" value="<?php echo Link::createUrl('Controllers/DeclineRequisition.php'); ?>" />
               <?php if ($result && 0 != $result->num_rows) { ?>
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
@@ -117,7 +119,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) : ?> 
                         <td>
                               <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_gsd_officer'> <i class='fa fa-thumbs-up'></i> Approve</a>
-                              <a href="javascript:void(0)" class='btn btn-sm btn-warning'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                              <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                         </td>    
                       <?php else: ?>
                         <td>

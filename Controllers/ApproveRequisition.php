@@ -9,18 +9,20 @@ Login::sessionStart();
 $isError = false;
 $errorMSG = '';
 
-if (isset($_POST['requistion_id']) && isset($_POST['type'])) {
+if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 
 	$requisitionService = new RequisitionService();
 
 	$data = [
-			'requistion_id'	=> isset($_POST['requistion_id']) ? (int)$_POST['requistion_id'] : null,
+			'requisition_id'	=> (int)$_POST['requisition_id'],
 			'approved_by'	=> Login::getUserLoggedInId(),
 			'approver_type' => Login::getUserLoggedInType(),
 			'type' 			=> isset($_POST['type']) ? $_POST['type'] : null,
 		];
 
-
+	$requisitionObj = new Requisitions();
+	$requisition = $requisitionObj->getAll(['requester_id'], ['id' => (int)$_POST['requisition_id']]);
+	
 	$result = $requisitionService->approve($data);
 
 	if ($result) {
@@ -44,17 +46,15 @@ if (isset($_POST['requistion_id']) && isset($_POST['type'])) {
 		        ]);	
 	    	}
 	    } else {
-	    	
+
     		$msg = Constant::NOTIFICATION_APPROVED_BY_PRESIDENT;
 	    }
 
-	    while ($GSDOfficer = $GSDOfficers->fetch_assoc()) {
-	        $notificationService->saveNotificationsApprovedByPresident([
-	          'sender_id'    => $sender_id,
-	          'recepient_id' => $GSDOfficer['id'],
-	          'msg'          => $msg
-	        ]); 
-	    }
+        $notificationService->saveNotificationsApprovedByPresident([
+          'sender_id'    => $sender_id,
+          'recepient_id' => $requisition->fetch_assoc()['requester_id'],
+          'msg'          => $msg
+        ]); 
 	}
 } else {
 	$isError = true;
