@@ -21,18 +21,33 @@ Login::sessionStart();
                 ]);
 
       if ($result) {
+         $userObj = new User();
+         $users = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
+
+         $sender_id = Login::getUserLoggedInId();
+         $notificationService = new NotificationService();
+
+         if ($_POST['type'] == Constant::REQUISITION_ITEM) {
+            $msg = Constant::NOTIFICATION_NEW_ITEM_REQUISITION;
+         } else {
+            $msg = Constant::NOTIFICATION_NEW_JOB_REQUISITION; 
+         }
+         
+         while ($user = $users->fetch_assoc()) {
+            $notificationService->saveNotificationsApprovedByPresident([
+              'sender_id'    => $sender_id,
+              'recepient_id' => $user['id'],
+              'msg'          => $msg
+            ]); 
+         }
+
          $_SESSION['record_successful_added'] = true;      
       } else {
          $_SESSION['something_wrong'] = true;
       }
 
-      $url = '';
+      $url = Link::createUrl('Pages/Requisitions/myrequisitions.php');
       
-      if (isset($_POST['type']) && $_POST['type'] == Constant::REQUISITION_JOB) {
-      	$url = Link::createUrl('Pages/Requisitions/Jobs/listing.php');
-      } else {
-      	$url = Link::createUrl('Pages/Requisitions/Items/listing.php');
-      }
       header('location: '.$url);
   }
 ?>

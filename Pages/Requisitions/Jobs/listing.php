@@ -78,7 +78,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       <td> 
                           <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
                       </td>
-                      <td> <?php echo '<b>'.$item['approver_type'].'</b>'.': '.RequesterUtility::getFullName($item); ?></td>
+                      <td> <?php echo 'GSD Officer'.': '.RequesterUtility::getFullName($item); ?></td>
                       <td> <?php echo $item['requisition_purpose']; ?></td>
                       <td>
                           <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) { ?> 

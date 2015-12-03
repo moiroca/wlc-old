@@ -55,7 +55,7 @@ class NotificationService
 				 	".$data['recepient_id'].",
 				 	'False',
 				 	'".$date->format('Y-m-d H:i:s')."',
-				 	'".Constant::NOTIFICATION_APPROVED_BY_PRESIDENT_MSG."'
+				 	'".$data['msg']."'
 				 	)";
 
 		$this->connection->query($sql) or die(mysqli_error($this->connection));;		
