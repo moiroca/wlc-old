@@ -76,7 +76,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                       <td> 
-                          <a title="View Details Of Requisition" href="#"><?php echo $item['requisition_control_identifier']; ?></a>
+                          <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
                       </td>
                       <td> <?php echo '<b>'.$item['approver_type'].'</b>'.': '.RequesterUtility::getFullName($item); ?></td>
                       <td> <?php echo $item['requisition_purpose']; ?></td>
@@ -103,7 +103,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <?php  while ($item = $result->fetch_assoc()) { ?>
                     <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                       <td> 
-                          <a title="View Details Of Requisition" href="#"><?php echo $item['requisition_control_identifier']; ?></a>
+                          <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
                       </td>
                       <td> <?php echo RequesterUtility::getFullName($item); ?></td>
                       <td> <?php echo $item['requisition_purpose']; ?></td>
