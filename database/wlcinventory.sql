@@ -50,7 +50,7 @@ CREATE TABLE `areas` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,6 +60,28 @@ CREATE TABLE `areas` (
 LOCK TABLES `areas` WRITE;
 /*!40000 ALTER TABLE `areas` DISABLE KEYS */;
 /*!40000 ALTER TABLE `areas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `department_areas`
+--
+
+DROP TABLE IF EXISTS `department_areas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `department_areas` (
+  `department_id` int(11) NOT NULL,
+  `area_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `department_areas`
+--
+
+LOCK TABLES `department_areas` WRITE;
+/*!40000 ALTER TABLE `department_areas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `department_areas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -74,7 +96,7 @@ CREATE TABLE `departments` (
   `name` varchar(150) NOT NULL,
   `dean_id` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4452 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,6 +106,34 @@ CREATE TABLE `departments` (
 LOCK TABLES `departments` WRITE;
 /*!40000 ALTER TABLE `departments` DISABLE KEYS */;
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `msg` varchar(255) NOT NULL,
+  `viewed` varchar(10) NOT NULL,
+  `recepient_id` int(11) NOT NULL,
+  `datetime_sent` datetime NOT NULL,
+  `datetime_viewed` datetime NOT NULL,
+  `sender_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -97,14 +147,17 @@ CREATE TABLE `requisitions` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL,
   `requester_id` varchar(50) NOT NULL,
-  `provider_id` varchar(100) NOT NULL,
   `purpose` varchar(255) NOT NULL,
   `datetime_added` datetime NOT NULL,
-  `datetime_provided` datetime NOT NULL,
   `status` varchar(45) NOT NULL,
   `control_identifier` varchar(45) NOT NULL,
+  `area_id` int(11) NOT NULL,
+  `datetime_approveddeclined_by_gsd_officer` datetime DEFAULT NULL,
+  `datetime_approveddeclined_by_president` datetime DEFAULT NULL,
+  `gsd_officer_id` int(50) DEFAULT NULL,
+  `president_id` int(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +166,6 @@ CREATE TABLE `requisitions` (
 
 LOCK TABLES `requisitions` WRITE;
 /*!40000 ALTER TABLE `requisitions` DISABLE KEYS */;
-INSERT INTO `requisitions` VALUES (76,'Item','444','','Testing Item Requisition','2015-11-26 20:53:30','0000-00-00 00:00:00','Sent','1518906806622924'),(75,'Job','444','','Testing','2015-11-26 20:35:37','0000-00-00 00:00:00','Sent','1518905681778803');
 /*!40000 ALTER TABLE `requisitions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +203,6 @@ CREATE TABLE `stocks` (
   `control_number` varchar(100) NOT NULL,
   `name` varchar(200) NOT NULL,
   `status` varchar(30) NOT NULL,
-  `area_id` int(100) NOT NULL,
   `datetime_added` datetime NOT NULL,
   `datetime_updated` datetime NOT NULL,
   `datetime_deleted` datetime NOT NULL,
@@ -188,11 +239,12 @@ CREATE TABLE `users` (
   `datetime_added` datetime NOT NULL,
   `datetime_updated` varchar(45) NOT NULL,
   `datetime_deleted` varchar(45) NOT NULL,
+  `department_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`id`),
   UNIQUE KEY `user_id_2` (`id`),
   UNIQUE KEY `user_id_3` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10012 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10018 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +253,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (444,'mae','soria','Soria','Fatima Mae','Gonzales','Active','Inventory Officer','0000-00-00 00:00:00','',''),(10011,'admin','aaa','Inventory','WLC','admin','Deleted','Admin','0000-00-00 00:00:00','',''),(479,'pamii','labra','Labra','Famela','A','Active','Admin','0000-00-00 00:00:00','','');
+INSERT INTO `users` VALUES (444,'mae','soria','Soria','Fatima Mae','Gonzales','Active','Inventory Officer','0000-00-00 00:00:00','','',0),(10011,'admin','aaa','Inventory','WLC','admin','Deleted','Admin','0000-00-00 00:00:00','','',0),(479,'pamii','labra','Labra','Famela','A','Active','Admin','0000-00-00 00:00:00','','',0),(10012,'mae','moiroca','Roca','John Temoty','Homeres','Active','Inventory Officer','2015-11-29 15:33:24','','',0),(10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Roca','John Temoty','Homeres','Active','Inventory Officer','2015-11-29 15:34:21','','',0),(10014,'moiroca','5f4dcc3b5aa765d61d8327deb882cf99','caranyagan','ella','rosales','Active','Dean','2015-11-29 15:58:01','','',0),(10015,'testing','5f4dcc3b5aa765d61d8327deb882cf99','testing','testing','testing','Active','President','2015-11-29 17:15:21','','',0),(10016,'daniel','5f4dcc3b5aa765d61d8327deb882cf99','Roca','Daniel','Homeres','Active','GSD Officer','2015-11-29 22:24:35','','',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -214,4 +266,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-11-26 22:28:21
+-- Dump completed on 2015-12-04 12:29:38
