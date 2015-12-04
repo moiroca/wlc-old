@@ -71,18 +71,24 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
                         <div class="control-group">
                           <label>Department</label>    
-                          <select name='department_id' class='form-control' required>
-                              <option value=''>Select Department</option>
-                              <?php 
-                                  if ($departments) {
-                                    while ($department =  $departments->fetch_assoc()) {
-                                      ?>
-                                        <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
-                                      <?php
-                                    }
-                                  } 
-                              ?>
-                          </select>
+                          <?php if (0 != $departments->num_rows): ?>
+                                <select name='department_id' class='form-control' required>
+                                  <option value=''>Select Department</option>
+                                  <?php 
+                                      if ($departments) {
+                                        while ($department =  $departments->fetch_assoc()) {
+                                          ?>
+                                            <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
+                                          <?php
+                                        }
+                                      } 
+                                  ?>
+                              </select>
+                          <?php else: ?>
+                              <div class="alert alert-info">
+                                  There are no department. Please add A Department first.
+                              </div>
+                          <?php endif ?>
                           <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
                       </div>
                     </fieldset>
