@@ -1,0 +1,3 @@
+INVENTORY OFFICER
+	Username: mae
+	Password: password
