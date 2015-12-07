@@ -210,7 +210,14 @@
                                 </a>
                             </li>    
                         <?php endif ?>
-                        
+                            <li class="divider"></li>
+                            <li>
+                                <a href="<?php echo Link::createUrl('Pages/Notifications/list.php'); ?>">
+                                    <div>
+                                        <i class="fa fa-tasks fa-fw"></i> View All Notifications
+                                    </div>
+                                </a>
+                            </li>
                         <!-- <li>
                             <a href="#">
                                 <div>

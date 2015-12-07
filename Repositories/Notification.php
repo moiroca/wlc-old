@@ -13,6 +13,31 @@ class Notification extends Base
 	}
 
 	/**
+	 * Get All Notifications By Sender Id
+	 */ 
+	public function getAllBySenderId($senderId)
+	{
+		$sql = "
+			SELECT 
+				`notifications`.`id` as notification_id,
+				`notifications`.`msg` as notification_msg,
+				`notifications`.`datetime_sent` as notification_datetime_sent,
+				`users`.`firstname` as user_firstname,
+				`users`.`lastname` as user_lastname
+			FROM
+				`notifications`
+			JOIN
+				`users`
+			ON
+				`users`.`id` = `notifications`.`recepient_id`
+			WHERE
+				`notifications`.`sender_id` = $senderId
+		";
+
+		return $this->raw($sql);
+	}
+
+	/**
 	 * Get Recepient By Recepient Id
 	 *
 	 * @param $recepientId

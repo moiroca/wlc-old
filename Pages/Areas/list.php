@@ -67,7 +67,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 <?php } ?>
             <?php } else { ?>
                   <tr>
-                      <td colspan=2>
+                      <td colspan=3>
                           <div class="alert alert-info">
                               There are no items found.
                           </div>
