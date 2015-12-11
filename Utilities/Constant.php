@@ -46,6 +46,10 @@ Class Constant {
 		REQUISITION_FINISHED = 'Finished',
 		REQUISITION_ONGOING = 'On Going',
 		REQUISITION_DECLINED = 'Declined',
+		APPROVED_BY_GSD_OFFICER = 'Approved By GSD Officer', 
+		APPROVED_BY_PRESIDENT = 'Approved By President',
+		DECLINED_BY_GSD_OFFICER = 'Declined By GSD Officer', 
+		DECLINED_BY_PRESIDENT = 'Declined By President',
 
 		// Notifications Status
 		NOTIFICATION_VIEWED = 'True',

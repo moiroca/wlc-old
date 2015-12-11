@@ -107,9 +107,9 @@ $userObj = new User();
     						<p>
     							<b>Declined Datetime: </b> 
     							<?php if (!is_null($requisition['requisition_gsd_officer_id'])): ?>
-    								<label class='label label-info'>Not Available</label>
-    							<?php else: ?>
     								<?php echo $requisition['requisition_datetime_approveddeclined_by_gsd_officer']; ?>
+    							<?php else: ?>
+    								<label class='label label-info'>Not Available</label>
     							<?php endif; ?>
     						</p>
     					</li>
