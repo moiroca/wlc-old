@@ -70,7 +70,7 @@ $userObj = new User();
     						<p>
     							<b>Name: </b> 
     							<?php
-	                                $user = $userObj->getAll(['*'], ['id' => $requisition['requisition_gsd_officer_id']])->fetch_assoc();
+	                                $user = $userObj->getAll(['*'], ['id' => Login::getUserLoggedInId()])->fetch_assoc();
 	                                echo $user['lastname'].', '.$user['firstname'];
 	                            ?>
     						</p>
