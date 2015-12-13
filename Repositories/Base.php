@@ -52,6 +52,35 @@ Class Base {
 	{
 		return $this->connection->query($sql);// or die(mysqli_error($this->connection));
 	}
+
+	/**
+	 * Update Function
+	 *
+	 * @param Array $set
+	 * @param Array where
+	 */
+	public function update($set, $where)
+	{
+		$sql = "UPDATE $this->table SET ";
+
+		$wherArray = [];
+		$setArray = [];
+
+		foreach ($set as $key => $value) {
+			$setArray[] = "`$this->table`.`$key` = '".$value."' ";
+		}
+
+		$sql .= implode(', ', $setArray);
+		$sql .= " WHERE ";
+
+		foreach ($where as $key => $value) {
+			$whereArray[] = "`$this->table`.`$key` = '".$value."' ";
+		}
+
+		$sql .= implode(', ', $whereArray);
+
+		return $this->connection->query($sql) or die(mysqli_error($this->connection));
+	}
 }
 
 ?>

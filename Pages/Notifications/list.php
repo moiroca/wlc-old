@@ -8,7 +8,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 $notificationsObj = new Notification();
 
 $notifications = $notificationsObj->getAllBySenderId((int)Login::getUserLoggedInId());
-
 ?>
 <?php Template::header(); ?>
 <div class="row">
@@ -42,7 +41,7 @@ $notifications = $notificationsObj->getAllBySenderId((int)Login::getUserLoggedIn
 		        	<?php endwhile; ?>
 	        	<?php else : ?>
 	        		<tr>
-	        			<td colspan=2> 
+	        			<td colspan=3> 
 	        				<div class="alert alert-info">
 	        					There is no notifications found.
 	        				</div>

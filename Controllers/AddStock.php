@@ -15,8 +15,11 @@ Login::sessionStart();
       $result = $stockServiceObj->save([
                   'name'    => $_POST['name'],
                   'quantity'=> $_POST['quantity'],
+                  'area_id' => $_POST['area_id'],
+                  'price'   => $_POST['price'],
                   'status'  => $_POST['status'],
-                  'type'    => $_POST['type']
+                  'type'    => $_POST['type'],
+                  'isRequest' => false
                 ]);
 
       if ($result) {

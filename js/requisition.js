@@ -5,6 +5,10 @@ var Requisition = function($){
 
 		$attachedItemGroup: $('#attached_item_group'),
 
+		$itemRequisitionType : $('#itemRequisitionType'),
+
+		$newItemRequisitionForm: $('#newItemRequisitionForm'),
+		
 		$requisitionStaus: { },
 
 		init: function() {
@@ -94,12 +98,11 @@ var Requisition = function($){
 			});
 		},
 
-		declinedRequisitionByPresident: function(requisitionId, callback) {
+		declineRequisition: function(requisitionId, callback) {
 			$.ajax({
 				url: $('#declined_item_requisition_url').val(),
 				method: 'POST',
 				data: {
-					type: $('#requisition_type').val(),
 					requisitionId: requisitionId
 				},
 				beforeSend: function() {
@@ -107,6 +110,22 @@ var Requisition = function($){
 				},
 				success: function(data) {
 					callback.success(data);
+				}
+			});
+		},
+
+		approveItemInRequisition: function(data, callback) {
+			$.ajax({
+				method: 'POST',
+				url: $('#approve_item_in_requisition').val(),
+				data: {
+					stockIds : data.stockIds	
+				},
+				beforeSend: function() {
+					callback.beforeSend();
+				},
+				success: function(response) {
+					callback.success(response);
 				}
 			});
 		}

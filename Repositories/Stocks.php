@@ -24,8 +24,10 @@ Class Stocks extends Base
                 status != 'Deleted'
               AND
                 `stocks`.`type` = '".$this->connection->real_escape_string($type)."'
+              AND
+                `stocks`.`isRequest` != 'TRUE'
               GROUP BY
-                `stocks`.`name`, `stocks`.`datetime_added`");
+                `stocks`.`name`");
 
 		return $result;
 	}
@@ -80,5 +82,35 @@ Class Stocks extends Base
       }
 
       return $this->raw($sql);
+  }
+
+  /**
+   * Get Stock By Requisition Id
+   *
+   * @param int $requisitionId
+   */
+  public function getStockByRequisitionId($requisitionId)
+  {
+        $result = $this->raw("
+              SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`status` as stock_status,
+                `stocks`.`price` as stock_price,
+                `stocks`.`isRequest` as stock_isRequest
+              FROM 
+                `stocks`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              WHERE 
+                `stocks`.`status` != 'Deleted'
+              AND
+                `stock_requisitions`.`requisition_id` = $requisitionId");
+
+        return $result;
   }
 }

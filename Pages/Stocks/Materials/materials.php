@@ -32,7 +32,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
         <?php 
 
-            $result = $stocks->getAllByType(Constant::ITEM_MATERIAL);;
+            $result = $stocks->getAllByType(Constant::ITEM_MATERIAL);
         ?>
 
         <?php if (isset($_SESSION['record_successful_added'])) { ?>

@@ -77,7 +77,10 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 <th> Control Number </th>
                 <th> Name</th>
                 <th> Item Status</th>
-                <th> Action </th>
+                <?php if (Login::getUserLoggedInType() == Constant::USER_INVENTORY_OFFICER): ?>
+                  <th> Action </th>  
+                <?php endif ?>
+                
               </tr>
           </thead>
           <tbody>
@@ -89,14 +92,16 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <td> <?php echo $item['stock_control_number']; ?></td>
                     <td> <?php echo $item['stock_name']; ?></td>
                     <td> <?php echo $item['stock_status']; ?></td>
-                    <td> 
-                      <a href="#" class='btn btn-sm btn-default'>
-                        <i class='fa fa-edit'></i> Edit
-                      </a> 
-                      <a href="#" class='btn btn-xs btn-warning'>
-                        <i class='fa fa-minus'></i> Delete
-                      </a>
-                    </td>
+                    <?php if (Login::getUserLoggedInType() == Constant::USER_INVENTORY_OFFICER): ?>
+                      <td> 
+                        <a href="#" class='btn btn-sm btn-default'>
+                          <i class='fa fa-edit'></i> Edit
+                        </a> 
+                        <a href="#" class='btn btn-xs btn-warning'>
+                          <i class='fa fa-minus'></i> Delete
+                        </a>
+                      </td>
+                    <?php endif ?>
                   </tr>  
                 <?php $number++; ?>
                 <?php } ?>

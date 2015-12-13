@@ -50,22 +50,7 @@ class RequisitionService
 
 		$requisition_id = mysqli_insert_id($this->connection);
 
-		if ($data['items'] && $requisition_id) {
-			foreach ($data['items'] as $item) {
-				$query = "INSERT 
-					INTO 
-						stock_requisitions(
-							requisition_id,
-							stock_id) 
-					VALUES (
-						".$requisition_id.",
-						".(int)$item.")";
-
-				$this->connection->query($query) or die(mysqli_error($this->connection));
-			}
-		}
-
-		return $insertRequistionQUery;
+		return $requisition_id;
 	}
 
 	/**
