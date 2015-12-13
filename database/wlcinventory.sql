@@ -207,6 +207,9 @@ CREATE TABLE `stocks` (
   `datetime_updated` datetime NOT NULL,
   `datetime_deleted` datetime NOT NULL,
   `type` varchar(45) NOT NULL,
+  `price` float DEFAULT NULL,
+  `isRequest` varchar(45) NOT NULL,
+  `area_id` int(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -244,7 +247,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `user_id` (`id`),
   UNIQUE KEY `user_id_2` (`id`),
   UNIQUE KEY `user_id_3` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10018 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10020 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,7 +256,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (444,'mae','soria','Soria','Fatima Mae','Gonzales','Active','Inventory Officer','0000-00-00 00:00:00','','',0),(10011,'admin','aaa','Inventory','WLC','admin','Deleted','Admin','0000-00-00 00:00:00','','',0),(479,'pamii','labra','Labra','Famela','A','Active','Admin','0000-00-00 00:00:00','','',0),(10012,'mae','moiroca','Roca','John Temoty','Homeres','Active','Inventory Officer','2015-11-29 15:33:24','','',0),(10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Roca','John Temoty','Homeres','Active','Inventory Officer','2015-11-29 15:34:21','','',0),(10014,'moiroca','5f4dcc3b5aa765d61d8327deb882cf99','caranyagan','ella','rosales','Active','Dean','2015-11-29 15:58:01','','',0),(10015,'testing','5f4dcc3b5aa765d61d8327deb882cf99','testing','testing','testing','Active','President','2015-11-29 17:15:21','','',0),(10016,'daniel','5f4dcc3b5aa765d61d8327deb882cf99','Roca','Daniel','Homeres','Active','GSD Officer','2015-11-29 22:24:35','','',0);
+INSERT INTO `users` VALUES (10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Soria','Mae','Gonzalez','Active','Inventory Officer','2015-11-29 15:34:21','','',0),(10018,'ella','5f4dcc3b5aa765d61d8327deb882cf99','Caranyagan','Tita Ella','Rosales','Active','GSD Officer','2015-12-07 21:24:02','','',1),(10019,'daniel','5f4dcc3b5aa765d61d8327deb882cf99','Roca','Daniel','Homeres','Active','President','2015-12-13 22:28:32','','',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -266,4 +269,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-04 12:29:38
+-- Dump completed on 2015-12-14  3:22:29
