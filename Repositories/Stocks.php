@@ -113,4 +113,30 @@ Class Stocks extends Base
 
         return $result;
   }
+
+  /**
+   * Get all stock by area id
+   */
+  /**
+   * Get All Stocks By Type
+   */
+  public function getAllByStockId($id)
+  {
+    $result = $this->raw("
+              SELECT 
+                `stocks`.`name` as stock_name, 
+                COUNT(*) as stock_quantity
+              FROM 
+                stocks 
+              WHERE 
+                status != 'Deleted'
+              AND
+                `stocks`.`area_id` = $id
+              AND
+                `stocks`.`isRequest` != 'TRUE'
+              GROUP BY
+                `stocks`.`name`");
+
+    return $result;
+  }
 }
