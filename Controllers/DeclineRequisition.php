@@ -27,6 +27,25 @@ if ($requisitionId) {
 		], ['id' => (int)$requisitionId]);	
 	}
 
+	// Notifications
+	$userObj = new User();
+	$GSDOfficers = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
+
+	$sender_id = Login::getUserLoggedInId();
+	$notificationService = new NotificationService();
+
+	if (Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER) {
+    	$msg = Constant::NOTIFICATION_DECLINED_BY_GSD_OFFICER;
+    } else {
+		$msg = Constant::NOTIFICATION_DECLINED_BY_PRESIDENT;
+    }
+
+	$notificationService->saveNotificationsApprovedByPresident([
+      'sender_id'    => $sender_id,
+      'recepient_id' => $requisition->fetch_assoc()['requester_id'],
+      'msg'          => $msg
+    ]); 
+
 	// header('location: '.Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$control_identifier));
 	echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$control_identifier);
 }

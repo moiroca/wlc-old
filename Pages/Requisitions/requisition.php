@@ -84,7 +84,7 @@ $itemsInRequisition = $stocksRepo->getStockByRequisitionId($requisition['requisi
                             </ul>
                         </div>
                         <div> 
-                            <b>GSD Officer Approver Details: </b> 
+                            <b>GSD Officer Details: </b> 
                             <ul>
                                 <li>
                                     <p>
@@ -122,7 +122,7 @@ $itemsInRequisition = $stocksRepo->getStockByRequisitionId($requisition['requisi
                             </ul>
                         </div>
                         <div> 
-                            <b>President Approver Details: </b> 
+                            <b>President Details: </b> 
                             <ul>
                                 <li>
                                     <p>
@@ -161,6 +161,16 @@ $itemsInRequisition = $stocksRepo->getStockByRequisitionId($requisition['requisi
                         </div>
                     </div>
                     <div class="col-lg-8">
+                        <?php if ($requisition['requisition_status'] == Constant::REQUISITION_APPROVED): ?>
+                            <div class="alert alert-success">
+                                <i class='fa fa-thumbs-up fa-5x'></i><label style="font-size:40px;"> REQUISITION APPROVED!</label>
+                            </div>
+                        <?php elseif ($requisition['requisition_status'] == Constant::REQUISITION_DECLINED): ?>
+                            <div class="alert alert-danger">
+                                <i class='fa fa-thumbs-down fa-5x'></i><label style="font-size:40px;">   REQUISITION DECLINED!</label>
+                            </div>
+                        <?php endif ?>
+
                         <input type='hidden' value="<?php echo Link::createUrl('Controllers/approveItemInRequisition.php'); ?>" id="approve_item_in_requisition" />
                         <table class="table table-bordered table-hover table-striped" id='stocks_in_requisition'>
                             <thead>

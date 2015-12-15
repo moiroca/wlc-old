@@ -33,8 +33,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <thead>
               <tr id='th'>
                   <th> Control Identifier </th>
-                  <th> Approved By GSD Officer</th>
-                  <th> Approved By President</th>
+                  <th> GSD Officer</th>
+                  <th> President</th>
                   <th> Purpose </th>
                   <th> Status </th>
               </tr>
@@ -69,7 +69,13 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       </td>
                       <td> <?php echo $item['purpose']; ?></td>
                       <td>
-                          <?php echo $item['status']; ?>
+                          <?php if ($item['status'] == Constant::REQUISITION_APPROVED): ?>
+                              <label class="label label-success"><?php echo $item['status']; ?></label>  
+                          <?php elseif ($item['status'] == Constant::REQUISITION_DECLINED): ?>
+                              <label class="label label-danger"><?php echo $item['status']; ?></label>  
+                          <?php else: ?>
+                              <label class="label label-info"><?php echo $item['status']; ?></label>  
+                          <?php endif ?>
                       </td>
                     </tr>  
                   <?php } ?>

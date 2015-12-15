@@ -84,7 +84,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       <td>
                           <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) { ?> 
                             <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
-                            <a href="javascript:void(0)" class='btn btn-sm btn-warning'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                            <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php } ?>
                       </td>
                     </tr>  
@@ -109,11 +109,13 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       <td> <?php echo RequesterUtility::getFullName($item); ?></td>
                       <td> <?php echo $item['requisition_purpose']; ?></td>
                       <td> 
-                        <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED) { ?> 
-                          <i class='label label-success'><?php echo $item['requisition_status']; ?></i>
-                        <?php } else { ?> 
-                          <i class='label label-info'><?php echo $item['requisition_status']; ?></i>
-                        <?php } ?>
+                          <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED): ?>
+                              <label class="label label-success"><?php echo $item['requisition_status']; ?></label>  
+                          <?php elseif ($item['requisition_status'] == Constant::REQUISITION_DECLINED): ?>
+                              <label class="label label-danger"><?php echo $item['requisition_status']; ?></label>  
+                          <?php else: ?>
+                              <label class="label label-info"><?php echo $item['requisition_status']; ?></label>  
+                          <?php endif ?>
                       </td>
                       <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED && $item['requisition_status'] != Constant::REQUISITION_DECLINED) : ?> 
                         <td>

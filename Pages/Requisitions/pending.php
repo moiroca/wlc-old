@@ -62,7 +62,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <tbody>
             <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
               <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/ApproveRequisitionByPresident.php'); ?>" />
-              <input type="hidden" id="declined_item_requisition_url" value="<?php echo Link::createUrl('Controllers/DeclinedRequisitionByPresident.php'); ?>" />
+              <input type="hidden" id="declined_item_requisition_url" value="<?php echo Link::createUrl('Controllers/DeclineRequisition.php'); ?>" />
               <input type="hidden" id="requisition_type" value="<?php echo Constant::REQUISITION_ITEM; ?>"/>
               <?php if ($result && 0 != $result->num_rows) { ?>
                   <?php  while ($item = $result->fetch_assoc()) { ?>
@@ -76,7 +76,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       <td> <?php echo $item['requisition_type']; ?> </td>
                       <td>
                             <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
-                            <a href="javascript:void(0)" class='btn btn-sm btn-warning'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                            <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                       </td>
                     </tr>  
                   <?php } ?>

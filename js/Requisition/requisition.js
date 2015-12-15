@@ -256,14 +256,16 @@ $(document).ready(function() {
 	$('.decline_requisition').on('click', function(e) {
 
 		var item = $(this).closest('tr'),
-			btn = $(this);
+			btn = $(this),
+			td = $(this).parents('td');
 
 		Requisition.declineRequisition($(item).attr('data-id'), {
 			beforeSend: function() {
 				console.log('Declining...')
 			},
 			success: function(data) {
-				window.location = data;
+				td.prev().empty().append('<label class="label label-danger">Declined</label>')
+				td.empty().append("<label class='label label-info'> <i class='fa fa-info'></i> There is no action available</label>");	
 			}	
 		});
 
