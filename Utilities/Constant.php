@@ -46,14 +46,20 @@ Class Constant {
 		REQUISITION_FINISHED = 'Finished',
 		REQUISITION_ONGOING = 'On Going',
 		REQUISITION_DECLINED = 'Declined',
+		APPROVED_BY_GSD_OFFICER = 'Approved By GSD Officer', 
+		APPROVED_BY_PRESIDENT = 'Approved By President',
+		DECLINED_BY_GSD_OFFICER = 'Declined By GSD Officer', 
+		DECLINED_BY_PRESIDENT = 'Declined By President',
 
 		// Notifications Status
 		NOTIFICATION_VIEWED = 'True',
 		NOTIFICATION_NOT_VIEWED = 'False',
 
 		// Notifications Messages
-		NOTIFICATION_APPROVED_BY_PRESIDENT = "Your requesition has been approved by the President.",
-		NOTIFICATION_APPROVED_BY_GSD_OFFICER   = "Your requesition has been approved by the GSD Officer.",
+		NOTIFICATION_APPROVED_BY_PRESIDENT = "Your requesition has been APPROVED by the President.",
+		NOTIFICATION_APPROVED_BY_GSD_OFFICER   = "Your requesition has been APPROVED by the GSD Officer.",
+		NOTIFICATION_DECLINED_BY_PRESIDENT 	   = "Your requesition has been DECLINED by the President.",
+		NOTIFICATION_DECLINED_BY_GSD_OFFICER   = "Your requesition has been DECLINED by the GSD Officer.",
 		NOTIFICATION_NEW_ITEM_REQUISITION 	   = "New Item Requisition",
 		NOTIFICATION_NEW_JOB_REQUISITION 	   = "New Job Requisition",
 		NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT = "New Requistion For Approval",

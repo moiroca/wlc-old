@@ -5,6 +5,19 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 Login::sessionStart();
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
+$areaObj = new Area(); 
+$areas = $areaObj->getAll();
+
+$index = 1;
+$areasArray = [];
+
+while ($area = $areas->fetch_assoc()) {
+  $areasArray[$index]['id'] = $area['id'];
+  $areasArray[$index]['name'] = $area['name'];
+  $index++;
+}
+
+
 ?>
 <?php Template::header(); ?>
   <div class="row">
@@ -49,8 +62,25 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     </div>
                     
                     <div class="control-group">
+                        <label class='control-label' for="type">Area</label>
+                        <select id='area_id' class='form-control' name='area_id' required>
+                            <option value=''>Select Area</option>
+                            <?php foreach ($areasArray as $key => $area): ?>
+                                <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
+                            <?php endforeach ?>
+                        </select>
+                        <p class="help-block"></p>
+                    </div>
+
+                    <div class="control-group">
                         <label>Quantity:</label>
                         <input class='form-control' min=1 name="quantity" id="quantity" type="number" placeholder="Quantity" required="required"/>
+                        <p class="help-block"></p>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Price Per Unit (Php):</label>
+                        <input class='form-control' min=1 name="price" id="price" type="number" step='0.01' placeholder="Price" required="required"/>
                         <p class="help-block"></p>
                     </div>
 

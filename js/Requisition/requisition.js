@@ -4,6 +4,14 @@ Requisition.init();
 $(document).ready(function() {
 	
 	/**
+	 * Remove Item in New Item Requisition
+	 */
+	var removeItemInNewItemRequisition = function(e) {
+		var tr = $(this).closest('tr');
+		tr.remove();
+	};
+
+	/**
 	 * Remove Item From Item List
 	 */
 	var removeItemFromItemList = function() {
@@ -37,14 +45,44 @@ $(document).ready(function() {
 	$('#requisition_type').on('change', function() {
 		var requisitionType = $(this);
 
+		Requisition.$newItemRequisitionForm.hide();
+
+		if ('Item' == requisitionType.val()) {
+			Requisition.$itemRequisitionType.show();						
+			Requisition.$attachedItemGroup.hide();
+		} else if ('Job' == requisitionType.val()) {
+			Requisition.$attachedItemGroup.show();
+			Requisition.$itemRequisitionType.hide();		
+		} else {
+			Requisition.$attachedItemGroup.hide();
+			Requisition.$itemRequisitionType.hide();		
+		}
+		
+	}).trigger('change');
+
+	// For Replacing Item Requisition
+	Requisition.$itemRequisitionType.on('click', '#replaceItemRequisition', function() {
+
+		var helpText = $(this).closest('div.itemRequisitionTypeDiv').find('.help-block');
+
 		Requisition.$attachedItemGroup.show();
+		helpText.text('Attach Item to Requisition by searching using Control Number');
+		Requisition.$newItemRequisitionForm.hide();
+	});
+
+	// New Item Requisition
+	Requisition.$itemRequisitionType.on('click', '#newItemRequisition', function() {
+
+		var helpText = $(this).closest('div.itemRequisitionTypeDiv').find('.help-block');
+
+		Requisition.$attachedItemGroup.hide();
+		Requisition.$newItemRequisitionForm.show();
+		helpText.text('');
 	});
 
 	$('#item_control_number').on('keyup', function(e) {
 
-		if (86 == e.keyCode || 13 == e.keyCode) {
-
-		}
+		if (86 == e.keyCode || 13 == e.keyCode) { }
 	});
 
 	$('#search_control_number').on('click', function() {
@@ -218,14 +256,16 @@ $(document).ready(function() {
 	$('.decline_requisition').on('click', function(e) {
 
 		var item = $(this).closest('tr'),
-			btn = $(this);
+			btn = $(this),
+			td = $(this).parents('td');
 
-		Requisition.declinedRequisitionByPresident($(item).attr('data-id'), {
+		Requisition.declineRequisition($(item).attr('data-id'), {
 			beforeSend: function() {
 				console.log('Declining...')
 			},
 			success: function(data) {
-				console.log(data);
+				td.prev().empty().append('<label class="label label-danger">Declined</label>')
+				td.empty().append("<label class='label label-info'> <i class='fa fa-info'></i> There is no action available</label>");	
 			}	
 		});
 
@@ -258,4 +298,172 @@ $(document).ready(function() {
 		});
 		e.preventDefault();
 	});
+
+	/**
+	 * Add New Requisition 
+	 */
+	$('.add-item-in-new-requisition').on('click', function() {
+		var form = $(this).closest('tr'),
+			type = form.find('#type'),
+			name = form.find('#name'),
+			area = form.find('#area'),
+			amount = form.find('#amount'),
+			quantity = form.find('#quantity'),
+			status = form.find('#status');
+		
+		var tr = $('<tr/>');
+		var td = $('<td />');
+
+		if (!type.val()) { type.closest('td').addClass('danger'); } else { type.closest('td').removeClass('danger'); }
+		if (!name.val()) { name.closest('td').addClass('danger'); } else { name.closest('td').removeClass('danger'); }
+		if (!area.val()) { area.closest('td').addClass('danger'); } else { area.closest('td').removeClass('danger'); }
+		if (!amount.val()) { amount.closest('td').addClass('danger'); } else { amount.closest('td').removeClass('danger'); }
+		if (!quantity.val()) { quantity.closest('td').addClass('danger'); } else { quantity.closest('td').removeClass('danger'); }
+		if (!status.val()) { status.closest('td').addClass('danger'); } else { status.closest('td').removeClass('danger'); }
+
+		if (type.val() && 
+			name.val() &&
+			area.val() &&
+			amount.val() &&
+			quantity.val() &&
+			status.val()) {
+
+			tr.append(
+				$('<td />').text(type.val()).append(
+						$('<input />')
+							.attr('type', 'hidden')
+							.attr('name', 'types[]')
+							.val(type.val())
+						)	
+			);
+
+			tr.append(
+				$('<td />').text(name.val()).append(
+						$('<input />')
+							.attr('type', 'hidden')
+							.attr('name', 'names[]')
+							.val(name.val())
+						)	
+				);
+
+			tr.append(
+				$('<td />').text(area.find('option:selected').text()).append(
+						$('<input />')
+							.attr('type', 'hidden')
+							.attr('name', 'areas[]')
+							.val(area.val())
+						)	
+				);
+
+			tr.append(
+				$('<td />').text(amount.val()).append(
+						$('<input />')
+							.attr('type', 'hidden')
+							.attr('name', 'amounts[]')
+							.val(amount.val())
+						)
+				);
+
+			tr.append(
+				$('<td />').text(quantity.val()).append(
+						$('<input />')
+							.attr('type', 'hidden')
+							.attr('name', 'quantities[]')
+							.val(quantity.val())
+						)
+				);
+
+			tr.append(
+				$('<td />').text(status.val()).append(
+						$('<input />')
+							.attr('type', 'hidden')
+							.attr('name', 'statuses[]')
+							.val(status.val())
+						)
+				);
+
+			tr.append($('<td />').html("<button type='button' class='btn btn-xs btn-warning remove-item-in-new-item-requisition'><i class='fa fa-minus'></i></button>"));
+
+			form.closest('tbody').append(tr);
+			$('.remove-item-in-new-item-requisition').bind('click', removeItemInNewItemRequisition);
+			type.val('');
+			name.val('');
+			area.val('');
+			amount.val('')
+			status.val('');
+			quantity.val('');
+		}
+	});
+
+	// ----------------------
+	// STOCKS IN REQUISITION
+	// ----------------------
+	$('table#stocks_in_requisition')
+
+		.on('click', '#approve-btn', function() {
+
+			var checkedstocksCheckBoxes = $('input[type="checkbox"]:not(.select-all):checked'),
+				stocksCheckBoxes = $('input[type="checkbox"]:not(.select-all)'),
+				stockIds = [];
+			
+
+			// Remove Success Class
+			$.each(stocksCheckBoxes, function(index, item) {
+
+				stockIds.push({
+					id : $(item).closest('tr').attr('data-id'),
+					value : $(item).is(':checked')
+				});
+
+				$(item).closest('tr').removeClass('success');
+			});
+
+			// Add Success To selected class
+			$.each(checkedstocksCheckBoxes, function(index, item) {
+				$(item).closest('tr').addClass('success');
+			});
+
+			if (0 != stockIds.length) {
+				Requisition.approveItemInRequisition({
+					stockIds : stockIds
+				}, {
+					beforeSend : function() {
+						console.log('Approving Items');
+					},
+					success: function(response) {
+						console.log(response);
+					}
+				});
+			}
+		})
+
+		.on('click', '#checkAllItem', function() {
+			var selectAll = $('input[type="checkbox"]#checkAllItem'),
+				stocksCheckBoxes = $('input[type="checkbox"]:not(.select-all)');
+
+			if (selectAll.is(':checked')) {
+				$.each(stocksCheckBoxes, function(index, item) {
+					$(item).prop('checked', true);
+				});
+			} else {
+				$.each(stocksCheckBoxes, function(index, item) {
+					$(item).prop('checked', false);
+				});
+			}
+		})
+
+		.on('click', 'input[type="checkbox"]:not(.select-all)', function() {
+			var checkedstocksCheckBoxes = $('input[type="checkbox"]:not(.select-all):checked'),
+				stocksCheckBoxes = $('input[type="checkbox"]:not(.select-all)');
+
+			if (stocksCheckBoxes.length == checkedstocksCheckBoxes.length) {
+				$('#checkAllItem').prop('checked', true);
+			} else {
+				$('#checkAllItem').prop('checked', false);
+			}
+		})
+
+		.on('click', '#decline-btn', function() {
+			console.log('Decline btn');
+		})
 });

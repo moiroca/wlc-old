@@ -305,7 +305,7 @@
                         <!-- /.Inventory Officer Menus -->
                         <?php if (LoggedInUser::type() == Constant::USER_INVENTORY_OFFICER) { ?>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stocks<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> File Management<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a href="<?php echo Link::createUrl('Pages/Stocks/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
@@ -383,7 +383,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stocks<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> File Management<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>"> Tools</a>
@@ -419,7 +419,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stocks<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> File Management<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>"> Tools</a>

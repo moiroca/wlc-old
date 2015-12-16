@@ -47,7 +47,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
         <?php unset($_SESSION['record_successful_added']); ?>
             <div class="alert alert-success">
-                Item Requisition Record Succesfully Added.
+                New User Added.
             </div>
         <?php } ?>
 

@@ -116,7 +116,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                           <i class='label label-info'><?php echo $item['requisition_status']; ?></i>
                         <?php } ?>
                       </td>
-                      <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED) : ?> 
+                      <?php if ($item['requisition_status'] != Constant::REQUISITION_APPROVED && $item['requisition_status'] != Constant::REQUISITION_DECLINED) : ?> 
                         <td>
                               <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_gsd_officer'> <i class='fa fa-thumbs-up'></i> Approve</a>
                               <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>

@@ -1,3 +1,11 @@
 INVENTORY OFFICER
 	Username: mae
 	Password: password
+
+GSD Officer
+	Username: ella
+	Password: password
+
+President
+	Username: daniel
+	Password: password

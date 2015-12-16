@@ -60,7 +60,9 @@ Class Requisitions extends Base
               ON 
                 `$this->table`.`gsd_officer_id`=`users`.`id`
               WHERE
-                `$this->table`.`president_id` IS NULL";
+                `$this->table`.`president_id` IS NULL
+              AND
+                `$this->table`.`status` = 'Declined'";
 
     $result = $this->raw($sql);
 

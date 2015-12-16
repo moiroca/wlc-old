@@ -7,7 +7,7 @@ Login::sessionStart();
 $tools = new Tools();
 $stocks = new Stocks();
 
-if (!isset($_GET['name']) || !isset($_GET['type'])) { throw new Exception('Error 404: Page Not Found!'); }
+if (!isset($_GET['area'])) { throw new Exception('Error 404: Page Not Found!'); }
 
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
@@ -21,7 +21,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <i class="fa fa-dashboard"></i>  <a href="#">Stocks</a>
               </li>
               <li class="active">
-                  <i class="fa fa-table"></i> <a href="#"><?php echo $_GET['type']; ?></a>
+                  <i class="fa fa-table"></i> <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>">Tools</a>
               </li>
               <li>
                   <i class='fa fa-tasks'></i> <a href="<?php echo Link::createUrl('Pages/Stocks/add.php'); ?>">Add Item</a>
@@ -43,17 +43,11 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             'andOrWhere' => '',
                           ],
                           [
-                            'field' => '`stocks`.`name`',
-                            'value' => $_GET['name'],
+                            'field' => '`stocks`.`area_id`',
+                            'value' => $_GET['area'],
                             'isEqual' => true,
                             'andOrWhere' => 'AND',
                           ],
-                          [
-                            'field' => '`stocks`.`type`',
-                            'value' => $_GET['type'],
-                            'isEqual' => true,
-                            'andOrWhere' => 'AND',
-                          ]
                       ]);
         ?>
 
@@ -73,37 +67,28 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
         <table class="table table-striped table-hover table-bordered">
           <thead>
               <tr id='th'>
-                <th> #</th>
                 <th> Control Number </th>
                 <th> Name</th>
                 <th> Item Status</th>
-                <?php if (Login::getUserLoggedInType() == Constant::USER_INVENTORY_OFFICER): ?>
-                  <th> Action </th>  
-                <?php endif ?>
-                
+                <th> Action </th>
               </tr>
           </thead>
           <tbody>
             <?php if ($result && 0 != $result->num_rows) { ?>
-                <?php $number = 1; ?>
                 <?php  while ($item = $result->fetch_assoc()) { ?>
                   <tr>
-                    <td> <?php echo $number; ?></td>
                     <td> <?php echo $item['stock_control_number']; ?></td>
                     <td> <?php echo $item['stock_name']; ?></td>
                     <td> <?php echo $item['stock_status']; ?></td>
-                    <?php if (Login::getUserLoggedInType() == Constant::USER_INVENTORY_OFFICER): ?>
-                      <td> 
-                        <a href="#" class='btn btn-sm btn-default'>
-                          <i class='fa fa-edit'></i> Edit
-                        </a> 
-                        <a href="#" class='btn btn-xs btn-warning'>
-                          <i class='fa fa-minus'></i> Delete
-                        </a>
-                      </td>
-                    <?php endif ?>
+                    <td> 
+                      <a href="#" class='btn btn-sm btn-default'>
+                        <i class='fa fa-edit'></i> Edit
+                      </a> 
+                      <a href="#" class='btn btn-xs btn-warning'>
+                        <i class='fa fa-minus'></i> Delete
+                      </a>
+                    </td>
                   </tr>  
-                <?php $number++; ?>
                 <?php } ?>
             <?php } else { ?>
                   <tr>
