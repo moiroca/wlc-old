@@ -44,7 +44,12 @@ class UserUtility
 		$userTypes = [
 			Constant::USER_GSD_OFFICER,
 			Constant::USER_PRESIDENT,
-			Constant::USER_DEAN
+			Constant::USER_DEAN,
+			Constant::USER_PROPERTY_CUSTODIAN,
+			Constant::USER_COMPTROLLER,
+			Constant::USER_TREASURER,
+			Constant::USER_DEPARTMENT_HEAD,
+			Constant::USER_EMPLOYEE,
 		];
 
 		if (!$isInventoryOffice) { $userTypes[] = Constant::USER_INVENTORY_OFFICER; }

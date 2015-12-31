@@ -29,8 +29,46 @@ Login::sessionStart();
       // End Of Validation
 
       if (!$errors) { 
+
         $userService = new UserService();
-        $result = $userService->save($_POST);
+        $result = false;
+
+        if ($_POST['user_type'] == Constant::USER_DEPARTMENT_HEAD) {
+
+            $departmentRepo = new Department();
+            $userRepo       = new User();
+            $departmentService = new DepartmentService();
+
+            $departmentHead = $departmentRepo->getDepartmentHeadByDepartmentId((int)$_POST['department_id']);
+            $departmentHead = $departmentHead->fetch_assoc();
+
+            // Save New User
+            $userId = $userService->save($_POST);
+
+            if ($departmentHead) {
+
+                // Update User
+                $updateUserType = $userRepo->update(
+                    [
+                      'type' => Constant::USER_EMPLOYEE
+                    ],
+                    [ 
+                      'id' => (int)$departmentHead['user_id'] 
+                    ]);
+                
+                $departmentService->updateDepartmentHead([
+                    'user_id' => $departmentHead['user_id'],
+                    'department_id' => (int)$_POST['department_id']
+                  ]);
+            }
+
+            $departmentService->saveDepartmentHead([
+              'user_id' => $userId,
+              'department_id' => (int)$_POST['department_id']
+            ]);
+
+            $result = true;
+        }
 
         if ($result) {
           $_SESSION['record_successful_added'] = true;      
@@ -38,19 +76,10 @@ Login::sessionStart();
           $_SESSION['something_wrong'] = true;
         }
 
-        if (isset($_POST['user_type'])) {
-
-          if ($_POST['user_type'] == Constant::USER_GSD_OFFICER) {
-            header('location: '.Link::createUrl('Pages/Users/GeneralServices/listing.php'));
-          } else if($_POST['user_type'] == Constant::USER_PRESIDENT) {
-            header('location: '.Link::createUrl('Pages/Users/Presidents/listing.php'));
-          } else if ($_POST['user_type'] == Constant::USER_DEAN) {
-            header('location: '.Link::createUrl('Pages/Users/Deans/listing.php'));
-          }
-        }
       } else {
          $_SESSION['errors'] = $errors;
-         header("location: ".Link::createUrl('Pages/Users/add.php'));
       }
+
+      header("location: ".Link::createUrl('Pages/Users/list.php'));
   }
 ?>

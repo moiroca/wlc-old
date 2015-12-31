@@ -19,6 +19,11 @@ Class Constant {
 		USER_INVENTORY_OFFICER 	= 'Inventory Officer',
 		USER_PRESIDENT 			= 'President',
 		USER_DEAN 				= 'Dean',
+		USER_TREASURER			= 'Treasurer',
+		USER_PROPERTY_CUSTODIAN = 'Property Custodian',
+		USER_COMPTROLLER		= 'Comptroller',
+		USER_EMPLOYEE			= 'Employee',
+		USER_DEPARTMENT_HEAD	= 'Department Head',
 
 		// User Status
 		USER_ACTIVE	= 'Active',
@@ -31,7 +36,7 @@ Class Constant {
 		STOCK_DELETED = 'Deleted',
 
 		// Item Type
-		ITEM_EQUIPMENT = 'Equipment',
+		ITEM_OFFICE_SUPPLY = 'Office Supply',
 		ITEM_TOOL      = 'Tools',
 		ITEM_MATERIAL  = 'Material',
 

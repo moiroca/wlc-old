@@ -56,23 +56,11 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
                     <fieldset>
                         <legend>School Information</legend>
-
-                        <div class="control-group">
-                            <label class='control-label' for="user_type"> User Type</label>
-                            <select class='form-control' name='user_type' required> 
-                                <option value=''>Select User Type</option>
-                                <?php foreach (UserUtility::getUserTypes() as $type) { ?>
-                                  <option value="<?php echo $type; ?>" ><?php echo $type; ?></option>
-                                  <?php ?>
-                                <?php } ?>
-                            </select>
-                            <p class="help-block"><?php echo (isset($_SESSION['errors']['user_type'])) ? $_SESSION['errors']['user_type'] : ''; ?></p>
-                        </div>
-
+                        <input id='getDepartmentHeadLink' type='hidden' value='<?php echo Link::createUrl('Controllers/GetDepartmentHead.php'); ?>'>   
                         <div class="control-group">
                           <label>Department</label>    
                           <?php if (0 != $departments->num_rows): ?>
-                                <select name='department_id' class='form-control' required>
+                                <select id='department_id' name='department_id' class='form-control' required>
                                   <option value=''>Select Department</option>
                                   <?php 
                                       if ($departments) {
@@ -90,6 +78,32 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                               </div>
                           <?php endif ?>
                           <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
+                      </div>
+
+                      <div class="control-group">
+                          <?php 
+                              $departmentHead = $departmentObj->getDepartmentHeadByDepartmentId(1); 
+                              $departmentHead = $departmentHead->fetch_assoc();
+                          ?>
+                          
+                          <div id="departmentHead" style='display:none'>
+                              <p >Current Department Head: <b ></b> </p>
+                              <div class="alert alert-info"> <i class='fa fa-info'></i> There is no set Department Head.</div>
+                          </div>
+                      </div>
+                      <div class="control-group">
+                          <label class='control-label' for="user_type"> User Type</label>
+                          <select class='form-control' name='user_type' required> 
+                              <option value=''>Select User Type</option>
+                              <?php foreach (UserUtility::getUserTypes() as $type) { ?>
+                                <?php if ($type == Constant::USER_EMPLOYEE): ?>
+                                    <option value="<?php echo $type; ?>" >Other</option>
+                                <?php else: ?>
+                                    <option value="<?php echo $type; ?>" ><?php echo $type; ?></option>  
+                                <?php endif ?>
+                              <?php } ?>
+                          </select>
+                          <p class="help-block"><?php echo (isset($_SESSION['errors']['user_type'])) ? $_SESSION['errors']['user_type'] : ''; ?></p>
                       </div>
                     </fieldset>
 
@@ -127,5 +141,5 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
       
     </div>
   </div>
-<?php Template::footer(); ?>
+<?php Template::footer(['user.js', 'Department/Department.js']); ?>
        

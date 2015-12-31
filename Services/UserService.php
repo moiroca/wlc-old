@@ -48,6 +48,6 @@ class UserService
 		
 		$resultQuery = $this->connection->query($query) or die(mysqli_error($this->connection));
 
-		return $resultQuery;
+		return mysqli_insert_id($this->connection);
 	}
 }
