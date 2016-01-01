@@ -40,6 +40,7 @@ class StockService
 								status, 
 								price,
 								area_id,
+								unit,
 								isRequest,
 								datetime_added) 
 						VALUES (
@@ -49,6 +50,7 @@ class StockService
 							'".$this->connection->real_escape_string($stocks['status'])."',
 							'".$this->connection->real_escape_string($stocks['price'])."',
 							'".$this->connection->real_escape_string($stocks['area_id'])."',
+							'".$this->connection->real_escape_string($stocks['unit'])."',
 							'".$isRequired."',
 							'".$datetime_added."')";
 			

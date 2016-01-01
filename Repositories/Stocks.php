@@ -99,7 +99,8 @@ Class Stocks extends Base
                 `stocks`.`name` as stock_name,
                 `stocks`.`status` as stock_status,
                 `stocks`.`price` as stock_price,
-                `stocks`.`isRequest` as stock_isRequest
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit
               FROM 
                 `stocks`
               JOIN

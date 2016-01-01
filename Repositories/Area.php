@@ -36,4 +36,23 @@ Class Area extends Base
 
 		return $this->connection->query($query);
 	}
+
+	public function getAllAreaByDepartmentId($id)
+	{
+		$sql = "
+			SELECT 
+				`areas`.`id` as area_id,
+				`areas`.`name` as area_name
+			FROM
+				`areas`
+			JOIN
+				`department_areas`
+			ON 
+				`department_areas`.`area_id` = `areas`.`id` 
+			WHERE
+				`department_areas`.`department_id` = $id
+		";
+
+		return $this->connection->query($sql);
+	}
 }

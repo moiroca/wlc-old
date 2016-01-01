@@ -45,17 +45,15 @@ $(document).ready(function() {
 	$('#requisition_type').on('change', function() {
 		var requisitionType = $(this);
 
-		Requisition.$newItemRequisitionForm.hide();
-
 		if ('Item' == requisitionType.val()) {
-			Requisition.$itemRequisitionType.show();						
-			Requisition.$attachedItemGroup.hide();
+			Requisition.$itemRequisition.show();						
+			Requisition.$jobRequisition.hide();
 		} else if ('Job' == requisitionType.val()) {
-			Requisition.$attachedItemGroup.show();
-			Requisition.$itemRequisitionType.hide();		
+			Requisition.$jobRequisition.show();
+			Requisition.$itemRequisition.hide();		
 		} else {
-			Requisition.$attachedItemGroup.hide();
-			Requisition.$itemRequisitionType.hide();		
+			Requisition.$jobRequisition.hide();
+			Requisition.$itemRequisition.hide();		
 		}
 		
 	}).trigger('change');
@@ -189,24 +187,13 @@ $(document).ready(function() {
 	$('#attach_item_to_item_requisition_btn').on('click', function(e) {
 		var requisition = $('#approve_requisition_items_template');
 
-		var area_id = requisition.find('#area_id'),
-			status = requisition.find('#status'),
-			type = requisition.find('#type'),
+		var amount = requisition.find('#amount'),
 			quantity = requisition.find('#quantity'),
+			unit = requisition.find('#unit'),
 			name = requisition.find('#name');
 
-		if (!area_id.val()) {
-			console.log('Area ID required');
-			return false;
-		}
-
-		if (!status.val()) {
-			console.log('Status required');
-			return false;
-		}
-
-		if (!type.val()) {
-			console.log('Type required');
+		if (!amount.val()) {
+			console.log('Amount required');
 			return false;
 		}
 
@@ -220,6 +207,10 @@ $(document).ready(function() {
 			return false;
 		}
 
+		if (!unit.val()) {
+			console.log('Unit required');
+			return false;
+		}
 		
 		e.preventDefault();
 	});
@@ -304,38 +295,24 @@ $(document).ready(function() {
 	 */
 	$('.add-item-in-new-requisition').on('click', function() {
 		var form = $(this).closest('tr'),
-			type = form.find('#type'),
 			name = form.find('#name'),
-			area = form.find('#area'),
 			amount = form.find('#amount'),
 			quantity = form.find('#quantity'),
-			status = form.find('#status');
+			unit = form.find('#unit');
 		
 		var tr = $('<tr/>');
 		var td = $('<td />');
 
-		if (!type.val()) { type.closest('td').addClass('danger'); } else { type.closest('td').removeClass('danger'); }
 		if (!name.val()) { name.closest('td').addClass('danger'); } else { name.closest('td').removeClass('danger'); }
-		if (!area.val()) { area.closest('td').addClass('danger'); } else { area.closest('td').removeClass('danger'); }
 		if (!amount.val()) { amount.closest('td').addClass('danger'); } else { amount.closest('td').removeClass('danger'); }
 		if (!quantity.val()) { quantity.closest('td').addClass('danger'); } else { quantity.closest('td').removeClass('danger'); }
-		if (!status.val()) { status.closest('td').addClass('danger'); } else { status.closest('td').removeClass('danger'); }
+		if (!unit.val()) { unit.closest('td').addClass('danger'); } else { unit.closest('td').removeClass('danger'); }
 
-		if (type.val() && 
-			name.val() &&
-			area.val() &&
+		if (name.val() &&
 			amount.val() &&
 			quantity.val() &&
-			status.val()) {
+			unit.val()) {
 
-			tr.append(
-				$('<td />').text(type.val()).append(
-						$('<input />')
-							.attr('type', 'hidden')
-							.attr('name', 'types[]')
-							.val(type.val())
-						)	
-			);
 
 			tr.append(
 				$('<td />').text(name.val()).append(
@@ -343,15 +320,6 @@ $(document).ready(function() {
 							.attr('type', 'hidden')
 							.attr('name', 'names[]')
 							.val(name.val())
-						)	
-				);
-
-			tr.append(
-				$('<td />').text(area.find('option:selected').text()).append(
-						$('<input />')
-							.attr('type', 'hidden')
-							.attr('name', 'areas[]')
-							.val(area.val())
 						)	
 				);
 
@@ -374,26 +342,68 @@ $(document).ready(function() {
 				);
 
 			tr.append(
-				$('<td />').text(status.val()).append(
+				$('<td />').text(unit.val()).append(
 						$('<input />')
 							.attr('type', 'hidden')
-							.attr('name', 'statuses[]')
-							.val(status.val())
+							.attr('name', 'units[]')
+							.val(unit.val())
 						)
 				);
 
-			tr.append($('<td />').html("<button type='button' class='btn btn-xs btn-warning remove-item-in-new-item-requisition'><i class='fa fa-minus'></i></button>"));
+			tr.append($('<td />').html("<button type='button' class='btn btn-xs btn-warning remove-item-in-new-item-requisition'><i class='fa fa-minus'></i> Remove </button>"));
 
 			form.closest('tbody').append(tr);
 			$('.remove-item-in-new-item-requisition').bind('click', removeItemInNewItemRequisition);
-			type.val('');
+			unit.val('');
 			name.val('');
-			area.val('');
-			amount.val('')
-			status.val('');
+			amount.val('');
 			quantity.val('');
 		}
 	});
+	
+	// Fetch Area By Department Id
+	$('#department_id').on('change', function() {
+		var department = $(this),
+			departmentId = $(this).val();
+			areas = $('#areas');
+
+		if (0 != departmentId.length) {
+
+			$.ajax({
+				method : 'GET',
+				url : $('#getAreaUrl').val(),
+				data : {
+					departmentId : departmentId
+				},
+				beforeSend : function() {
+					console.log('Fetching Areas in Department');
+					department.closest('div.control-group').find('p.help-block').empty();
+				},
+				success : function(resp) {
+					var select = areas.find('select');
+					select.empty();
+
+					if (0 == resp.error.length) {
+						if (0 != resp.areas.length) {
+							areas.show();
+							$.each(resp.areas, function(index, item) {
+								// 0 index is the area id
+								// 1 index is the area name
+								select.append("<option value='"+item[0]+"'>"+item[1]+"</option>");
+							});
+						} else {
+							areas.hide();
+							department.closest('div.control-group').find('p.help-block').append('<label class="label label-danger">There are no areas in this department.</label>');
+						}
+					} else {
+						console.log(resp.error);
+					}
+				}
+			});
+		} else {
+			areas.hide();
+		}
+	}).trigger('change');
 
 	// ----------------------
 	// STOCKS IN REQUISITION

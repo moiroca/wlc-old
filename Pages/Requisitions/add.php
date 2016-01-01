@@ -55,164 +55,182 @@ while ($area = $areas->fetch_assoc()) {
                         </select>
                         <p class="help-block"></p>
                     </div>
-                    <div class="control-group" id='itemRequisitionType' style='margin:10px 0px;'>
-                        <div class="itemRequisitionTypeDiv" style='padding:10px 20px;'>
-                            <label class='control-label' for="type">New Item or For Replace</label>
+
+                    <!-- Item Requisition -->
+                    <div id="itemRequisition">
+                        <div class="control-group" id='itemRequisitionType'>
+                            <label class='control-label' for="type">Item Type</label>
                             <div class="row">
                                 <div class="col-lg-12 ">
-                                    <button type='button' id='newItemRequisition' class='btn btn-lg btn-primary'><i class='fa fa-plus'></i> New Item</button> 
-                                    <button type='button' id='replaceItemRequisition' class='btn btn-lg btn-warning'><i class='fa fa-edit'></i> For Replace</button>
+                                    <select id='type' class='form-control' name='type'>
+                                        <option value=''>Select Item Type</option>
+                                        <?php foreach (StockUtility::getStockTypes() as $type) { ?>
+                                          <option value="<?php echo $type; ?>" ><?php echo $type; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <p class="help-block"></p>
                                 </div>
                             </div>
                             <p class="help-block" style='margin: 0px 10px;'></p>
                         </div>
-                    </div>
-                    <div class="control-group" id='newItemRequisitionForm' style='display:none;'>
-                        <div class="row">
-                            <div class='col-lg-12'>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <p class='panel-title'>Attached Items In Item Requisition</p>
-                                            </div>
-                                            <div class="panel-body">
-                                                <table class="item_list table table-hover table-striped table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Type</th>
-                                                            <th>Name</th>
-                                                            <th>Area</th>
-                                                            <th>Amount/Unit (Php)</th>
-                                                            <th>Quantity</th>
-                                                            <th>Status</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr data-id=''>
-                                                            <td class='col-md-2'>
-                                                                <div class="control-group">
-                                                                    <select id='type' class='form-control' name='type'>
-                                                                        <option value=''>Select</option>
-                                                                        <?php foreach (StockUtility::getStockTypes() as $type) { ?>
-                                                                          <option value="<?php echo $type; ?>" ><?php echo $type; ?></option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                    <p class="help-block"></p>
-                                                                </div>
-                                                            </td>
-                                                            <td class='col-md-3'>
-                                                                <div class="control-group">
-                                                                    <input class='form-control' name="name" id="name" type="text" placeholder="Item Name" value="" />
-                                                                    <p class="help-block"></p>
-                                                                </div>
-                                                            </td>
-                                                            <td class='col-md-3'>
-                                                                <select class='form-control' name='areas' id="area">
-                                                                    <option value=''>Select</option>
-                                                                    <?php foreach ($areasArray as $key => $area): ?>
-                                                                        <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
-                                                                    <?php endforeach ?>
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <div class="control-group">
-                                                                    <input class='form-control' min=1 name="amount" id="amount" type="decimal" placeholder="Amount" />
-                                                                    <p class="help-block"></p>
-                                                                </div>
-                                                            </td>
-                                                            <td class='col-md-2'>
-                                                                <div class="control-group">
-                                                                    <input class='form-control' min=1 name="quantity" id="quantity" type="number" placeholder="Quantity" />
-                                                                    <p class="help-block"></p>
-                                                                </div>
-                                                            </td>
-                                                            <td class='col-md-3'>
-                                                                <div class="control-group">
-                                                                    <select id='status' class='form-control' name='status' > 
-                                                                        <option value=''>Select</option>
-                                                                        <?php foreach (StockUtility::getStockStatus() as $status) { ?>
-                                                                          <option value="<?php echo $status; ?>" ><?php echo $status; ?></option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                    <p class="help-block"></p>
-                                                                </div>
-                                                            </td>
-                                                            <td >
-                                                                <button type='button' class="btn btn-sm btn-primary add-item-in-new-requisition"><i class='fa fa-plus'></i></button>
-                                                                <!-- <button type='button' class="btn btn-sm btn-warning"><i class='fa fa-minus'></i></button> -->
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+                        <?php 
+                          $departmentObj   = new Department();
+                          $departments = $departmentObj->getAll();
+                        ?>
+                        <div class="control-group">
+                          <label>Department</label>    
+                              <input type='hidden' id='getAreaUrl' value='<?php echo Link::createUrl('Controllers/GetArea.php'); ?>' />
+
+                              <?php  if (0 != $departments->num_rows) { ?>
+                              <select id='department_id' name='department_id' class='form-control' required>
+                                <option value=''>Select Department</option>
+                                <?php while ($department =  $departments->fetch_assoc()) { ?>
+                                          <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                            <?php } else { ?>
+                                <div class="alert alert-info"> There are no Departments. Please Add A Department First.</div>
+                            <?php } ?>
+                            <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
+                        </div>
+
+                        <div class="control-group" id='areas'>
+                            <div class="control-group">
+                              <?php if (0 != $areas->num_rows): ?>
+                                      <label class='control-label' for="type">Area</label>
+                                      <select id='area_id' class='form-control' name='area_id'>
+                                          <option value=''>Select Area</option>
+                                          <?php foreach ($areasArray as $key => $area): ?>
+                                              <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
+                                          <?php endforeach ?>
+                                      </select>
+                                      <p class="help-block"></p>
+                              <?php else : ?>
+                                  <div class='alert alert-info'> <i class='fa fa-info'></i> There are no areas yet. Please Add Area First. </div>
+                              <?php endif ?>
                             </div>
                         </div>
-                    </div>
-                    <div id='attached_item_group' class="control-group" style='display:none'>
-                        <label class='control-label' for="purpose"> Attach Item by searching Item by Control Identifier</label>    
-                        <div class="form-group input-group">
-                                <span class="input-group-addon">
-                                  Item Control Number
-                                </span>
-                                <input placeholder='Enter Control Number' id='item_control_number' type="text" class="form-control">
-                                <span class="input-group-btn">
-                                  <button type='button' id='search_control_number' class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                  </button>
-                                </span>
+
+                        <div class="control-group" id='newItemRequisitionForm' style='display:block;'>
+                          <div class="row">
+                              <div class='col-lg-12'>
+                                  <div class="row">
+                                      <div class="col-lg-12">
+                                          <div class="panel panel-default">
+                                              <div class="panel-heading">
+                                                  <p class='panel-title'>Attached Items In Item Requisition</p>
+                                              </div>
+                                              <div class="panel-body">
+                                                  <table class="item_list table table-hover table-striped table-bordered">
+                                                      <thead>
+                                                          <tr>
+                                                              <th>Name</th>
+                                                              <th>Amount/Unit (Php)</th>
+                                                              <th>Quantity</th>
+                                                              <th>Unit</th>
+                                                              <th>Action</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <tr data-id=''>
+                                                              <td class='col-md-3'>
+                                                                  <div class="control-group">
+                                                                      <input class='form-control' name="name" id="name" type="text" placeholder="Item Name" value="" />
+                                                                      <p class="help-block"></p>
+                                                                  </div>
+                                                              </td>
+                                                              <td class='col-md-1'>
+                                                                  <div class="control-group">
+                                                                      <input class='form-control' min=1 name="amount" id="amount" type="decimal" placeholder="Amount" />
+                                                                      <p class="help-block"></p>
+                                                                  </div>
+                                                              </td>
+                                                              <td class='col-md-2'>
+                                                                  <div class="control-group">
+                                                                      <input class='form-control' min=1 name="quantity" id="quantity" type="number" placeholder="Quantity" />
+                                                                      <p class="help-block"></p>
+                                                                  </div>
+                                                              </td>
+                                                              <td class='col-md-2'>
+                                                                  <div class="control-group">
+                                                                      <input class='form-control' name="unit" id="unit" type="text" placeholder="Unit" />
+                                                                      <p class="help-block"></p>
+                                                                  </div>
+                                                              </td>
+                                                              <!-- <td class='col-md-3'>
+                                                                  <div class="control-group">
+                                                                      <select id='status' class='form-control' name='status' > 
+                                                                          <option value=''>Select</option>
+                                                                          <?php foreach (StockUtility::getStockStatus() as $status) { ?>
+                                                                            <option value="<?php echo $status; ?>" ><?php echo $status; ?></option>
+                                                                          <?php } ?>
+                                                                      </select>
+                                                                      <p class="help-block"></p>
+                                                                  </div>
+                                                              </td> -->
+                                                              <td class='col-md-1'>
+                                                                  <button type='button' class="btn btn-sm btn-primary add-item-in-new-requisition"><i class='fa fa-plus'></i> Add</button>
+                                                                  <!-- <button type='button' class="btn btn-sm btn-warning"><i class='fa fa-minus'></i></button> -->
+                                                              </td>
+                                                          </tr>
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
                         </div>
-                        <p style='display:none;' class="help-block alert alert-danger"></p>
-                        <table style='display:none' class="table table-hover table-striped" id='item_table'>
-                            <thead>
-                                <tr>
-                                    <th>Item Control Identifier</th>
-                                    <th>Item Name</th>
-                                    <th>Area</th>
-                                    <th>Item Condition</th>
-                                    <th>Item Type</th>
-                                        <th>Action</th>
-                                 </tr>
-                                <tr id='empty' class='info'>
-                                    <td colspan=6 align=center><label class='label label-primary'>No Item Found</label></td>
-                                </tr>
-                                <tr id='loader' style='display:none'>
-                                    <td colspan=6 align=center><i class='fa fa-spinner fa-spin fa-2x'></i></td>
-                                </tr>
-                                <tr id='result' class='info'>
-                                </tr>
-                            </thead>
-                            <tbody id='item_list'>
-                            </tbody>
-                        </table>
                     </div>
 
-                    <div class="control-group">
-                      <?php if (0 != $areas->num_rows): ?>
-                              <label class='control-label' for="type">Area</label>
-                              <select id='area_id' class='form-control' name='area_id' required>
-                                  <option value=''>Select Area</option>
-                                  <?php foreach ($areasArray as $key => $area): ?>
-                                      <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
-                                  <?php endforeach ?>
-                              </select>
-                              <p class="help-block"></p>
-                      <?php else : ?>
-                          <div class='alert alert-info'> <i class='fa fa-info'></i> There are no areas yet. Please Add Area First. </div>
-                      <?php endif ?>
-                    </div>
+                    <!-- Job Requisition -->
+                    <div id="jobRequisition">
+                        <div class="control-group">
+                            <label class='control-label' for="purpose"> Purpose</label>    
+                            <textarea name='purpose' class='form-control'></textarea>
+                            <p class="help-block"></p>
+                        </div>
 
-                    <div class="control-group">
-                        <label class='control-label' for="purpose"> Purpose</label>    
-                        <textarea name='purpose' class='form-control' required></textarea>
-                        <p class="help-block"></p>
+                        <div id='attached_item_group' class="control-group" style='display:none'>
+                            <label class='control-label' for="purpose"> Attach Item by searching Item by Control Identifier</label>    
+                            <div class="form-group input-group">
+                                    <span class="input-group-addon">
+                                      Item Control Number
+                                    </span>
+                                    <input placeholder='Enter Control Number' id='item_control_number' type="text" class="form-control">
+                                    <span class="input-group-btn">
+                                      <button type='button' id='search_control_number' class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                      </button>
+                                    </span>
+                            </div>
+                            <p style='display:none;' class="help-block alert alert-danger"></p>
+                            <table style='display:none' class="table table-hover table-striped" id='item_table'>
+                                <thead>
+                                    <tr>
+                                        <th>Item Control Identifier</th>
+                                        <th>Item Name</th>
+                                        <th>Area</th>
+                                        <th>Item Condition</th>
+                                        <th>Item Type</th>
+                                            <th>Action</th>
+                                     </tr>
+                                    <tr id='empty' class='info'>
+                                        <td colspan=6 align=center><label class='label label-primary'>No Item Found</label></td>
+                                    </tr>
+                                    <tr id='loader' style='display:none'>
+                                        <td colspan=6 align=center><i class='fa fa-spinner fa-spin fa-2x'></i></td>
+                                    </tr>
+                                    <tr id='result' class='info'>
+                                    </tr>
+                                </thead>
+                                <tbody id='item_list'>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    
-                    
 
                     <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Requisition" type="submit" />
                 </form>
@@ -228,8 +246,5 @@ while ($area = $areas->fetch_assoc()) {
       
     </div>
   </div>
-  <script type="text/javascript">
-
-  </script>
 <?php Template::footer(['requisition.js', 'Requisition/requisition.js']); ?>
        

@@ -13,14 +13,19 @@ class StockUtility
 	 *
 	 * @return Array
 	 */
-	public static function getStockStatus()
+	public static function getStockStatus($notDelete = true)
 	{
-		return [
+		$statuses = [
 			Constant::STOCK_GOOD,
 			Constant::STOCK_REPAIR,
 			Constant::STOCK_REPLACE,
-			Constant::STOCK_DELETED,
 		];
+
+		if (!$notDelete) {
+			$statuses[] = Constant::STOCK_DELETED;
+		}
+
+		return $statuses;
 	}
 
 	/**
@@ -31,9 +36,8 @@ class StockUtility
 	public static function getStockTypes()
 	{
 		return [
-			Constant::ITEM_MATERIAL,
-			Constant::ITEM_TOOL,
-			Constant::ITEM_EQUIPMENT,
+			Constant::ITEM_MATERIAL_EQUIPMENT,
+			Constant::ITEM_OFFICE_SUPPLY,
 		];
 	}
 }

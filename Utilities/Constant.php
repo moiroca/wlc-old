@@ -37,8 +37,9 @@ Class Constant {
 
 		// Item Type
 		ITEM_OFFICE_SUPPLY = 'Office Supply',
-		ITEM_TOOL      = 'Tools',
+		ITEM_EQUIPMENT      = 'Equipment',
 		ITEM_MATERIAL  = 'Material',
+		ITEM_MATERIAL_EQUIPMENT = 'Material and Equipment',
 
 		// Requisition Type
 		REQUISITION_ITEM = 'Item',

@@ -7,6 +7,10 @@ var Requisition = function($){
 
 		$itemRequisitionType : $('#itemRequisitionType'),
 
+		$jobRequisition : $('#jobRequisition'),
+
+		$itemRequisition : $('#itemRequisition'),
+
 		$newItemRequisitionForm: $('#newItemRequisitionForm'),
 		
 		$requisitionStaus: { },
