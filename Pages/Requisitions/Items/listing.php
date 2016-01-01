@@ -60,7 +60,9 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <th> Approved By Comptroller </th>
                   <th> Approved By President </th>
                   <th> Status </th>
-                  <th> Action </th>
+                  <?php if (Login::getUserLoggedInType() != Constant::USER_INVENTORY_OFFICER): ?>
+                      <th> Action </th>
+                  <?php endif ?>
               </tr>
           </thead>
           <tbody>
@@ -145,10 +147,12 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             <label class='label label-info'><?php echo $item['requisition_status']; ?></label>
                         <?php endif ?>
                     </td>
-                    <td> 
-                        <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
-                        <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
-                    </td>
+                    <?php if (Login::getUserLoggedInType() != Constant::USER_INVENTORY_OFFICER): ?>
+                      <td> 
+                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                          <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                      </td>
+                    <?php endif ?>
                   </tr>  
                 <?php } ?>
             <?php } else { ?>
