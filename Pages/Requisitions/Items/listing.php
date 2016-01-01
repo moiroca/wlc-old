@@ -55,7 +55,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
               <tr id='th'>
                   <th> Control Identifier </th>
                   <th> Requester Name </th>
-                  <th> Purpose </th>
                   <th> Department Head Details</th>
                   <th> <?php echo Constant::ITEM_MATERIAL_EQUIPMENT.'/ '.Constant::ITEM_OFFICE_SUPPLY; ?></th>
                   <th> Approved By Comptroller </th>
@@ -75,7 +74,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
                     </td>
                     <td> <?php echo RequesterUtility::getFullName($item); ?></td>
-                    <td> <?php echo $item['requisition_purpose']; ?></td>
                     <td>
                         <?php
                             $user = $userObj->getAll(['*'], ['id' => $item['requisition_department_head_id']])->fetch_assoc();
@@ -139,10 +137,16 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <?php } ?>
                     </td>
                     <td>
-                        
+                        <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED): ?>
+                            <label class='label label-success'><?php echo $item['requisition_status']; ?></label>
+                        <?php elseif($item['requisition_status'] == Constant::REQUISITION_DECLINED): ?>
+                            <label class='label label-danger'><?php echo $item['requisition_status']; ?></label>
+                        <?php else: ?>
+                            <label class='label label-info'><?php echo $item['requisition_status']; ?></label>
+                        <?php endif ?>
                     </td>
                     <td> 
-                        <a href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                        <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
                         <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                     </td>
                   </tr>  
