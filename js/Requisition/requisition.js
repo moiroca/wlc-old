@@ -158,7 +158,10 @@ $(document).ready(function() {
 	$('.approve_item_requisition').on('click', function(e) {
 		var item = $(this).closest('tr');
 
-		Requisition.approve(item.attr('data-id'), item.attr('data-type'), {
+		Requisition.approve({
+				requisition_id : item.attr('data-id'),
+				type : item.attr('data-type')
+			}, {
 			beforeSend: function() {
 				console.log(3);
 			},

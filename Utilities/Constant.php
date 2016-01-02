@@ -52,9 +52,20 @@ Class Constant {
 		REQUISITION_FINISHED = 'Finished',
 		REQUISITION_ONGOING = 'On Going',
 		REQUISITION_DECLINED = 'Declined',
-		APPROVED_BY_GSD_OFFICER = 'Approved By GSD Officer', 
-		APPROVED_BY_PRESIDENT = 'Approved By President',
+
+		NOTED_BY_DEPARTMENT_HEAD = 'Noted By Department Head',
+		DECLINED_BY_DEPARTMENT_HEAD = 'Declined By Department Head',
+
+		VERIFIED_BY_PROPERTY_CUSTODIAN = 'Verified By Property Custodian', 
+		DECLINED_BY_PROPERTY_CUSTODIAN = 'Declined By Property Custodian', 
+
+		VERIFIED_BY_GSD_OFFICER = 'Verified By GSD Officer', 
 		DECLINED_BY_GSD_OFFICER = 'Declined By GSD Officer', 
+
+		APPROVED_BY_COMPTROLLER = 'Approved By Comptroller',
+		DECLINED_BY_COMPTROLLER = 'Declined By Comptroller',
+
+		APPROVED_BY_PRESIDENT = 'Approved By President',
 		DECLINED_BY_PRESIDENT = 'Declined By President',
 
 		// Notifications Status
@@ -79,7 +90,5 @@ Class Constant {
 		
 		NOTIFICATION_NEW_ITEM_REQUISITION 	   = "New Item Requisition",
 		NOTIFICATION_NEW_JOB_REQUISITION 	   = "New Job Requisition",
-		NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT = "New Requistion For Approval",
-		NOTIFICATION_REQUISTION_DECLINED_BY_GSD_OFFICER	   = "You requisition has been declined by GSD Officer",
-		NOTIFICATION_REQUISTION_DECLINED_BY_President	   = "You requisition has been declined by President";
+		NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT = "New Requistion For Approval";
 }

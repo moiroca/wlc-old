@@ -34,9 +34,9 @@ class NotificationService
 	}
 
 	/** 
-	 * Insert New Notifications Approved By President
+	 * Insert New Notifications
 	 */
-	public function saveNotificationsApprovedByPresident($data)
+	public function saveNotification($data)
 	{
 		$date = new Datetime();
 
@@ -46,14 +46,12 @@ class NotificationService
 				 	`notifications` (
 				 		`sender_id`,
 				 		`recepient_id`,
-				 		`viewed`,
 				 		`datetime_sent`,
 				 		`msg`
 				 	) 
 				 VALUES (
 				 	".$data['sender_id'].", 
 				 	".$data['recepient_id'].",
-				 	'False',
 				 	'".$date->format('Y-m-d H:i:s')."',
 				 	'".$data['msg']."'
 				 	)";

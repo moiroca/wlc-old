@@ -121,7 +121,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             $user = $userObj->getAll(['*'], ['id' => $item['requisition_comptroller_id']])->fetch_assoc();
                         ?>
                         <?php if (!is_null($user)) { ?>
-                            <b>Comptroller Name: </b> 
                             <?php echo $user['lastname'].', '.$user['firstname']; ?>
                         <?php } else { ?>
                             <label class='label label-info'>Not Available</label>
@@ -132,39 +131,36 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             $user = $userObj->getAll(['*'], ['id' => $item['requisition_president_id']])->fetch_assoc();    
                         ?>
                         <?php if (!is_null($user)) { ?>
-                            <b>President Name: </b> 
                             <?php echo $user['lastname'].', '.$user['firstname']; ?>
                         <?php } else { ?>
                             <label class='label label-info'>Not Available</label>
                         <?php } ?>
                     </td>
                     <td>
-                        <?php if ($item['requisition_status'] == Constant::REQUISITION_APPROVED): ?>
-                            <label class='label label-success'><?php echo $item['requisition_status']; ?></label>
-                        <?php elseif($item['requisition_status'] == Constant::REQUISITION_DECLINED): ?>
-                            <label class='label label-danger'><?php echo $item['requisition_status']; ?></label>
-                        <?php else: ?>
-                            <label class='label label-info'><?php echo $item['requisition_status']; ?></label>
-                        <?php endif ?>
+                        <label class='label label-info'><?php echo $item['requisition_status']; ?></label>
                     </td>
                     <?php if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD): ?>
                         <td> 
-                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Note</a>
-                          <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php if ($item['requisition_status'] != Constant::NOTED_BY_DEPARTMENT_HEAD): ?>
+                            <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Note</a>
+                            <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php else: ?>
+                            <label class="label label-info">No Actions Found</label>
+                          <?php endif ?>
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN || Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
                         <td> 
-                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Note</a>
+                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Note</a>
                           <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_COMPTROLLER): ?>
                         <td> 
-                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
                           <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
                       <td> 
-                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
                           <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                       </td>
                     <?php endif ?>

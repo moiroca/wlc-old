@@ -8,10 +8,15 @@ Login::sessionStart();
 
 $isError = false;
 $errorMSG = '';
+$msg = '';
 
 if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 
 	$requisitionService = new RequisitionService();
+
+	$requisitionObj = new Requisitions();
+	$requisitionId = (int)$_POST['requisition_id'];
+	$requisition = $requisitionObj->getAll(['requester_id'], ['id' => $requisitionId]);
 
 	$data = [
 			'requisition_id'	=> (int)$_POST['requisition_id'],
@@ -20,37 +25,48 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 			'type' 			=> isset($_POST['type']) ? $_POST['type'] : null,
 		];
 
-	$requisitionObj = new Requisitions();
-	$requisition = $requisitionObj->getAll(['requester_id'], ['id' => (int)$_POST['requisition_id']]);
-	
-	$result = $requisitionService->approve($data);
+	$requisitionService->approve($data);	
 
-	if ($result) {
+	if ($requisitionId) {
 
-		$userObj = new User();
-	    $GSDOfficers = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
+		// $userObj = new User();
+	    // $GSDOfficers = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
 
 	    $sender_id = Login::getUserLoggedInId();
 	    $notificationService = new NotificationService();
 
-	    if (Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER) {
-	    	$msg = Constant::NOTIFICATION_APPROVED_BY_GSD_OFFICER;
+	    if ($data['approver_type'] == Constant::USER_GSD_OFFICER) {
+	    	$msg = Constant::NOTIFICATION_VERIFIED_BY_GSD_OFFICER;
+		} elseif ($data['approver_type'] == Constant::USER_PRESIDENT) {
+			$msg = Constant::NOTIFICATION_APPROVED_BY_PRESIDENT;
+		} else if ($data['approver_type'] == Constant::USER_TREASURER) {
+			#code
+		} elseif ($data['approver_type'] == Constant::USER_PROPERTY_CUSTODIAN) {
+			$msg = Constant::NOTIFICATION_VERIFIED_BY_PROPERTY_CUSTODIAN;
+		} elseif ($data['approver_type'] == Constant::USER_COMPTROLLER) {
+			$msg = Constant::NOTIFICATION_APPROVED_BY_COMPTROLLER;
+		} elseif ($data['approver_type'] == Constant::USER_DEPARTMENT_HEAD) { 
+			$msg = Constant::NOTIFICATION_NOTED_BY_DEPARTMENT_HEAD;
+		}
 
-	    	$presidents = $userObj->getAll(['id'], ['type' => Constant::USER_PRESIDENT]);	    	
+	    // if (Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER) {
+	    // 	$msg = Constant::NOTIFICATION_APPROVED_BY_GSD_OFFICER;
+
+	    // 	$presidents = $userObj->getAll(['id'], ['type' => Constant::USER_PRESIDENT]);	    	
 	    	
-	    	while ($president = $presidents->fetch_assoc()) {
-	    		$notificationService->saveNotificationsApprovedByPresident([
-		          'sender_id'    => $sender_id,
-		          'recepient_id' => $president['id'],
-		          'msg'          => Constant::NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT
-		        ]);	
-	    	}
-	    } else {
+	    // 	while ($president = $presidents->fetch_assoc()) {
+	    // 		$notificationService->saveNotificationsApprovedByPresident([
+		   //        'sender_id'    => $sender_id,
+		   //        'recepient_id' => $president['id'],
+		   //        'msg'          => Constant::NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT
+		   //      ]);	
+	    // 	}
+	    // } else {
 
-    		$msg = Constant::NOTIFICATION_APPROVED_BY_PRESIDENT;
-	    }
+    	// 	$msg = Constant::NOTIFICATION_APPROVED_BY_PRESIDENT;
+	    // }
 
-        $notificationService->saveNotificationsApprovedByPresident([
+        $notificationService->saveNotification([
           'sender_id'    => $sender_id,
           'recepient_id' => $requisition->fetch_assoc()['requester_id'],
           'msg'          => $msg
@@ -63,5 +79,6 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 
 echo json_encode([
 		'errorMSG' 	=> $errorMSG,
-		'isError'	=> $isError
+		'isError'	=> $isError,
+		'successMSG' => $msg
 	]);
