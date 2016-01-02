@@ -60,7 +60,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <th> Approved By Comptroller </th>
                   <th> Approved By President </th>
                   <th> Status </th>
-                  <?php if (Login::getUserLoggedInType() != Constant::USER_INVENTORY_OFFICER): ?>
+                  <?php if (UserUtility::isApprover(Login::getUserLoggedInType())): ?>
                       <th> Action </th>
                   <?php endif ?>
               </tr>
@@ -147,7 +147,22 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             <label class='label label-info'><?php echo $item['requisition_status']; ?></label>
                         <?php endif ?>
                     </td>
-                    <?php if (Login::getUserLoggedInType() != Constant::USER_INVENTORY_OFFICER): ?>
+                    <?php if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD): ?>
+                        <td> 
+                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Note</a>
+                          <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                        </td>
+                    <?php elseif (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN || Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
+                        <td> 
+                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Note</a>
+                          <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                        </td>
+                    <?php elseif (Login::getUserLoggedInType() == Constant::USER_COMPTROLLER): ?>
+                        <td> 
+                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                          <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                        </td>
+                    <?php elseif (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
                       <td> 
                           <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_by_president_btn'> <i class='fa fa-thumbs-up'></i> Approve</a>
                           <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
