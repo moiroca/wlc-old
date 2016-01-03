@@ -100,6 +100,13 @@ $(document).ready(function() {
 			itemsList = $('#item_list').find('tr'),
 			isExistInItemsList = false;
 
+
+		if (itemControlNumber.val().length != 16) {
+			$('#attached_item_group').find('p.help-block').show();
+			$('#attached_item_group').find('p.help-block').text('Item Control Number Not Valid.');
+			return false;
+		}
+
 		$.each(itemsList, function(index, itemInList) {
 			if (itemControlNumber.val() == $(itemInList).attr('data-control_number')) {
 				isExistInItemsList = true;
@@ -109,7 +116,7 @@ $(document).ready(function() {
 
 		if (isExistInItemsList) {
 			$('#attached_item_group').find('p.help-block').show();
-			$('#attached_item_group').find('p.help-block').text('Item Control Number Already Exist.');
+			$('#attached_item_group').find('p.help-block').text('Item Already Exist.');
 			return false;
 		}
 
