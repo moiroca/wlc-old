@@ -53,4 +53,44 @@ Class Department extends Base
 
 		return $this->raw($sql);
 	}
+
+	public function getUserDepartmentByRequesterId($id)
+	{
+		$sql = "
+			SELECT
+				`departments`.`name` as department_name
+			FROM
+				`departments`
+			JOIN
+				`users`
+			ON
+				`users`.`department_id` = `departments`.`id`
+			JOIN
+				`requisitions`
+			ON
+				`requisitions`.`requester_id` = `users`.`id`
+			WHERE
+				`users`.`id` = $id
+		";
+
+		return $this->raw($sql);
+	}
+
+	public function getUserDepartmentByUserId($id)
+	{
+		$sql = "
+			SELECT
+				`departments`.`name` as department_name
+			FROM
+				`departments`
+			JOIN
+				`users`
+			ON
+				`users`.`department_id` = `departments`.`id`
+			WHERE
+				`users`.`id` = $id
+		";
+
+		return $this->raw($sql);
+	}
 }

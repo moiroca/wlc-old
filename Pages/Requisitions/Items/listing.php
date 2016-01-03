@@ -70,7 +70,36 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
             <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/ApproveRequisitionByPresident.php'); ?>" />
             <?php if ($result && 0 != $result->num_rows) { ?>
                 <?php  while ($item = $result->fetch_assoc()) { ?>
-                  <?php // var_dump($item); die(); ?>
+                  <?php
+                      $stocksRepo = new Stocks();
+                      $itemsInRequisition = $stocksRepo->getStockByRequisitionId($item['requisition_id']);
+                      $firstItem = $itemsInRequisition->fetch_assoc();
+
+                      if (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN && 
+                          ($firstItem && $firstItem['stock_type'] == Constant::ITEM_MATERIAL_EQUIPMENT)) {
+                        continue;
+                      } 
+
+                      if(Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER && 
+                          ($firstItem && $firstItem['stock_type'] == Constant::ITEM_OFFICE_SUPPLY)) {
+                        continue;
+                      }
+
+                      if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD) {
+                          
+                          $departmentRepo = new Department();
+
+                          $requesterDepartment = $departmentRepo->getUserDepartmentByRequesterId($item['requisition_requester_id']);
+                          $requesterDepartment = $requesterDepartment->fetch_assoc();
+                          
+                          $loggedInDepartment = $departmentRepo->getUserDepartmentByUserId(Login::getUserLoggedInId());
+                          $loggedInDepartment = $loggedInDepartment->fetch_assoc();
+
+                          if ($requesterDepartment['department_name'] != $loggedInDepartment['department_name']) {
+                              continue;
+                          }
+                      }
+                  ?>
                   <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                     <td> 
                         <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
@@ -87,12 +116,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <?php } ?>
                     </td>
                     <td>
-                        <?php
-                            $stocksRepo = new Stocks();
-                            $itemsInRequisition = $stocksRepo->getStockByRequisitionId($item['requisition_id']);
-                            $firstItem = $itemsInRequisition->fetch_assoc();
-
-                        ?>
 
                         <?php if ($firstItem && $firstItem['stock_type'] == Constant::ITEM_MATERIAL_EQUIPMENT): ?>
                               <?php
@@ -106,7 +129,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                               <?php } ?> 
                         <?php else: ?>
                               <?php
-                                  $user = $userObj->getAll(['*'], ['id' => $item['requisition_gsd_officer_id']])->fetch_assoc();
+                                  $user = $userObj->getAll(['*'], ['id' => $item['requisition_property_custodian_id']])->fetch_assoc();
                               ?>
                               <?php if (!is_null($user)) { ?>
                                   <b>Property Custodian Name: </b> 
@@ -141,7 +164,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     </td>
                     <?php if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD): ?>
                         <td> 
-                          <?php if ($item['requisition_status'] != Constant::NOTED_BY_DEPARTMENT_HEAD): ?>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByDepartmentHead($item['requisition_status'])): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Note</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>
@@ -150,25 +173,37 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN || Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
                         <td> 
-                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Note</a>
-                          <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($item['requisition_status'])): ?>
+                            <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Verify</a>
+                            <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php else: ?>
+                            <label class="label label-info">No Actions Found</label>
+                          <?php endif ?>
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_COMPTROLLER): ?>
                         <td> 
-                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
-                          <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByComptroller($item['requisition_status'])): ?>
+                            <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                            <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php else: ?>
+                            <label class="label label-info">No Actions Found</label>
+                          <?php endif ?>
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
                       <td> 
-                          <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
-                          <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByPresident($item['requisition_status'])): ?>
+                            <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                            <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php else: ?>
+                            <label class="label label-info">No Actions Found</label>
+                          <?php endif; ?>
                       </td>
                     <?php endif ?>
                   </tr>  
                 <?php } ?>
             <?php } else { ?>
                   <tr>
-                      <td colspan=7>
+                      <td colspan=8>
                           <div class="alert alert-info">
                               There are no items found.
                           </div>

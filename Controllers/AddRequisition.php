@@ -51,25 +51,25 @@ Login::sessionStart();
                 ]);
 
       if ($requisition_id) {
-         $userObj = new User();
-         $users = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
+         // $userObj = new User();
+         // $users = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
 
-         $sender_id = Login::getUserLoggedInId();
-         $notificationService = new NotificationService();
+         // $sender_id = Login::getUserLoggedInId();
+         // $notificationService = new NotificationService();
 
-         if ($_POST['requisition_type'] == Constant::REQUISITION_ITEM) {
-            $msg = Constant::NOTIFICATION_NEW_ITEM_REQUISITION;
-         } else {
-            $msg = Constant::NOTIFICATION_NEW_JOB_REQUISITION; 
-         }
+         // if ($_POST['requisition_type'] == Constant::REQUISITION_ITEM) {
+         //    $msg = Constant::NOTIFICATION_NEW_ITEM_REQUISITION;
+         // } else {
+         //    $msg = Constant::NOTIFICATION_NEW_JOB_REQUISITION; 
+         // }
          
-         while ($user = $users->fetch_assoc()) {
-            $notificationService->saveNotificationsApprovedByPresident([
-              'sender_id'    => $sender_id,
-              'recepient_id' => $user['id'],
-              'msg'          => $msg
-            ]); 
-         }
+         // while ($user = $users->fetch_assoc()) {
+         //    $notificationService->saveNotificationsApprovedByPresident([
+         //      'sender_id'    => $sender_id,
+         //      'recepient_id' => $user['id'],
+         //      'msg'          => $msg
+         //    ]); 
+         // }
 
          $_SESSION['record_successful_added'] = true;      
       } else {

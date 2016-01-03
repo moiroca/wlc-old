@@ -64,4 +64,56 @@ class RequisitionUtility
 
 		return $isApproved;
 	}
+
+	public static function isRequisitionActionedByDepartmentHead($status)
+	{
+		return in_array($status, [
+				Constant::NOTED_BY_DEPARTMENT_HEAD,
+				Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
+				Constant::VERIFIED_BY_GSD_OFFICER,
+				Constant::APPROVED_BY_COMPTROLLER,
+				Constant::APPROVED_BY_PRESIDENT,
+
+				Constant::DECLINED_BY_DEPARTMENT_HEAD,
+				Constant::DECLINED_BY_PROPERTY_CUSTODIAN,
+				Constant::DECLINED_BY_GSD_OFFICER,
+				Constant::DECLINED_BY_COMPTROLLER,
+				Constant::DECLINED_BY_PRESIDENT,
+			]);
+	}
+
+	public static function isRequisitionActionedByPropertyCustodianOrGSDOfficer($status)
+	{
+		return in_array($status, [
+				Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
+				Constant::VERIFIED_BY_GSD_OFFICER,
+				Constant::APPROVED_BY_COMPTROLLER,
+				Constant::APPROVED_BY_PRESIDENT,
+
+				Constant::DECLINED_BY_PROPERTY_CUSTODIAN,
+				Constant::DECLINED_BY_GSD_OFFICER,
+				Constant::DECLINED_BY_COMPTROLLER,
+				Constant::DECLINED_BY_PRESIDENT,
+			]);
+	}
+
+	public static function isRequisitionActionedByComptroller($status)
+	{
+		return in_array($status, [
+				Constant::APPROVED_BY_COMPTROLLER,
+				Constant::APPROVED_BY_PRESIDENT,
+
+				Constant::DECLINED_BY_COMPTROLLER,
+				Constant::DECLINED_BY_PRESIDENT,
+			]);
+	}
+
+	public static function isRequisitionActionedByPresident($status)
+	{
+		return in_array($status, [
+				Constant::APPROVED_BY_PRESIDENT,
+
+				Constant::DECLINED_BY_PRESIDENT,
+			]);
+	}
 }
