@@ -414,8 +414,14 @@
                                         <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/pending.php'); ?>">Pending Requisitions</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php'); ?>">Item Requisition</a>
                                     </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Jobs/listing.php'); ?>">Job Requisition</a>
+                                    </li>
+                                    <!-- <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/pending.php'); ?>">Pending Requisitions</a>
+                                    </li> -->
                                 </ul>
                             </li>
                             <li>
@@ -469,6 +475,69 @@
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                            </li>
+                        <?php } ?>
+
+                        <!-- /.Department Head Menus -->
+                        <?php if (LoggedInUser::type() == Constant::USER_DEPARTMENT_HEAD) { ?>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/myrequisitions.php'); ?>"> <i class='fa fa-table'></i> My Request</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php'); ?>">Item Requisition</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Jobs/listing.php'); ?>">Job Requisition</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        <?php } ?>
+
+                        <!-- /.PROPERTY CUSTODIAN Menus -->
+                        <?php if (LoggedInUser::type() == Constant::USER_PROPERTY_CUSTODIAN) { ?>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/myrequisitions.php'); ?>"> <i class='fa fa-table'></i> My Request</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php'); ?>">Item Requisition</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Jobs/listing.php'); ?>">Job Requisition</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        <?php } ?>
+
+                        <!-- /.PROPERTY CUSTODIAN Menus -->
+                        <?php if (LoggedInUser::type() == Constant::USER_COMPTROLLER) { ?>
+                            <li>
+                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/myrequisitions.php'); ?>"> <i class='fa fa-table'></i> My Request</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php'); ?>">Item Requisition</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Jobs/listing.php'); ?>">Job Requisition</a>
+                                    </li>
+                                </ul>
                             </li>
                         <?php } ?>
                     </ul>
