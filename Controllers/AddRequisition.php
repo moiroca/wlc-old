@@ -18,37 +18,47 @@ Login::sessionStart();
       $areaId             = (isset($_POST['area_id']) && !is_null($_POST['area_id'])) ? (int)$_POST['area_id']  : 0;
       $itemType           = (isset($_POST['type']) && !is_null($_POST['type'])) ? $_POST['type']  : '';
 
+      // Save Requisition and Retrieve Requisition ID
       $requisition_id = $requisitionServiceObj->save([
-                  'type' 	=> $requisitionType,
-                  'purpose'  => $requisitionPurpose,
-                  'area_id'   => $areaId,
-                  'items'    	=> (isset($_POST['items']) && 0 != sizeof($_POST['items']) && is_array($_POST['items'])) ? $_POST['items'] : null
-                ]);
-
-      $stockService = new StockService();
-      $stockIds = [];
-
-      foreach ($_POST['names'] as $index => $name) { 
-        $ids = $stockService->save([
-                      'name' => $_POST['names'][$index],
-                      'type' => $itemType,
-                      'price' => $_POST['amounts'][$index],
-                      'area_id' => $areaId,
-                      'quantity' => $_POST['quantities'][$index],
-                      'status' => Constant::STOCK_GOOD,
-                      'isRequest' => true,
-                      'unit'  => $_POST['units'][$index]
-                    ], true, $stockIds);
-
-        $stockIds = array_merge($stockIds, $ids);
-      }
-
+                    'type'  => $requisitionType,
+                    'purpose'  => $requisitionPurpose,
+                    'area_id'   => $areaId
+                  ]);
       $stockRequisitionService = new StockRequisitionService();
 
-      $result = $stockRequisitionService->saveStockRequisition([
-                  'items' => $stockIds,
-                  'requisition_id' => $requisition_id
-                ]);
+      if ($requisitionType == Constant::REQUISITION_JOB) {
+
+        $result = $stockRequisitionService->saveStockRequisition([
+                    'items' => $_POST['items'],
+                    'requisition_id' => $requisition_id,
+                    'statuses' => $_POST['statuses']
+                  ], true);
+
+      } else if ($requisitionType == Constant::REQUISITION_ITEM) {
+
+        $stockService = new StockService();
+        $stockIds = [];
+
+        foreach ($_POST['names'] as $index => $name) { 
+          $ids = $stockService->save([
+                        'name' => $_POST['names'][$index],
+                        'type' => $itemType,
+                        'price' => $_POST['amounts'][$index],
+                        'area_id' => $areaId,
+                        'quantity' => $_POST['quantities'][$index],
+                        'status' => Constant::STOCK_GOOD,
+                        'isRequest' => true,
+                        'unit'  => $_POST['units'][$index]
+                      ], true, $stockIds);
+
+          $stockIds = array_merge($stockIds, $ids);
+        }
+
+        $result = $stockRequisitionService->saveStockRequisition([
+                    'items' => $stockIds,
+                    'requisition_id' => $requisition_id
+                  ]);
+      }
 
       if ($requisition_id) {
          // $userObj = new User();
