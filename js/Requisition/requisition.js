@@ -479,4 +479,34 @@ $(document).ready(function() {
 		.on('click', '#decline-btn', function() {
 			console.log('Decline btn');
 		})
+
+	$('#requisition_form').on('submit', function(event) {
+		var requisitionType = $('#requisition_type').val(),
+			itemType 		= $('#type').val(),
+			areaId			= $('#area_id'),
+			requisitionItems = $('#requisitionItems'),
+			error 			= false;
+
+		if (requisitionType == 'Job') {
+
+		} else if(requisitionType == 'Item') {
+			error = (itemType.length == 0);
+			console.log(error);
+			if (!error) {
+				error = (areaId.length == 0);
+
+				if (!error) {
+					error = (areaId.val().length == 0);
+
+					if (!error) {
+						error = (requisitionItems.find('tr:not(.itemForm)').length == 0);
+					}
+				}
+			}
+		} else {	
+
+		}
+
+		if (error) { event.preventDefault(); }
+	});
 });

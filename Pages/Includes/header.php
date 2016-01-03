@@ -326,10 +326,13 @@
                                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Requisitions<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/myrequisitions.php'); ?>"> <i class='fa fa-table'></i> My Request</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php'); ?>">Item Requisition</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Jobs/listing.php'); ?>">Job Requisition</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->

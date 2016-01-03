@@ -16,7 +16,7 @@ Login::sessionStart();
       $requisitionType    = (isset($_POST['requisition_type']) && !is_null($_POST['requisition_type'])) ? $_POST['requisition_type']  : '';
       $requisitionPurpose = (isset($_POST['purpose']) && !is_null($_POST['purpose'])) ? $_POST['purpose']  : '';
       $areaId             = (isset($_POST['area_id']) && !is_null($_POST['area_id'])) ? (int)$_POST['area_id']  : 0;
-      $itemType           = (isset($_POST['type']) && !is_null($_POST['type'])) ? (int)$_POST['type']  : '';
+      $itemType           = (isset($_POST['type']) && !is_null($_POST['type'])) ? $_POST['type']  : '';
 
       $requisition_id = $requisitionServiceObj->save([
                   'type' 	=> $requisitionType,

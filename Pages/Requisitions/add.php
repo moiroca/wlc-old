@@ -122,9 +122,9 @@ while ($area = $areas->fetch_assoc()) {
                                                   <p class='panel-title'>Attached Items In Item Requisition</p>
                                               </div>
                                               <div class="panel-body">
-                                                  <table class="item_list table table-hover table-striped table-bordered">
+                                                  <table id='requisitionItems' class="item_list table table-hover table-striped table-bordered">
                                                       <thead>
-                                                          <tr>
+                                                          <tr class='itemForm'>
                                                               <th>Name</th>
                                                               <th>Amount/Unit (Php)</th>
                                                               <th>Quantity</th>
@@ -133,7 +133,7 @@ while ($area = $areas->fetch_assoc()) {
                                                           </tr>
                                                       </thead>
                                                       <tbody>
-                                                          <tr data-id=''>
+                                                          <tr class='itemForm' data-id=''>
                                                               <td class='col-md-3'>
                                                                   <div class="control-group">
                                                                       <input class='form-control' name="name" id="name" type="text" placeholder="Item Name" value="" />
@@ -158,20 +158,8 @@ while ($area = $areas->fetch_assoc()) {
                                                                       <p class="help-block"></p>
                                                                   </div>
                                                               </td>
-                                                              <!-- <td class='col-md-3'>
-                                                                  <div class="control-group">
-                                                                      <select id='status' class='form-control' name='status' > 
-                                                                          <option value=''>Select</option>
-                                                                          <?php foreach (StockUtility::getStockStatus() as $status) { ?>
-                                                                            <option value="<?php echo $status; ?>" ><?php echo $status; ?></option>
-                                                                          <?php } ?>
-                                                                      </select>
-                                                                      <p class="help-block"></p>
-                                                                  </div>
-                                                              </td> -->
                                                               <td class='col-md-1'>
                                                                   <button type='button' class="btn btn-sm btn-primary add-item-in-new-requisition"><i class='fa fa-plus'></i> Add</button>
-                                                                  <!-- <button type='button' class="btn btn-sm btn-warning"><i class='fa fa-minus'></i></button> -->
                                                               </td>
                                                           </tr>
                                                       </tbody>
