@@ -211,7 +211,8 @@ DROP TABLE IF EXISTS `stock_requisitions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stock_requisitions` (
   `requisition_id` int(11) NOT NULL,
-  `stock_id` varchar(45) NOT NULL
+  `stock_id` varchar(45) NOT NULL,
+  `changeTo` enum('For Replace','For Repair') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -303,4 +304,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-03 13:42:22
+-- Dump completed on 2016-01-03 22:53:36
