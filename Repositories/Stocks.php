@@ -54,6 +54,8 @@ Class Stocks extends Base
               WHERE 
                 status != 'Deleted'
               AND
+                `stocks`.`isRequest` != 'TRUE'
+              AND
                 `stocks`.`control_number` 
                 LIKE '%".$this->connection->real_escape_string($contolNumber)."%'") or die(mysqli_error($this->connection));
 

@@ -240,6 +240,7 @@ while ($area = $areas->fetch_assoc()) {
                                         <th>Area</th>
                                         <th>Item Condition</th>
                                         <th>Item Type</th>
+                                        <th>Change To</th>
                                         <th>Action</th>
                                      </tr>
                                     <tr id='empty' class='info itemForm'>

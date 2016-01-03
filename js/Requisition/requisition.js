@@ -128,7 +128,6 @@ $(document).ready(function() {
 			$('#attached_item_group').find('p.help-block').text('Item Control Numbe Required').hide();
 		}
 
-		$('#item_table').show();
 
 		Requisition.search(
 			itemControlNumber.val(), 
@@ -142,35 +141,42 @@ $(document).ready(function() {
 
 					$('#loader').hide();
 
-					if ('object' == typeof data && null != data) {
+					if (!data.isEmpty) {
+						$('#attached_item_group').find('p.help-block').show();
+						$('#attached_item_group').find('p.help-block').text('Item Not Found.');
+					} else {
+						$('#item_table').show();
 						
-						var td = $('<td />'),
-							tr = $('#result'),
-							status = $('<select/>', { class: 'form-control'});
+						if ('object' == typeof data && null != data) {
+							
+							var td = $('<td />'),
+								tr = $('#result'),
+								status = $('<select/>', { class: 'form-control'});
 
-						if (data.statuses.length != 0) {
-							$.each(data.statuses, function(index, value) {
-								status.append('<option value="'+value+'">'+value+'</option>');
-							});
+							if (data.statuses.length != 0) {
+								$.each(data.statuses, function(index, value) {
+									status.append('<option value="'+value+'">'+value+'</option>');
+								});
+							}
+
+							tr.attr('data-id', data.stock_id);
+							tr.attr('data-control_number', data.stock_control_number);
+
+							tr.prepend('<td><button type="button" class="add_item btn btn-sm btn-primary"><i class="fa fa-plus"></i> Add </button></td>');
+							tr.prepend(td.append(status));
+							tr.prepend('<td>'+data.stock_type+'</td>');
+							tr.prepend('<td>'+data.stock_status+'</td>');
+							tr.prepend('<td>'+data.area_name+'</td>');
+							tr.prepend('<td>'+data.stock_name+'</td>');
+							tr.prepend('<td>'+data.stock_control_number+'</td>');
+
+							$('#result').prepend(tr);
+
+							$('.add_item').bind('click', appendResultToItemList);
+
+						} else {  
+							$('#empty').show().fadeOut(1600);
 						}
-
-						tr.attr('data-id', data.stock_id);
-						tr.attr('data-control_number', data.stock_control_number);
-
-						tr.prepend('<td><button type="button" class="add_item btn btn-sm btn-primary"><i class="fa fa-plus"></i> Add </button></td>');
-						tr.prepend(td.append(status));
-						tr.prepend('<td>'+data.stock_type+'</td>');
-						tr.prepend('<td>'+data.stock_status+'</td>');
-						tr.prepend('<td>'+data.area_name+'</td>');
-						tr.prepend('<td>'+data.stock_name+'</td>');
-						tr.prepend('<td>'+data.stock_control_number+'</td>');
-
-						$('#result').prepend(tr);
-
-						$('.add_item').bind('click', appendResultToItemList);
-
-					} else {  
-						$('#empty').show().fadeOut(1600);
 					}
 
 					itemControlNumber.val('');
