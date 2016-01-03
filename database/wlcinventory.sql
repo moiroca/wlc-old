@@ -85,6 +85,32 @@ LOCK TABLES `department_areas` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `department_heads`
+--
+
+DROP TABLE IF EXISTS `department_heads`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `department_heads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `datetime_added` datetime NOT NULL,
+  `datetime_deleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `department_heads`
+--
+
+LOCK TABLES `department_heads` WRITE;
+/*!40000 ALTER TABLE `department_heads` DISABLE KEYS */;
+/*!40000 ALTER TABLE `department_heads` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `departments`
 --
 
@@ -94,7 +120,6 @@ DROP TABLE IF EXISTS `departments`;
 CREATE TABLE `departments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL,
-  `dean_id` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -118,7 +143,7 @@ DROP TABLE IF EXISTS `notifications`;
 CREATE TABLE `notifications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `msg` varchar(255) NOT NULL,
-  `viewed` varchar(10) NOT NULL,
+  `viewed` enum('TRUE','FALSE') DEFAULT 'FALSE',
   `recepient_id` int(11) NOT NULL,
   `datetime_sent` datetime NOT NULL,
   `datetime_viewed` datetime NOT NULL,
@@ -156,6 +181,14 @@ CREATE TABLE `requisitions` (
   `datetime_approveddeclined_by_president` datetime DEFAULT NULL,
   `gsd_officer_id` int(50) DEFAULT NULL,
   `president_id` int(50) DEFAULT NULL,
+  `department_head_id` int(50) DEFAULT NULL,
+  `comptroller_id` int(50) DEFAULT NULL,
+  `property_custodian_id` int(50) DEFAULT NULL,
+  `treasurer_id` int(50) DEFAULT NULL,
+  `datetime_approveddeclined_by_comptroller` datetime DEFAULT NULL,
+  `datetime_approveddeclined_by_property_custodian` datetime DEFAULT NULL,
+  `datetime_approveddeclined_by_department_head` datetime DEFAULT NULL,
+  `datetime_approveddeclined_by_treasurer` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -202,14 +235,15 @@ CREATE TABLE `stocks` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `control_number` varchar(100) NOT NULL,
   `name` varchar(200) NOT NULL,
-  `status` varchar(30) NOT NULL,
+  `status` enum('GOOD CONDITION','FOR REPLACE','FOR REPARIR','DELETED') NOT NULL DEFAULT 'GOOD CONDITION',
   `datetime_added` datetime NOT NULL,
   `datetime_updated` datetime NOT NULL,
   `datetime_deleted` datetime NOT NULL,
-  `type` varchar(45) NOT NULL,
+  `type` enum('Office Supply','Material and Equipment') NOT NULL,
   `price` float DEFAULT NULL,
-  `isRequest` varchar(45) NOT NULL,
+  `isRequest` enum('TRUE','FALSE') NOT NULL DEFAULT 'TRUE',
   `area_id` int(50) NOT NULL,
+  `unit` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -247,7 +281,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `user_id` (`id`),
   UNIQUE KEY `user_id_2` (`id`),
   UNIQUE KEY `user_id_3` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10020 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10062 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,7 +290,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Soria','Mae','Gonzalez','Active','Inventory Officer','2015-11-29 15:34:21','','',0),(10018,'ella','5f4dcc3b5aa765d61d8327deb882cf99','Caranyagan','Tita Ella','Rosales','Active','GSD Officer','2015-12-07 21:24:02','','',1),(10019,'daniel','5f4dcc3b5aa765d61d8327deb882cf99','Roca','Daniel','Homeres','Active','President','2015-12-13 22:28:32','','',1);
+INSERT INTO `users` VALUES (10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Soria','Mae','Gonzalez','Active','Inventory Officer','2015-11-29 15:34:21','','',2),(10018,'ella','5f4dcc3b5aa765d61d8327deb882cf99','Caranyagan','Tita Ella','Rosales','Active','GSD Officer','2015-12-07 21:24:02','','',1),(10019,'daniel','5f4dcc3b5aa765d61d8327deb882cf99','Roca','Daniel','Homeres','Active','President','2015-12-13 22:28:32','','',1),(10020,'nino','5f4dcc3b5aa765d61d8327deb882cf99','Siose','Nino','Mabihinhigan','Active','Property Custodian','2015-12-30 11:58:52','','',1),(10061,'comptroller','5f4dcc3b5aa765d61d8327deb882cf99','Comptroller','John','John','Active','Comptroller','2015-12-31 14:29:32','','',1),(10059,'testing','5f4dcc3b5aa765d61d8327deb882cf99','employs','ladis','employs','Active','Employee','2015-12-31 14:28:51','','',1),(10060,'temp','5f4dcc3b5aa765d61d8327deb882cf99','Department Head','New','testing','Active','Department Head','2015-12-31 14:29:32','','',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -269,4 +303,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-12-14  3:22:29
+-- Dump completed on 2016-01-03 13:42:22
