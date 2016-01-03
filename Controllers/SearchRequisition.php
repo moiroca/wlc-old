@@ -8,6 +8,9 @@ $stockRepo = new Stocks();
 $itemControlNumber = isset($_GET['itemControlNumber']) ? $_GET['itemControlNumber'] : '';
 $stockResult = $stockRepo->getByControlNumber($itemControlNumber);
 
-echo json_encode($stockResult->fetch_assoc());
+$result = $stockResult->fetch_assoc();
+$result['statuses'] = StockUtility::jobRequisitionStatusType();
+
+echo json_encode($result);
 
 ?>

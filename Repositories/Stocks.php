@@ -43,9 +43,14 @@ Class Stocks extends Base
                 `stocks`.`type` as stock_type,
                 `stocks`.`control_number` as stock_control_number,
                 `stocks`.`name` as stock_name,
-                `stocks`.`status` as stock_status
+                `stocks`.`status` as stock_status,
+                `areas`.`name` as area_name
               FROM 
                 stocks
+              JOIN 
+                `areas`
+              ON
+                `areas`.`id` = `stocks`.`area_id`
               WHERE 
                 status != 'Deleted'
               AND

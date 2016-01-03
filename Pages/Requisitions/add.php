@@ -12,6 +12,8 @@ $index = 1;
 
 $areasArray = [];
 
+$departmentObj   = new Department();
+
 while ($area = $areas->fetch_assoc()) {
   $areasArray[$index]['id'] = $area['id'];
   $areasArray[$index]['name'] = $area['name'];
@@ -73,17 +75,15 @@ while ($area = $areas->fetch_assoc()) {
                             </div>
                             <p class="help-block" style='margin: 0px 10px;'></p>
                         </div>
-
-                        <?php 
-                          $departmentObj   = new Department();
-                          $departments = $departmentObj->getAll();
+                        <?php
+                            $departments = $departmentObj->getAll();
                         ?>
                         <div class="control-group">
                           <label>Department</label>    
                               <input type='hidden' id='getAreaUrl' value='<?php echo Link::createUrl('Controllers/GetArea.php'); ?>' />
 
                               <?php  if (0 != $departments->num_rows) { ?>
-                              <select id='department_id' name='department_id' class='form-control' required>
+                              <select name='department_id' class='form-control department_id'>
                                 <option value=''>Select Department</option>
                                 <?php while ($department =  $departments->fetch_assoc()) { ?>
                                           <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
@@ -95,11 +95,11 @@ while ($area = $areas->fetch_assoc()) {
                             <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
                         </div>
 
-                        <div class="control-group" id='areas'>
+                        <div class="control-group areas">
                             <div class="control-group">
                               <?php if (0 != $areas->num_rows): ?>
                                       <label class='control-label' for="type">Area</label>
-                                      <select id='area_id' class='form-control' name='area_id'>
+                                      <select class='form-control area_id' name='area_id'>
                                           <option value=''>Select Area</option>
                                           <?php foreach ($areasArray as $key => $area): ?>
                                               <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
@@ -122,13 +122,14 @@ while ($area = $areas->fetch_assoc()) {
                                                   <p class='panel-title'>Attached Items In Item Requisition</p>
                                               </div>
                                               <div class="panel-body">
-                                                  <table id='requisitionItems' class="item_list table table-hover table-striped table-bordered">
+                                                  <table class="requisitionItems item_list table table-hover table-striped table-bordered">
                                                       <thead>
                                                           <tr class='itemForm'>
                                                               <th>Name</th>
                                                               <th>Amount/Unit (Php)</th>
                                                               <th>Quantity</th>
                                                               <th>Unit</th>
+                                                              <th>Please Select Status</th>
                                                               <th>Action</th>
                                                           </tr>
                                                       </thead>
@@ -175,13 +176,49 @@ while ($area = $areas->fetch_assoc()) {
 
                     <!-- Job Requisition -->
                     <div id="jobRequisition">
+                        <?php 
+                          $departments = $departmentObj->getAll();
+                        ?>
+                        <div class="control-group">
+                          <label>Department</label>    
+                              <input type='hidden' id='getAreaUrl' value='<?php echo Link::createUrl('Controllers/GetArea.php'); ?>' />
+
+                              <?php  if (0 != $departments->num_rows) { ?>
+                              <select name='department_id' class='form-control department_id' required>
+                                <option value=''>Select Department</option>
+                                <?php while ($department =  $departments->fetch_assoc()) { ?>
+                                          <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                            <?php } else { ?>
+                                <div class="alert alert-info"> There are no Departments. Please Add A Department First.</div>
+                            <?php } ?>
+                            <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
+                        </div>
+
+                        <div class="control-group areas">
+                            <div class="control-group">
+                              <?php if (0 != $areas->num_rows): ?>
+                                      <label class='control-label' for="type">Area</label>
+                                      <select class='form-control area_id' name='area_id'>
+                                          <option value=''>Select Area</option>
+                                          <?php foreach ($areasArray as $key => $area): ?>
+                                              <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
+                                          <?php endforeach ?>
+                                      </select>
+                                      <p class="help-block"></p>
+                              <?php else : ?>
+                                  <div class='alert alert-info'> <i class='fa fa-info'></i> There are no areas yet. Please Add Area First. </div>
+                              <?php endif ?>
+                            </div>
+                        </div>
                         <div class="control-group">
                             <label class='control-label' for="purpose"> Purpose</label>    
-                            <textarea name='purpose' class='form-control'></textarea>
+                            <textarea id='purpose' name='purpose' class='form-control'></textarea>
                             <p class="help-block"></p>
                         </div>
 
-                        <div id='attached_item_group' class="control-group" style='display:none'>
+                        <div id='attached_item_group' class="control-group">
                             <label class='control-label' for="purpose"> Attach Item by searching Item by Control Identifier</label>    
                             <div class="form-group input-group">
                                     <span class="input-group-addon">
@@ -195,32 +232,32 @@ while ($area = $areas->fetch_assoc()) {
                                     </span>
                             </div>
                             <p style='display:none;' class="help-block alert alert-danger"></p>
-                            <table style='display:none' class="table table-hover table-striped" id='item_table'>
+                            <table style='display:none' class="table table-hover table-striped requisitionItems" id='item_table'>
                                 <thead>
-                                    <tr>
+                                    <tr class='itemForm'>
                                         <th>Item Control Identifier</th>
                                         <th>Item Name</th>
                                         <th>Area</th>
                                         <th>Item Condition</th>
                                         <th>Item Type</th>
-                                            <th>Action</th>
+                                        <th>Action</th>
                                      </tr>
-                                    <tr id='empty' class='info'>
+                                    <tr id='empty' class='info itemForm'>
                                         <td colspan=6 align=center><label class='label label-primary'>No Item Found</label></td>
                                     </tr>
-                                    <tr id='loader' style='display:none'>
+                                    <tr id='loader' style='display:none' class='itemForm'>
                                         <td colspan=6 align=center><i class='fa fa-spinner fa-spin fa-2x'></i></td>
                                     </tr>
-                                    <tr id='result' class='info'>
+                                    <tr id='result' class='info itemForm'>
                                     </tr>
                                 </thead>
-                                <tbody id='item_list'>
+                                <tbody id='item_list' class='itemForm'>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Requisition" type="submit" />
+                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" value="Save Requisition" type="submit" />
                 </form>
                 <span id='links'>
                   <input id='searchRequisitionLink' type='hidden' value='<?php echo Link::createUrl('Controllers/SearchRequisition.php'); ?>'/>

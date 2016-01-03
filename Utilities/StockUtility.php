@@ -29,6 +29,21 @@ class StockUtility
 	}
 
 	/**
+	 * Get Job Requisition Stock Item Status 
+	 *
+	 * @return Array
+	 */
+	public static function jobRequisitionStatusType()
+	{
+		$statuses = [
+			Constant::STOCK_REPAIR,
+			Constant::STOCK_REPLACE,
+		];
+
+		return $statuses;
+	}
+
+	/**
 	 * Get Stock Item Type
 	 *
 	 * @return Array

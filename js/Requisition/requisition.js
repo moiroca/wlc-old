@@ -25,25 +25,36 @@ $(document).ready(function() {
 	var appendResultToItemList = function(event) {
 		var item = $(this).closest('tr');
 
+		var select = item.find('select').val();
+		item.find('select').closest('td').empty().text(select);
+
 		item.removeClass();
 		item.find('td:last-child button').removeClass('btn-primary').addClass('btn-warning');
 		item.find('td:last-child button').removeClass('add_item').addClass('remove_item');
 		item.find('td:last-child button').html('<i class="fa fa-minus"> Remove</i>');
 
 		$('#item_list').prepend(
-			$('<tr/>', { 'data-id': item.attr('data-id'), 'data-control_number' : item.attr('data-control_number') })
+			$('<tr/>', { 
+					'data-id': item.attr('data-id'), 
+					'data-control_number' : item.attr('data-control_number'), 
+					'data-status' : select })
 				.append(item.children())
 				.append($('<input />', { 'type' : 'hidden', 'name' : 'items[]'}).val(item.attr('data-id')))
+				.append($('<input />', { 'type' : 'hidden', 'name' : 'statuses[]'}).val(select))
 		);
 		
 		item.attr('data-id', 0);
 		item.attr('data-control_number', 0);
+
 		$('.remove_item').bind('click', removeItemFromItemList);
 		$(this).unbind('click', appendResultToItemList);
 	}
 
 	$('#requisition_type').on('change', function() {
 		var requisitionType = $(this);
+
+		// Hide Areas
+		$('.areas').hide();
 
 		if ('Item' == requisitionType.val()) {
 			Requisition.$itemRequisition.show();						
@@ -126,13 +137,21 @@ $(document).ready(function() {
 
 					if ('object' == typeof data && null != data) {
 						
-						var td = $('<td />');
-						var tr = $('#result');
+						var td = $('<td />'),
+							tr = $('#result'),
+							status = $('<select/>', { class: 'form-control'});
+
+						if (data.statuses.length != 0) {
+							$.each(data.statuses, function(index, value) {
+								status.append('<option value="'+value+'">'+value+'</option>');
+							});
+						}
 
 						tr.attr('data-id', data.stock_id);
 						tr.attr('data-control_number', data.stock_control_number);
 
 						tr.prepend('<td><button type="button" class="add_item btn btn-sm btn-primary"><i class="fa fa-plus"></i> Add </button></td>');
+						tr.prepend(td.append(status));
 						tr.prepend('<td>'+data.stock_type+'</td>');
 						tr.prepend('<td>'+data.stock_status+'</td>');
 						tr.prepend('<td>'+data.area_name+'</td>');
@@ -365,10 +384,10 @@ $(document).ready(function() {
 	});
 	
 	// Fetch Area By Department Id
-	$('#department_id').on('change', function() {
+	$('.department_id').on('change', function() {
 		var department = $(this),
 			departmentId = $(this).val();
-			areas = $('#areas');
+			areas = $('.areas');
 
 		if (0 != departmentId.length) {
 
@@ -483,11 +502,28 @@ $(document).ready(function() {
 	$('#requisition_form').on('submit', function(event) {
 		var requisitionType = $('#requisition_type').val(),
 			itemType 		= $('#type').val(),
-			areaId			= $('#area_id'),
-			requisitionItems = $('#requisitionItems'),
+			areaId			= $('.area_id'),
+			requisitionItems = $('.requisitionItems'),
 			error 			= false;
 
 		if (requisitionType == 'Job') {
+			purpose = $('#purpose').val();
+
+			error = (areaId.length == 0);
+
+			if (!error) {
+				error = (areaId.val().length == 0);
+
+				if (!error) {
+					error = (requisitionItems.find('tr:not(.itemForm)').length == 0);
+
+					console.log(error);
+					if (!error) {
+
+						error = (purpose.length == 0 );
+					};
+				}
+			}
 
 		} else if(requisitionType == 'Item') {
 			error = (itemType.length == 0);
