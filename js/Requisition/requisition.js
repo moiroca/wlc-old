@@ -491,7 +491,7 @@ $(document).ready(function() {
 
 		} else if(requisitionType == 'Item') {
 			error = (itemType.length == 0);
-			console.log(error);
+			
 			if (!error) {
 				error = (areaId.length == 0);
 
