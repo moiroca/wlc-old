@@ -58,67 +58,55 @@ class RequisitionService
 	 */
 	public function approve($data)
 	{
+		$status = '';
+		
 		if ($data['approver_type'] == Constant::USER_GSD_OFFICER) {
-			$updateStatusQuery = "
-				UPDATE 
-					`requisitions` 
-				SET 
-					`status`='".Constant::VERIFIED_BY_GSD_OFFICER."',
-					`datetime_approveddeclined_by_gsd_officer` = '".date_create()->format('Y-m-d H:i:s')."',
-					`gsd_officer_id`=".$data['approved_by']."
-				WHERE 
-					`id`=".$data['requisition_id']."
-			";
+			$status = Constant::VERIFIED_BY_GSD_OFFICER;
 		} elseif ($data['approver_type'] == Constant::USER_PRESIDENT) {
-			$updateStatusQuery = "
-				UPDATE 
-					`requisitions` 
-				SET 
-					`status`='".Constant::APPROVED_BY_PRESIDENT."',
-					`datetime_approveddeclined_by_president` = '".date_create()->format('Y-m-d H:i:s')."',
-					`president_id`=".$data['approved_by']."
-				WHERE 
-					`id`=".$data['requisition_id']."
-			";
+			$status = Constant::APPROVED_BY_PRESIDENT;
 		} else if ($data['approver_type'] == Constant::USER_TREASURER) {
-			# code...
+			$status = Constant::APPROVED_BY_TREASURER;
 		} elseif ($data['approver_type'] == Constant::USER_PROPERTY_CUSTODIAN) {
-			$updateStatusQuery = "
-				UPDATE 
-					`requisitions` 
-				SET 
-					`status`='".Constant::VERIFIED_BY_PROPERTY_CUSTODIAN."',
-					`datetime_approveddeclined_by_property_custodian` = '".date_create()->format('Y-m-d H:i:s')."',
-					`property_custodian_id`=".$data['approved_by']."
-				WHERE 
-					`id`=".$data['requisition_id']."
-			";
+			$status = Constant::VERIFIED_BY_PROPERTY_CUSTODIAN;
 		} elseif ($data['approver_type'] == Constant::USER_COMPTROLLER) {
-			$updateStatusQuery = "
-				UPDATE 
-					`requisitions` 
-				SET 
-					`status`='".Constant::APPROVED_BY_COMPTROLLER."',
-					`datetime_approveddeclined_by_comptroller` = '".date_create()->format('Y-m-d H:i:s')."',
-					`comptroller_id`=".$data['approved_by']."
-				WHERE 
-					`id`=".$data['requisition_id']."
-			";
+			$status = Constant::APPROVED_BY_COMPTROLLER;
 		} elseif ($data['approver_type'] == Constant::USER_DEPARTMENT_HEAD) {
-			$updateStatusQuery = "
-				UPDATE 
-					`requisitions` 
-				SET 
-					`status`='".Constant::NOTED_BY_DEPARTMENT_HEAD."',
-					`datetime_approveddeclined_by_department_head` = '".date_create()->format('Y-m-d H:i:s')."',
-					`department_head_id`=".$data['approved_by']."
-				WHERE 
-					`id`=".$data['requisition_id']."
-			";
+			$status = Constant::NOTED_BY_DEPARTMENT_HEAD;
 		}
 
-		return $this->connection->query($updateStatusQuery);
+		$this->saveRequisitionStatus(
+			$data['approved_by'],
+			$data['requisition_id'],
+			$status
+		);
 	}
 
+	/**
+	 * Insert Requisition Status
+	 *
+	 * @param Int $userId
+	 * @param Int $requisitionId
+	 * @param String $status
+	 */
+	public function saveRequisitionStatus($userId, $requisitionId, $status)
+	{
+		$sql = "
+			INSERT
+			INTO
+				`requisition_status`(
+						`user_id`,
+						`requisition_id`,
+						`status`,
+						`datetime_added`
+					)
+			VALUES(
+					$userId,
+					$requisitionId,
+					'".$status."',
+					'".date_create()->format('Y-m-d H:i:s')."'
+				)
+		";
 
+		return $this->connection->query($sql);
+	}
 }

@@ -62,6 +62,9 @@ Class Constant {
 		VERIFIED_BY_GSD_OFFICER = 'Verified By GSD Officer', 
 		DECLINED_BY_GSD_OFFICER = 'Declined By GSD Officer', 
 
+		APPROVED_BY_TREASURER = 'Approved By Treasurer',
+		DECLINED_BY_TREASURER = 'Declined By Treasurer',
+
 		APPROVED_BY_COMPTROLLER = 'Approved By Comptroller',
 		DECLINED_BY_COMPTROLLER = 'Declined By Comptroller',
 

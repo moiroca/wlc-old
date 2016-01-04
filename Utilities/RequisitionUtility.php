@@ -65,36 +65,74 @@ class RequisitionUtility
 		return $isApproved;
 	}
 
-	public static function isRequisitionActionedByDepartmentHead($status)
+	public static function isRequisitionActionedByDepartmentHead($status, $isApproved = false)
 	{
-		return in_array($status, [
-				Constant::NOTED_BY_DEPARTMENT_HEAD,
-				Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
-				Constant::VERIFIED_BY_GSD_OFFICER,
-				Constant::APPROVED_BY_COMPTROLLER,
-				Constant::APPROVED_BY_PRESIDENT,
+		if ($isApproved) {
+			return in_array($status, [
+					Constant::NOTED_BY_DEPARTMENT_HEAD,
+					Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
+					Constant::VERIFIED_BY_GSD_OFFICER,
+					Constant::APPROVED_BY_COMPTROLLER,
+					Constant::APPROVED_BY_PRESIDENT,
+					Constant::APPROVED_BY_TREASURER,
+				]);
+		} else {
+			return in_array($status, [
+					Constant::NOTED_BY_DEPARTMENT_HEAD,
+					Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
+					Constant::VERIFIED_BY_GSD_OFFICER,
+					Constant::APPROVED_BY_COMPTROLLER,
+					Constant::APPROVED_BY_PRESIDENT,
+					Constant::APPROVED_BY_TREASURER,
 
-				Constant::DECLINED_BY_DEPARTMENT_HEAD,
-				Constant::DECLINED_BY_PROPERTY_CUSTODIAN,
-				Constant::DECLINED_BY_GSD_OFFICER,
-				Constant::DECLINED_BY_COMPTROLLER,
-				Constant::DECLINED_BY_PRESIDENT,
-			]);
+					Constant::DECLINED_BY_DEPARTMENT_HEAD,
+					Constant::DECLINED_BY_PROPERTY_CUSTODIAN,
+					Constant::DECLINED_BY_GSD_OFFICER,
+					Constant::DECLINED_BY_COMPTROLLER,
+					Constant::DECLINED_BY_PRESIDENT,
+					Constant::DECLINED_BY_TREASURER,
+				]);
+		}
 	}
 
-	public static function isRequisitionActionedByPropertyCustodianOrGSDOfficer($status)
+	public function isRequisitionActionByTreasurer($status)
 	{
 		return in_array($status, [
-				Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
-				Constant::VERIFIED_BY_GSD_OFFICER,
-				Constant::APPROVED_BY_COMPTROLLER,
-				Constant::APPROVED_BY_PRESIDENT,
+					Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
+					Constant::VERIFIED_BY_GSD_OFFICER,
+					Constant::APPROVED_BY_COMPTROLLER,
+					Constant::APPROVED_BY_PRESIDENT,
+					Constant::APPROVED_BY_TREASURER,
+				]);
+	}
 
-				Constant::DECLINED_BY_PROPERTY_CUSTODIAN,
-				Constant::DECLINED_BY_GSD_OFFICER,
-				Constant::DECLINED_BY_COMPTROLLER,
-				Constant::DECLINED_BY_PRESIDENT,
-			]);
+	public static function isRequisitionActionedByPropertyCustodianOrGSDOfficer($status, $isApproved = false)
+	{
+		if ($isApproved) {
+			
+			return in_array($status, [
+					Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
+					Constant::VERIFIED_BY_GSD_OFFICER,
+					Constant::APPROVED_BY_COMPTROLLER,
+					Constant::APPROVED_BY_PRESIDENT,
+					Constant::APPROVED_BY_TREASURER,
+				]);
+		} else {
+		
+			return in_array($status, [
+					Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
+					Constant::VERIFIED_BY_GSD_OFFICER,
+					Constant::APPROVED_BY_COMPTROLLER,
+					Constant::APPROVED_BY_PRESIDENT,
+					Constant::APPROVED_BY_TREASURER,
+
+					Constant::DECLINED_BY_PROPERTY_CUSTODIAN,
+					Constant::DECLINED_BY_GSD_OFFICER,
+					Constant::DECLINED_BY_COMPTROLLER,
+					Constant::DECLINED_BY_PRESIDENT,
+					Constant::DECLINED_BY_TREASURER,
+				]);
+		}
 	}
 
 	public static function isRequisitionActionedByComptroller($status)

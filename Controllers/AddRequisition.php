@@ -24,6 +24,7 @@ Login::sessionStart();
                     'purpose'  => $requisitionPurpose,
                     'area_id'   => $areaId
                   ]);
+      
       $stockRequisitionService = new StockRequisitionService();
 
       if ($requisitionType == Constant::REQUISITION_JOB) {

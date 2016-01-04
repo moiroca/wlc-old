@@ -180,4 +180,127 @@ Class Requisitions extends Base
 
     return $result;
   }
+
+  /**
+   * Get Current Requisition Status
+   *
+   * @param int $requisitionId
+   *
+   * @return Mix
+   */
+  public function getCurrentRequisitionStatus($requisitionId)
+  {
+     $sql = "
+        SELECT 
+          `requisition_status`.`status` as status
+        FROM
+          `requisition_status`
+        JOIN
+          `users`
+        ON
+          `users`.`id` = `requisition_status`.`user_id`
+        WHERE
+          `requisition_status`.`requisition_id` = $requisitionId
+        ORDER BY
+          `requisition_status`.`datetime_added`
+        LIMIT 1
+     ";
+
+     $requisition = $this->connection->query($sql);
+
+     if (0 != $requisition->num_rows) {
+        return $requisition->fetch_assoc()['status'];
+     } else {
+        return null;
+     }
+  }
+
+  /**
+   * Get All status Of 
+   *
+   * @param int $requisitionId
+   */
+  public function getAllRequisitionStatus($requisitionId)
+  {
+      $sql = "
+        SELECT 
+          `requisition_status`.`status` as status,
+          `users`.`firstname` as user_firstname,
+          `users`.`middlename` as user_middlename,
+          `users`.`lastname` as user_lastname,
+          `users`.`id` as user_id
+        FROM
+          `requisition_status`
+        JOIN
+          `users`
+        ON
+          `users`.`id` = `requisition_status`.`user_id`
+        WHERE
+          `requisition_status`.`requisition_id` = $requisitionId
+        ORDER BY
+          `requisition_status`.`datetime_added`
+     ";
+
+     $requisition = $this->connection->query($sql);
+
+     if (0 != $requisition->num_rows) {
+        return $requisition->fetch_all();
+     } else {
+        return null;
+     }
+  }
+
+  /**
+   * Get Requisition User From RequisitionId and Status
+   *
+   * @param int $requisitionId
+   * @param String $status
+   */
+  public function getRequisitionActorByStatus($requisitionId, $status, $or = false)
+  {
+      $sql = "
+        SELECT 
+          `users`.`firstname` as user_firstname,
+          `users`.`middlename` as user_middlename,
+          `users`.`lastname` as user_lastname,
+          `users`.`id` as user_id,
+          `requisition_status`.`status` as status,
+          `requisition_status`.`datetime_added` as datetime_added
+        FROM
+          `requisition_status`
+        JOIN
+          `users`
+        ON
+          `users`.`id` = `requisition_status`.`user_id`
+        WHERE
+          `requisition_status`.`requisition_id` = $requisitionId";
+
+      if ($or) {
+          foreach ($status as $ind => $where) {
+              if (0 == $ind) {
+                $sql .= " AND ";
+              } else {
+                $sql  .= " OR ";
+              }
+
+              $sql .= " `requisition_status`.`status` = '".$where."' ";
+          }
+      } else {
+          $sql .= "
+                  AND
+                    `requisition_status`.`status` = '".$status."' ";
+      }
+        
+      $sql .= "
+            LIMIT 1
+         ";
+
+      $requisition = $this->connection->query($sql);
+
+      if (0 != $requisition->num_rows) {
+        return $requisition->fetch_assoc();
+      } else {
+        return null;
+      }
+  }
 }
