@@ -19,6 +19,7 @@ Login::sessionStart();
                   'price'   => $_POST['price'],
                   'status'  => $_POST['status'],
                   'type'    => $_POST['type'],
+                  'unit'    => $_POST['unit'],
                   'isRequest' => false
                 ]);
 
@@ -29,13 +30,11 @@ Login::sessionStart();
       }
 
       if (isset($_POST['type'])) {
-        if ($_POST['type'] == Constant::ITEM_TOOL) {
-          header('location: '.Link::createUrl('Pages/Stocks/Tools/tools.php'));
-        } else if($_POST['type'] == Constant::ITEM_EQUIPMENT) {
-          header('location: '.Link::createUrl('Pages/Stocks/Equipments/equipments.php'));
-        } else {
-          header('location: '.Link::createUrl('Pages/Stocks/Materials/materials.php'));
-        }
+        if ($_POST['type'] == Constant::ITEM_MATERIAL_EQUIPMENT) {
+          header('location: '.Link::createUrl('Pages/Stocks/MaterialsEquipments.php'));
+        } else if($_POST['type'] == Constant::ITEM_OFFICE_SUPPLY) {
+          header('location: '.Link::createUrl('Pages/Stocks/OfficeSupply.php'));
+        } 
       }
       
   }

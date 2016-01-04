@@ -8,6 +8,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 $areaObj = new Area(); 
 $areas = $areaObj->getAll();
 
+$departmentObj   = new Department();
+
 $index = 1;
 $areasArray = [];
 
@@ -61,15 +63,41 @@ while ($area = $areas->fetch_assoc()) {
                         <p class="help-block"></p>
                     </div>
                     
+                    <?php
+                        $departments = $departmentObj->getAll();
+                    ?>
                     <div class="control-group">
-                        <label class='control-label' for="type">Area</label>
-                        <select id='area_id' class='form-control' name='area_id' required>
-                            <option value=''>Select Area</option>
-                            <?php foreach ($areasArray as $key => $area): ?>
-                                <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
-                            <?php endforeach ?>
+                      <label>Department</label>    
+                          <input type='hidden' id='getAreaUrl' value='<?php echo Link::createUrl('Controllers/GetArea.php'); ?>' />
+
+                          <?php  if (0 != $departments->num_rows) { ?>
+                          <select name='department_id' class='form-control department_id'>
+                            <option value=''>Select Department</option>
+                            <?php while ($department =  $departments->fetch_assoc()) { ?>
+                                      <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
+                            <?php } ?>
                         </select>
-                        <p class="help-block"></p>
+                        <?php } else { ?>
+                            <div class="alert alert-info"> There are no Departments. Please Add A Department First.</div>
+                        <?php } ?>
+                        <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
+                    </div>
+
+                    <div class="control-group areas">
+                        <div class="control-group">
+                          <?php if (0 != $areas->num_rows): ?>
+                                  <label class='control-label' for="type">Area</label>
+                                  <select class='form-control area_id' name='area_id'>
+                                      <option value=''>Select Area</option>
+                                      <?php foreach ($areasArray as $key => $area): ?>
+                                          <option value="<?php echo $area['id']; ?>" ><?php echo $area['name']; ?></option>
+                                      <?php endforeach ?>
+                                  </select>
+                                  <p class="help-block"></p>
+                          <?php else : ?>
+                              <div class='alert alert-info'> <i class='fa fa-info'></i> There are no areas yet. Please Add Area First. </div>
+                          <?php endif ?>
+                        </div>
                     </div>
 
                     <div class="control-group">
@@ -81,6 +109,12 @@ while ($area = $areas->fetch_assoc()) {
                     <div class="control-group">
                         <label>Price Per Unit (Php):</label>
                         <input class='form-control' min=1 name="price" id="price" type="number" step='0.01' placeholder="Price" required="required"/>
+                        <p class="help-block"></p>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Unit</label>
+                        <input class='form-control' name="unit" id="unit" type="text" placeholder="e.g. M, Pc, Kg, G," required="required"/>
                         <p class="help-block"></p>
                     </div>
 
@@ -105,5 +139,5 @@ while ($area = $areas->fetch_assoc()) {
       
     </div>
   </div>
-<?php Template::footer(); ?>
+<?php Template::footer(['requisition.js', 'Requisition/requisition.js']); ?>
        
