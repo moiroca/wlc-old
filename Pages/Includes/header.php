@@ -311,13 +311,10 @@
                                         <a href="<?php echo Link::createUrl('Pages/Stocks/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Tools/tools.php'); ?>"> Tools</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/OfficeSupply.php'); ?>"> Office Supply</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Equipments/equipments.php'); ?>"> Equipments</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Stocks/Materials/materials.php'); ?>"> Materials</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Stocks/MaterialsEquipments.php'); ?>"> Materials and Equipments</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
