@@ -28,11 +28,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
     <div class="col-md-12">
       <div class="table-responsive">
         <?php 
-            if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT) {
-                $result = $requisitions->getAllRequesitionForApprovalByPresident(Constant::REQUISITION_JOB);  
-            } else {
-                $result = $requisitions->getAllRequesition(Constant::REQUISITION_JOB);
-            }
+            $result = $requisitions->getRequisitionByUserType(Login::getUserLoggedInType(), Constant::REQUISITION_JOB);
         ?>
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
         <?php unset($_SESSION['record_successful_added']); ?>
@@ -77,31 +73,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
                       //--. Get Requisition Current Status .--//
                       $requisitionCurrentStatus = $requisitions->getCurrentRequisitionStatus($item['requisition_id']);
-
-                      if (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN && 
-                          ($firstItem && $firstItem['stock_type'] == Constant::ITEM_MATERIAL_EQUIPMENT)) {
-                        continue;
-                      } 
-
-                      if(Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER && 
-                          ($firstItem && $firstItem['stock_type'] == Constant::ITEM_OFFICE_SUPPLY)) {
-                        continue;
-                      }
-
-                      if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD) {
-                          
-                          $departmentRepo = new Department();
-
-                          $requesterDepartment = $departmentRepo->getUserDepartmentByRequesterId($item['requisition_requester_id']);
-                          $requesterDepartment = $requesterDepartment->fetch_assoc();
-                          
-                          $loggedInDepartment = $departmentRepo->getUserDepartmentByUserId(Login::getUserLoggedInId());
-                          $loggedInDepartment = $loggedInDepartment->fetch_assoc();
-
-                          if ($requesterDepartment['department_name'] != $loggedInDepartment['department_name']) {
-                              continue;
-                          }
-                      }
                   ?>
                   <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                     <td> 
@@ -149,7 +120,13 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <?php } ?>
                     </td>
                     <td>
-                        <label class='label label-info'><?php echo $requisitionCurrentStatus; ?></label>
+                        <label class='label label-info'>
+                          <?php if ($requisitionCurrentStatus): ?>
+                              <?php echo $requisitionCurrentStatus; ?>
+                          <?php else: ?>
+                              <i class="fa fa-info"></i> Pending for Approval
+                          <?php endif ?>
+                        </label>
                     </td>
                     <?php if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD): ?>
                         <td> 

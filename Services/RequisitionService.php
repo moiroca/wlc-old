@@ -33,7 +33,6 @@ class RequisitionService
 							requester_id,
 							purpose,  
 							type, 
-							status, 
 							datetime_added,
 							control_identifier,
 							area_id) 
@@ -41,7 +40,6 @@ class RequisitionService
 						".$this->connection->real_escape_string($requester_id).",
 						'".$this->connection->real_escape_string($data['purpose'])."', 
 						'".$this->connection->real_escape_string($data['type'])."',
-						'".Constant::REQUISITION_PENDING."',
 						'".$datetime_added."',
 						'".hexdec(uniqid())."',
 						".$this->connection->real_escape_string($data['area_id']).")";

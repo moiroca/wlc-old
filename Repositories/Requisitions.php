@@ -22,25 +22,9 @@ Class Requisitions extends Base
                 `users`.`firstname` as user_firstname,
                 `users`.`middlename` as user_middlename,
                 `users`.`lastname` as user_lastname,
-                `$this->table`.`status` as requisition_status,
 
                 `$this->table`.`purpose` as requisition_purpose,
                 `$this->table`.`type` as requisition_type,
-                `$this->table`.`requester_id` as requisition_requester_id,
-                `$this->table`.`datetime_approveddeclined_by_president` as requisition_datetime_approveddeclined_by_president,
-                `$this->table`.`datetime_approveddeclined_by_gsd_officer` as requisition_datetime_approveddeclined_by_gsd_officer,
-                `$this->table`.`datetime_approveddeclined_by_comptroller` as requisition_datetime_approveddeclined_by_comptroller,
-                `$this->table`.`datetime_approveddeclined_by_property_custodian` as requisition_datetime_approveddeclined_by_property_custodian,
-                `$this->table`.`datetime_approveddeclined_by_department_head` as requisition_datetime_approveddeclined_by_department_head,
-                `$this->table`.`datetime_approveddeclined_by_treasurer` as requisition_datetime_approveddeclined_by_treasurer,
-                `$this->table`.`datetime_added` as requisition_datetime_added,
-                `$this->table`.`status` as requisition_status,
-                `$this->table`.`president_id` as requisition_president_id,
-                `$this->table`.`gsd_officer_id` as requisition_gsd_officer_id,
-                `$this->table`.`department_head_id` as requisition_department_head_id,
-                `$this->table`.`comptroller_id` as requisition_comptroller_id,
-                `$this->table`.`property_custodian_id` as requisition_property_custodian_id,
-                `$this->table`.`treasurer_id` as requisition_treasurer_id,
                 `areas`.`name` as requisition_area_name
               FROM 
                 $this->table
@@ -152,20 +136,7 @@ Class Requisitions extends Base
                 `$this->table`.`type` as requisition_type,
                 `$this->table`.`requester_id` as requisition_requester_id,
                 `$this->table`.`control_identifier` as requisition_control_identifier,
-                `$this->table`.`datetime_approveddeclined_by_president` as requisition_datetime_approveddeclined_by_president,
-                `$this->table`.`datetime_approveddeclined_by_gsd_officer` as requisition_datetime_approveddeclined_by_gsd_officer,
-                `$this->table`.`datetime_approveddeclined_by_comptroller` as requisition_datetime_approveddeclined_by_comptroller,
-                `$this->table`.`datetime_approveddeclined_by_property_custodian` as requisition_datetime_approveddeclined_by_property_custodian,
-                `$this->table`.`datetime_approveddeclined_by_department_head` as requisition_datetime_approveddeclined_by_department_head,
-                `$this->table`.`datetime_approveddeclined_by_treasurer` as requisition_datetime_approveddeclined_by_treasurer,
                 `$this->table`.`datetime_added` as requisition_datetime_added,
-                `$this->table`.`status` as requisition_status,
-                `$this->table`.`president_id` as requisition_president_id,
-                `$this->table`.`gsd_officer_id` as requisition_gsd_officer_id,
-                `$this->table`.`department_head_id` as requisition_department_head_id,
-                `$this->table`.`comptroller_id` as requisition_comptroller_id,
-                `$this->table`.`property_custodian_id` as requisition_property_custodian_id,
-                `$this->table`.`treasurer_id` as requisition_treasurer_id,
                 `areas`.`name` as requisition_area_name
               FROM 
                 `$this->table`
@@ -202,7 +173,7 @@ Class Requisitions extends Base
         WHERE
           `requisition_status`.`requisition_id` = $requisitionId
         ORDER BY
-          `requisition_status`.`datetime_added`
+          `requisition_status`.`datetime_added` DESC
         LIMIT 1
      ";
 
@@ -276,15 +247,9 @@ Class Requisitions extends Base
           `requisition_status`.`requisition_id` = $requisitionId";
 
       if ($or) {
-          foreach ($status as $ind => $where) {
-              if (0 == $ind) {
-                $sql .= " AND ";
-              } else {
-                $sql  .= " OR ";
-              }
-
-              $sql .= " `requisition_status`.`status` = '".$where."' ";
-          }
+          $sql .= " AND `requisition_status`.`status` IN (".implode(',', array_map(function($item) {
+              return "'".$item."'";
+          }, $status)).")";
       } else {
           $sql .= "
                   AND
@@ -299,6 +264,100 @@ Class Requisitions extends Base
 
       if (0 != $requisition->num_rows) {
         return $requisition->fetch_assoc();
+      } else {
+        return null;
+      }
+  }
+
+  /**
+   * Get Requisition By User Type and Requisition Type
+   *
+   * @param String $userType
+   * @param String $requisitionType
+   */
+  public function getRequisitionByUserType($userType, $requisitionType)
+  {
+      $sql = "SELECT 
+                `$this->table`.`id` as requisition_id,
+                `$this->table`.`purpose` as requisition_purpose,
+                `$this->table`.`control_identifier` as requisition_control_identifier,
+                `$this->table`.`datetime_added` as requisition_datetime_added,
+                `$this->table`.`type` as requisition_type,
+                `users`.`firstname` as user_firstname,
+                `users`.`middlename` as user_middlename,
+                `users`.`lastname` as user_lastname,
+                `areas`.`name` as requisition_area_name
+              FROM 
+                `$this->table`
+              JOIN
+                `areas`
+              ON
+                `areas`.`id` = `$this->table`.`area_id`
+              JOIN
+                `users`
+              ON
+                `users`.`id` = `$this->table`.`requester_id`";
+
+      if ($userType == Constant::USER_INVENTORY_OFFICER || $userType == Constant::USER_DEPARTMENT_HEAD) {
+          $sql .= "
+              WHERE
+                `$this->table`.`type` = '".$requisitionType."'
+          ";
+      } elseif ($userType == Constant::USER_GSD_OFFICER || $userType == Constant::USER_PROPERTY_CUSTODIAN) {
+          $sql .= "
+              JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              WHERE
+                `requisition_status`.`status` = '".CONSTANT::NOTED_BY_DEPARTMENT_HEAD."'
+              AND
+                `$this->table`.`type` = '".$requisitionType."'
+              LIMIT 1
+          ";
+      } elseif ($userType == Constant::USER_TREASURER) {
+          $sql .= "
+              JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              WHERE
+                `requisition_status`.`status` = '".CONSTANT::VERIFIED_BY_GSD_OFFICER."'
+              AND
+                `$this->table`.`type` = '".$requisitionType."'
+              LIMIT 1
+          ";
+      } elseif ($userType == Constant::USER_COMPTROLLER) {
+          $sql .= "
+              JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              WHERE
+                `requisition_status`.`status` IN ('".CONSTANT::VERIFIED_BY_GSD_OFFICER."', '".CONSTANT::VERIFIED_BY_GSD_OFFICER."')
+              AND
+                `$this->table`.`type` = '".$requisitionType."'
+              LIMIT 1
+          ";
+      } elseif ($userType == Constant::USER_PRESIDENT) {
+          $sql .= "
+              JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              WHERE
+                `requisition_status`.`status` 
+                IN ('".CONSTANT::APPROVED_BY_COMPTROLLER."', '".CONSTANT::APPROVED_BY_TREASURER."')
+              AND
+                `$this->table`.`type` = '".$requisitionType."'
+              LIMIT 1
+          ";
+      } 
+
+      $requisition = $this->raw($sql);
+
+      if (0 != $requisition->num_rows) {
+        return $requisition;
       } else {
         return null;
       }

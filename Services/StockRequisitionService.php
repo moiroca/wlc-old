@@ -17,15 +17,15 @@ class StockRequisitionService
 		if ($isJobRequisition) {
 			foreach ($data['items'] as $index => $item) {
 				$query = "INSERT 
-						INTO 
-							stock_requisitions(
-								requisition_id,
-								stock_id,
-								changeTo) 
-						VALUES (
-							".$data['requisition_id'].",
-							".$item.",
-							'".$data['statuses'][$index]."')";
+							INTO 
+								stock_requisitions(
+									requisition_id,
+									stock_id,
+									changeTo) 
+							VALUES (
+								".$data['requisition_id'].",
+								".$item.",
+								'".$data['statuses'][$index]."')";
 				
 				$this->connection->query($query);
 			}

@@ -24,7 +24,7 @@ Login::sessionStart();
                     'purpose'  => $requisitionPurpose,
                     'area_id'   => $areaId
                   ]);
-      
+
       $stockRequisitionService = new StockRequisitionService();
 
       if ($requisitionType == Constant::REQUISITION_JOB) {
@@ -86,8 +86,11 @@ Login::sessionStart();
       } else {
          $_SESSION['something_wrong'] = true;
       }
-
-      $url = Link::createUrl('Pages/Requisitions/myrequisitions.php');
+      if ($requisitionType == Constant::REQUISITION_JOB) {
+        $url = Link::createUrl('Pages/Requisitions/Jobs/listing.php');
+      } else {
+        $url = Link::createUrl('Pages/Requisitions/Items/listing.php');
+      }
       
       header('location: '.$url);
   }

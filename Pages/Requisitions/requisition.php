@@ -35,15 +35,6 @@ $itemsInRequisition = $stocksRepo->getStockByRequisitionId($requisition['requisi
     			<label class="panel-title">Requisition Details</label>
     		</div>
     		<div class="panel-body" >
-                    <?php if ($requisition['requisition_status'] == Constant::REQUISITION_APPROVED): ?>
-                        <div class="alert alert-success">
-                            <i class='fa fa-thumbs-up fa-5x'></i><label style="font-size:40px;"> REQUISITION APPROVED!</label>
-                        </div>
-                    <?php elseif ($requisition['requisition_status'] == Constant::REQUISITION_DECLINED): ?>
-                        <div class="alert alert-danger">
-                            <i class='fa fa-thumbs-down fa-5x'></i><label style="font-size:40px;">   REQUISITION DECLINED!</label>
-                        </div>
-                    <?php endif ?>
 
                     <input type='hidden' value="<?php echo Link::createUrl('Controllers/approveItemInRequisition.php'); ?>" id="approve_item_in_requisition" />
                     <table class="table table-bordered table-hover table-striped" id='stocks_in_requisition'>
@@ -134,9 +125,20 @@ $itemsInRequisition = $stocksRepo->getStockByRequisitionId($requisition['requisi
                         </p>
                     </div>
                     <div>
+                        <?php
+                            //--. Get Requisition Current Status .--//
+                            $requisitionCurrentStatus = $requisitionObj->getCurrentRequisitionStatus($requisition['requisition_id']);
+                        ?>
+
                         <p>
                             <b>Status: </b> 
-                            <?php echo $requisition['requisition_status']; ?>
+                            <label class='label label-info'>
+                              <?php if ($requisitionCurrentStatus): ?>
+                                  <?php echo $requisitionCurrentStatus; ?>
+                              <?php else: ?>
+                                  <i class="fa fa-info"></i> Pending for Approval
+                              <?php endif ?>
+                            </label>
                         </p>
                     </div>
                     <div> 

@@ -28,11 +28,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
     <div class="col-md-12">
       <div class="table-responsive">
         <?php 
-            if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT) {
-                $result = $requisitions->getAllRequesitionForApprovalByPresident(Constant::REQUISITION_ITEM);  
-            } else {
-                $result = $requisitions->getAllRequesition(Constant::REQUISITION_ITEM);
-            }
+            $result = $requisitions->getRequisitionByUserType(Login::getUserLoggedInType(), Constant::REQUISITION_ITEM);
         ?>
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
         <?php unset($_SESSION['record_successful_added']); ?>
@@ -75,30 +71,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                       $itemsInRequisition = $stocksRepo->getStockByRequisitionId($item['requisition_id']);
                       $firstItem = $itemsInRequisition->fetch_assoc();
 
-                      if (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN && 
-                          ($firstItem && $firstItem['stock_type'] == Constant::ITEM_MATERIAL_EQUIPMENT)) {
-                        continue;
-                      } 
-
-                      if(Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER && 
-                          ($firstItem && $firstItem['stock_type'] == Constant::ITEM_OFFICE_SUPPLY)) {
-                        continue;
-                      }
-
-                      if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD) {
-                          
-                          $departmentRepo = new Department();
-
-                          $requesterDepartment = $departmentRepo->getUserDepartmentByRequesterId($item['requisition_requester_id']);
-                          $requesterDepartment = $requesterDepartment->fetch_assoc();
-                          
-                          $loggedInDepartment = $departmentRepo->getUserDepartmentByUserId(Login::getUserLoggedInId());
-                          $loggedInDepartment = $loggedInDepartment->fetch_assoc();
-
-                          if ($requesterDepartment['department_name'] != $loggedInDepartment['department_name']) {
-                              continue;
-                          }
-                      }
+                      //--. Get Requisition Current Status .--//
+                      $requisitionCurrentStatus = $requisitions->getCurrentRequisitionStatus($item['requisition_id']);
                   ?>
                   <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                     <td> 
@@ -107,10 +81,10 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <td> <?php echo RequesterUtility::getFullName($item); ?></td>
                     <td>
                         <?php
-                            $user = $userObj->getAll(['*'], ['id' => $item['requisition_department_head_id']])->fetch_assoc();
+                            $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::NOTED_BY_DEPARTMENT_HEAD, Constant::DECLINED_BY_DEPARTMENT_HEAD], true);
                         ?>
-                        <?php if (!is_null($user)) { ?>
-                            <?php echo $user['lastname'].', '.$user['firstname']; ?>
+                        <?php if ($actor) { ?>
+                              <?php echo RequesterUtility::getFullName($actor);  ?>
                         <?php } else { ?>
                             <label class='label label-info'>Not Available</label>
                         <?php } ?>
@@ -118,49 +92,53 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <td>
 
                         <?php if ($firstItem && $firstItem['stock_type'] == Constant::ITEM_MATERIAL_EQUIPMENT): ?>
-                              <?php
-                                  $user = $userObj->getAll(['*'], ['id' => $item['requisition_gsd_officer_id']])->fetch_assoc();
-                              ?>
-                              <?php if (!is_null($user)) { ?>
-                                  <b>GSD Officer Name: </b> 
-                                  <?php echo $user['lastname'].', '.$user['firstname']; ?>
+                              <?php 
+                                    $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::VERIFIED_BY_GSD_OFFICER, Constant::DECLINED_BY_GSD_OFFICER], true);
+                              ?> 
+                              <?php if ($actor) { ?>
+                                    <b>GSD OFFICER: </b><?php echo RequesterUtility::getFullName($actor);  ?>
                               <?php } else { ?>
                                   <label class='label label-info'>Not Available</label>
-                              <?php } ?> 
+                              <?php } ?>
                         <?php else: ?>
-                              <?php
-                                  $user = $userObj->getAll(['*'], ['id' => $item['requisition_property_custodian_id']])->fetch_assoc();
-                              ?>
-                              <?php if (!is_null($user)) { ?>
-                                  <b>Property Custodian Name: </b> 
-                                  <?php echo $user['lastname'].', '.$user['firstname']; ?>
+                              <?php 
+                                    $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::VERIFIED_BY_PROPERTY_CUSTODIAN, Constant::DECLINED_BY_PROPERTY_CUSTODIAN], true);
+                              ?> 
+                              <?php if ($actor) { ?>
+                                    <b>PROPERTY CUSTODIAN: </b><?php echo RequesterUtility::getFullName($actor);  ?>
                               <?php } else { ?>
                                   <label class='label label-info'>Not Available</label>
                               <?php } ?>
                         <?php endif ?>
                     </td>
                     <td>
-                        <?php
-                            $user = $userObj->getAll(['*'], ['id' => $item['requisition_comptroller_id']])->fetch_assoc();
+                        <?php 
+                              $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::APPROVED_BY_COMPTROLLER, Constant::DECLINED_BY_COMPTROLLER], true);
                         ?>
-                        <?php if (!is_null($user)) { ?>
-                            <?php echo $user['lastname'].', '.$user['firstname']; ?>
+                        <?php if ($actor) { ?>
+                            <?php echo RequesterUtility::getFullName($actor); ?>
                         <?php } else { ?>
                             <label class='label label-info'>Not Available</label>
                         <?php } ?>
                     </td>
                     <td>
-                        <?php
-                            $user = $userObj->getAll(['*'], ['id' => $item['requisition_president_id']])->fetch_assoc();    
+                        <?php 
+                              $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::APPROVED_BY_PRESIDENT, Constant::DECLINED_BY_PRESIDENT], true);
                         ?>
-                        <?php if (!is_null($user)) { ?>
-                            <?php echo $user['lastname'].', '.$user['firstname']; ?>
+                        <?php if ($actor) { ?>
+                            <?php echo RequesterUtility::getFullName($actor); ?>
                         <?php } else { ?>
                             <label class='label label-info'>Not Available</label>
                         <?php } ?>
                     </td>
                     <td>
-                        <label class='label label-info'><?php echo $item['requisition_status']; ?></label>
+                        <label class='label label-info'>
+                          <?php if ($requisitionCurrentStatus): ?>
+                              <?php echo $requisitionCurrentStatus; ?>
+                          <?php else: ?>
+                              <i class="fa fa-info"></i> Pending for Approval
+                          <?php endif ?>
+                        </label>
                     </td>
                     <?php if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD): ?>
                         <td> 

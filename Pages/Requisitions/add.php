@@ -129,7 +129,6 @@ while ($area = $areas->fetch_assoc()) {
                                                               <th>Amount/Unit (Php)</th>
                                                               <th>Quantity</th>
                                                               <th>Unit</th>
-                                                              <th>Please Select Status</th>
                                                               <th>Action</th>
                                                           </tr>
                                                       </thead>
@@ -184,7 +183,7 @@ while ($area = $areas->fetch_assoc()) {
                               <input type='hidden' id='getAreaUrl' value='<?php echo Link::createUrl('Controllers/GetArea.php'); ?>' />
 
                               <?php  if (0 != $departments->num_rows) { ?>
-                              <select name='department_id' class='form-control department_id' required>
+                              <select name='department_id' class='form-control department_id'>
                                 <option value=''>Select Department</option>
                                 <?php while ($department =  $departments->fetch_assoc()) { ?>
                                           <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
