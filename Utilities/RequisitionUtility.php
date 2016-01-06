@@ -146,6 +146,17 @@ class RequisitionUtility
 			]);
 	}
 
+	public static function isRequisitionActionedByTreasurer($status)
+	{
+		return in_array($status, [
+				Constant::APPROVED_BY_TREASURER,
+				Constant::APPROVED_BY_PRESIDENT,
+
+				Constant::DECLINED_BY_TREASURER,
+				Constant::DECLINED_BY_PRESIDENT,
+			]);
+	}
+
 	public static function isRequisitionActionedByPresident($status)
 	{
 		return in_array($status, [

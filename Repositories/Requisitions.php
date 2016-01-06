@@ -257,6 +257,9 @@ Class Requisitions extends Base
       }
         
       $sql .= "
+
+            ORDER BY `requisition_status`.`datetime_added` DESC
+
             LIMIT 1
          ";
 
@@ -274,8 +277,9 @@ Class Requisitions extends Base
    *
    * @param String $userType
    * @param String $requisitionType
+   * @param Int $userId
    */
-  public function getRequisitionByUserType($userType, $requisitionType)
+  public function getRequisitionByUserType($userType = null, $requisitionType = null, $userId = null)
   {
       $sql = "SELECT 
                 `$this->table`.`id` as requisition_id,
@@ -286,7 +290,8 @@ Class Requisitions extends Base
                 `users`.`firstname` as user_firstname,
                 `users`.`middlename` as user_middlename,
                 `users`.`lastname` as user_lastname,
-                `areas`.`name` as requisition_area_name
+                `areas`.`name` as requisition_area_name,
+                `requisition_status`.`status` as requisition_status
               FROM 
                 `$this->table`
               JOIN
@@ -300,12 +305,16 @@ Class Requisitions extends Base
 
       if ($userType == Constant::USER_INVENTORY_OFFICER || $userType == Constant::USER_DEPARTMENT_HEAD) {
           $sql .= "
+              LEFT JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
               WHERE
                 `$this->table`.`type` = '".$requisitionType."'
           ";
       } elseif ($userType == Constant::USER_GSD_OFFICER || $userType == Constant::USER_PROPERTY_CUSTODIAN) {
           $sql .= "
-              JOIN
+              LEFT JOIN
                 `requisition_status`
               ON
                 `requisition_status`.`requisition_id` = `$this->table`.`id`
@@ -317,26 +326,28 @@ Class Requisitions extends Base
           ";
       } elseif ($userType == Constant::USER_TREASURER) {
           $sql .= "
-              JOIN
+              LEFT JOIN
                 `requisition_status`
               ON
                 `requisition_status`.`requisition_id` = `$this->table`.`id`
               WHERE
-                `requisition_status`.`status` = '".CONSTANT::VERIFIED_BY_GSD_OFFICER."'
+                `requisition_status`.`status` IN ('".CONSTANT::VERIFIED_BY_GSD_OFFICER."', '".CONSTANT::APPROVED_BY_TREASURER."')
               AND
                 `$this->table`.`type` = '".$requisitionType."'
+              ORDER BY `requisition_status`.`datetime_added` DESC
               LIMIT 1
           ";
       } elseif ($userType == Constant::USER_COMPTROLLER) {
           $sql .= "
-              JOIN
+              LEFT JOIN
                 `requisition_status`
               ON
                 `requisition_status`.`requisition_id` = `$this->table`.`id`
               WHERE
-                `requisition_status`.`status` IN ('".CONSTANT::VERIFIED_BY_GSD_OFFICER."', '".CONSTANT::VERIFIED_BY_GSD_OFFICER."')
+                `requisition_status`.`status` IN ('".CONSTANT::VERIFIED_BY_GSD_OFFICER."', '".CONSTANT::APPROVED_BY_COMPTROLLER."')
               AND
                 `$this->table`.`type` = '".$requisitionType."'
+              ORDER BY `requisition_status`.`datetime_added` DESC
               LIMIT 1
           ";
       } elseif ($userType == Constant::USER_PRESIDENT) {
@@ -347,16 +358,26 @@ Class Requisitions extends Base
                 `requisition_status`.`requisition_id` = `$this->table`.`id`
               WHERE
                 `requisition_status`.`status` 
-                IN ('".CONSTANT::APPROVED_BY_COMPTROLLER."', '".CONSTANT::APPROVED_BY_TREASURER."')
+                IN ('".CONSTANT::APPROVED_BY_COMPTROLLER."', '".CONSTANT::APPROVED_BY_TREASURER."', '".CONSTANT::APPROVED_BY_PRESIDENT."')
               AND
                 `$this->table`.`type` = '".$requisitionType."'
+              ORDER BY `requisition_status`.`datetime_added` DESC
               LIMIT 1
           ";
-      } 
+      } else {
+          $sql .= "
+              LEFT JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              WHERE
+                `$this->table`.`requester_id` = $userId
+          ";
+      }
 
       $requisition = $this->raw($sql);
 
-      if (0 != $requisition->num_rows) {
+      if ($requisition && 0 != $requisition->num_rows) {
         return $requisition;
       } else {
         return null;

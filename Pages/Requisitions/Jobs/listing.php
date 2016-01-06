@@ -155,6 +155,15 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             <label class="label label-info">No Actions Found</label>
                           <?php endif ?>
                         </td>
+                    <?php elseif (Login::getUserLoggedInType() == Constant::USER_TREASURER): ?>
+                        <td>
+                            <?php if (!RequisitionUtility::isRequisitionActionedByTreasurer($item['requisition_status'])): ?>
+                              <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                              <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                            <?php else: ?>
+                              <label class="label label-info">No Actions Found</label>
+                            <?php endif; ?>
+                        </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
                       <td> 
                           <?php if (!RequisitionUtility::isRequisitionActionedByPresident($item['requisition_status'])): ?>

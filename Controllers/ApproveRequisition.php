@@ -40,7 +40,7 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 		} elseif ($data['approver_type'] == Constant::USER_PRESIDENT) {
 			$msg = Constant::NOTIFICATION_APPROVED_BY_PRESIDENT;
 		} else if ($data['approver_type'] == Constant::USER_TREASURER) {
-			#code
+			$msg = Constant::NOTIFICATION_APPROVED_BY_TREASURER;
 		} elseif ($data['approver_type'] == Constant::USER_PROPERTY_CUSTODIAN) {
 			$msg = Constant::NOTIFICATION_VERIFIED_BY_PROPERTY_CUSTODIAN;
 		} elseif ($data['approver_type'] == Constant::USER_COMPTROLLER) {

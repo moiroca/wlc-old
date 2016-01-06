@@ -71,6 +71,9 @@ Class Constant {
 		APPROVED_BY_PRESIDENT = 'Approved By President',
 		DECLINED_BY_PRESIDENT = 'Declined By President',
 
+		RELEASED_BY_GSD_OFFICER = 'Released By GSD Officer',
+		RECEIVED_BY_REQUESTER = 'Received By Requester',
+
 		// Notifications Status
 		NOTIFICATION_VIEWED = 'True',
 		NOTIFICATION_NOT_VIEWED = 'False',
@@ -87,6 +90,9 @@ Class Constant {
 
 		NOTIFICATION_APPROVED_BY_COMPTROLLER	= "Your requesition has been APPROVED by the Comptroller.",
 		NOTIFICATION_DECLINED_BY_COMPTROLLER    = "Your requesition has been DECLINED by the Comptroller.",
+
+		NOTIFICATION_APPROVED_BY_TREASURER		= "Your requesition has been APPROVED by the Treasurer.",
+		NOTIFICATION_DECLINED_BY_TREASURER    	= "Your requesition has been DECLINED by the Treasurer.",
 
 		NOTIFICATION_APPROVED_BY_PRESIDENT 		= "Your requesition has been APPROVED by the President.",
 		NOTIFICATION_DECLINED_BY_PRESIDENT 	   = "Your requesition has been DECLINED by the President.",
