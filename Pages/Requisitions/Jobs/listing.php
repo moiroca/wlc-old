@@ -130,7 +130,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     </td>
                     <?php if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD): ?>
                         <td> 
-                          <?php if (!RequisitionUtility::isRequisitionActionedByDepartmentHead($item['requisition_status'])): ?>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByDepartmentHead($requisitionCurrentStatus)): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Note</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>
@@ -139,7 +139,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN || Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
                         <td> 
-                          <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($item['requisition_status'])): ?>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($requisitionCurrentStatus)): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Verify</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>
@@ -148,7 +148,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_COMPTROLLER): ?>
                         <td> 
-                          <?php if (!RequisitionUtility::isRequisitionActionedByComptroller($item['requisition_status'])): ?>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByComptroller($requisitionCurrentStatus)): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>
@@ -157,7 +157,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_TREASURER): ?>
                         <td>
-                            <?php if (!RequisitionUtility::isRequisitionActionedByTreasurer($item['requisition_status'])): ?>
+                            <?php if (!RequisitionUtility::isRequisitionActionedByTreasurer($requisitionCurrentStatus)): ?>
                               <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
                               <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                             <?php else: ?>
@@ -166,7 +166,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
                       <td> 
-                          <?php if (!RequisitionUtility::isRequisitionActionedByPresident($item['requisition_status'])): ?>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByPresident($requisitionCurrentStatus)): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>

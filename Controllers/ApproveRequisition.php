@@ -29,9 +29,6 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 
 	if ($requisitionId) {
 
-		// $userObj = new User();
-	    // $GSDOfficers = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
-
 	    $sender_id = Login::getUserLoggedInId();
 	    $notificationService = new NotificationService();
 
@@ -49,23 +46,6 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 			$msg = Constant::NOTIFICATION_NOTED_BY_DEPARTMENT_HEAD;
 		}
 
-	    // if (Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER) {
-	    // 	$msg = Constant::NOTIFICATION_APPROVED_BY_GSD_OFFICER;
-
-	    // 	$presidents = $userObj->getAll(['id'], ['type' => Constant::USER_PRESIDENT]);	    	
-	    	
-	    // 	while ($president = $presidents->fetch_assoc()) {
-	    // 		$notificationService->saveNotificationsApprovedByPresident([
-		   //        'sender_id'    => $sender_id,
-		   //        'recepient_id' => $president['id'],
-		   //        'msg'          => Constant::NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT
-		   //      ]);	
-	    // 	}
-	    // } else {
-
-    	// 	$msg = Constant::NOTIFICATION_APPROVED_BY_PRESIDENT;
-	    // }
-
         $notificationService->saveNotification([
           'sender_id'    => $sender_id,
           'recepient_id' => $requisition->fetch_assoc()['requester_id'],
@@ -80,5 +60,5 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 echo json_encode([
 		'errorMSG' 	=> $errorMSG,
 		'isError'	=> $isError,
-		'successMSG' => $msg
+		'successMSG' => $requisitionObj->getCurrentRequisitionStatus($requisitionId),
 	]);

@@ -322,7 +322,6 @@ Class Requisitions extends Base
                 `requisition_status`.`status` = '".CONSTANT::NOTED_BY_DEPARTMENT_HEAD."'
               AND
                 `$this->table`.`type` = '".$requisitionType."'
-              LIMIT 1
           ";
       } elseif ($userType == Constant::USER_TREASURER) {
           $sql .= "
@@ -335,7 +334,6 @@ Class Requisitions extends Base
               AND
                 `$this->table`.`type` = '".$requisitionType."'
               ORDER BY `requisition_status`.`datetime_added` DESC
-              LIMIT 1
           ";
       } elseif ($userType == Constant::USER_COMPTROLLER) {
           $sql .= "
@@ -348,7 +346,6 @@ Class Requisitions extends Base
               AND
                 `$this->table`.`type` = '".$requisitionType."'
               ORDER BY `requisition_status`.`datetime_added` DESC
-              LIMIT 1
           ";
       } elseif ($userType == Constant::USER_PRESIDENT) {
           $sql .= "
@@ -362,7 +359,6 @@ Class Requisitions extends Base
               AND
                 `$this->table`.`type` = '".$requisitionType."'
               ORDER BY `requisition_status`.`datetime_added` DESC
-              LIMIT 1
           ";
       } else {
           $sql .= "
@@ -374,6 +370,10 @@ Class Requisitions extends Base
                 `$this->table`.`requester_id` = $userId
           ";
       }
+
+      $sql .= "
+          GROUP BY `$this->table`.`control_identifier`
+      ";
 
       $requisition = $this->raw($sql);
 

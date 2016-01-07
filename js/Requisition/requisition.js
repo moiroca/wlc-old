@@ -189,6 +189,8 @@ $(document).ready(function() {
 	 */
 	$('.approve_item_requisition').on('click', function(e) {
 		var item = $(this).closest('tr');
+			btn = $(this),
+			td = $(this).parents('td');
 
 		Requisition.approve({
 				requisition_id : item.attr('data-id'),
@@ -198,7 +200,11 @@ $(document).ready(function() {
 				console.log(3);
 			},
 			success: function(data) {
-				console.log(data);
+				
+				if (!data.isError) {
+					td.prev().empty().append('<label class="label label-info">'+data.successMSG+'</label>')
+					td.empty().append("<label class='label label-info'> <i class='fa fa-info'></i> No action Found.</label>");	
+				}
 			}
 		});
 
@@ -290,8 +296,8 @@ $(document).ready(function() {
 				console.log('Declining...')
 			},
 			success: function(data) {
-				td.prev().empty().append('<label class="label label-danger">Declined</label>')
-				td.empty().append("<label class='label label-info'> <i class='fa fa-info'></i> There is no action available</label>");	
+				td.prev().empty().append('<label class="label label-danger">'+data.msg+'</label>')
+				td.empty().append("<label class='label label-info'> <i class='fa fa-info'></i> No Action Available</label>");	
 			}	
 		});
 
