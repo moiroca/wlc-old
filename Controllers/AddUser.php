@@ -11,6 +11,7 @@ Login::sessionStart();
   if ($_POST['submit']) {
 
       $errors = [];
+      $userRepo    = new User();
 
       /* Validations */
       if (!isset($_POST['first_name'])) { $errors['first_name'] = 'First Name is Required'; }
@@ -18,7 +19,16 @@ Login::sessionStart();
       if (!isset($_POST['middle_name'])) { $errors['middle_name'] = 'Middle Name is Required'; }
       if (!isset($_POST['user_type'])) { $errors['user_type'] = 'User Type is Required'; }
       if (!isset($_POST['department_id'])) { $errors['department_id'] = 'Department is Required'; }
-      if (!isset($_POST['username'])) { $errors['username'] = 'Username is Required'; }
+      if (!isset($_POST['username'])) { $errors['username'] = 'Username is Required'; 
+      } else {
+        //--. Check if Username Already Exist .--//
+        $checkedUser = $userRepo->getAll(['count(*) as user_count'], ['email' => $_POST['username']]);
+
+        if (0 != $checkedUser->num_rows) {
+          $checkedUser = $checkedUser->fetch_assoc();
+          $errors['username'] = 'Username already Exist';
+        } 
+      }
       if (!isset($_POST['password'])) { $errors['password'] = 'Password is Required'; }
       if (!isset($_POST['cpassword'])) { $errors['cpassword'] = 'Confirm Password is Required';}
       if (isset($_POST['password']) && isset($_POST['cpassword'])) {
@@ -26,12 +36,12 @@ Login::sessionStart();
             $errors['matching'] = 'Password And Confirm Password does not match!';
         }
       }
+
       // End Of Validation
 
       if (!$errors) { 
 
         $userService = new UserService();
-        $userRepo    = new User();
         $result      = false;
 
         //--. Save New User .--//
@@ -83,7 +93,7 @@ Login::sessionStart();
 
         //--. Save New Comptroller .--//
         if ($_POST['user_type'] == Constant::USER_COMPTROLLER) {
-          
+
           $currentComptroller = $userRepo->getAll(['id as comptroller_id'], ['type' => Constant::USER_COMPTROLLER]);
           $currentComptroller = $currentComptroller->fetch_assoc();
 
@@ -102,10 +112,11 @@ Login::sessionStart();
           $_SESSION['something_wrong'] = true;
         }
 
+        header("location: ".Link::createUrl('Pages/Users/list.php'));
       } else {
-         $_SESSION['errors'] = $errors;
+        $_SESSION['errors'] = $errors;
+        header("location: ".Link::createUrl('Pages/Users/add.php'));
       }
 
-      header("location: ".Link::createUrl('Pages/Users/list.php'));
   }
 ?>
