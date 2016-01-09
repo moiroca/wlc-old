@@ -51,7 +51,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
         <table class="table table-striped table-hover table-bordered">
           <thead>
               <tr id='th'>
-                <th> Area</th>
+                <th> #</th>
                 <th> Name</th>
                 <th> Quantity</th>
                 <th> Action </th>

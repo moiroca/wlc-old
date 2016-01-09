@@ -51,9 +51,9 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
               <tr id='th'>
                   <th> Control Identifier </th>
                   <th> Requester Name </th>
-                  <th> Department Head Details</th>
+                  <!-- <th> Department Head Details</th> -->
                   <th> <?php echo Constant::ITEM_MATERIAL_EQUIPMENT.'/ '.Constant::ITEM_OFFICE_SUPPLY; ?></th>
-                  <th> Approved By Comptroller </th>
+                  <!-- <th> Approved By Comptroller </th> -->
                   <th> Approved By President </th>
                   <th> Status </th>
                   <?php if (UserUtility::isApprover(Login::getUserLoggedInType())): ?>
@@ -69,7 +69,10 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <?php
                       $stocksRepo = new Stocks();
                       $itemsInRequisition = $stocksRepo->getStockByRequisitionId($item['requisition_id']);
-                      $firstItem = $itemsInRequisition->fetch_assoc();
+                      
+                      $firstItem = '';
+
+                      if ($itemsInRequisition) { $firstItem = $itemsInRequisition->fetch_assoc(); }
 
                       //--. Get Requisition Current Status .--//
                       $requisitionCurrentStatus = $requisitions->getCurrentRequisitionStatus($item['requisition_id']);
@@ -79,7 +82,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
                     </td>
                     <td> <?php echo RequesterUtility::getFullName($item); ?></td>
-                    <td>
+                    <!-- <td>
                         <?php
                             $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::NOTED_BY_DEPARTMENT_HEAD, Constant::DECLINED_BY_DEPARTMENT_HEAD], true);
                         ?>
@@ -88,7 +91,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <?php } else { ?>
                             <label class='label label-info'>Not Available</label>
                         <?php } ?>
-                    </td>
+                    </td> -->
                     <td>
 
                         <?php if ($firstItem && $firstItem['stock_type'] == Constant::ITEM_MATERIAL_EQUIPMENT): ?>
@@ -111,7 +114,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                               <?php } ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <!-- <td>
                         <?php 
                               $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::APPROVED_BY_COMPTROLLER, Constant::DECLINED_BY_COMPTROLLER], true);
                         ?>
@@ -120,7 +123,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <?php } else { ?>
                             <label class='label label-info'>Not Available</label>
                         <?php } ?>
-                    </td>
+                    </td> -->
                     <td>
                         <?php 
                               $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::APPROVED_BY_PRESIDENT, Constant::DECLINED_BY_PRESIDENT], true);
@@ -132,23 +135,17 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         <?php } ?>
                     </td>
                     <td>
-                        <label class='label label-info'>
-                          <?php if ($requisitionCurrentStatus): ?>
-                              <?php echo $requisitionCurrentStatus; ?>
-                          <?php else: ?>
-                              <i class="fa fa-info"></i> Pending for Approval
-                          <?php endif ?>
-                        </label>
+                        <?php echo RequisitionDecorator::status($requisitionCurrentStatus) ;?>
                     </td>
                     <?php if (Login::getUserLoggedInType() == Constant::USER_DEPARTMENT_HEAD): ?>
-                        <td> 
+                        <!-- <td> 
                           <?php if (!RequisitionUtility::isRequisitionActionedByDepartmentHead($item['requisition_status'])): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Note</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>
                             <label class="label label-info">No Actions Found</label>
                           <?php endif ?>
-                        </td>
+                        </td> -->
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN || Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
                         <td> 
                           <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($item['requisition_status'])): ?>
@@ -159,17 +156,18 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                           <?php endif ?>
                         </td>
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_COMPTROLLER): ?>
-                        <td> 
+                        <!-- <td> 
                           <?php if (!RequisitionUtility::isRequisitionActionedByComptroller($item['requisition_status'])): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>
                             <label class="label label-info">No Actions Found</label>
                           <?php endif ?>
-                        </td>
+                        </td> -->
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
                       <td> 
-                          <?php if (!RequisitionUtility::isRequisitionActionedByPresident($item['requisition_status'])): ?>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByPresident($requisitionCurrentStatus)): ?>
+                            <a class='btn btn-sm btn-default' href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"> <i class='fa fa-check'> Verify</i> </a>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>

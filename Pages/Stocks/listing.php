@@ -53,6 +53,12 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             'value' => $_GET['type'],
                             'isEqual' => true,
                             'andOrWhere' => 'AND',
+                          ],
+                          [
+                            'field' => '`stocks`.`isRequest`',
+                            'value' => 'FALSE',
+                            'isEqual' => true,
+                            'andOrWhere' => 'AND'
                           ]
                       ]);
         ?>

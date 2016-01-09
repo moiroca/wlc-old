@@ -60,5 +60,5 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 echo json_encode([
 		'errorMSG' 	=> $errorMSG,
 		'isError'	=> $isError,
-		'successMSG' => $requisitionObj->getCurrentRequisitionStatus($requisitionId),
+		'successMSG' => RequisitionDecorator::status($requisitionObj->getCurrentRequisitionStatus($requisitionId)),
 	]);

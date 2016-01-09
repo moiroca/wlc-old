@@ -96,9 +96,9 @@ Class Stocks extends Base
    *
    * @param int $requisitionId
    */
-  public function getStockByRequisitionId($requisitionId)
+  public function getStockByRequisitionId($requisitionId, $group = false, $stockName = '')
   {
-        $result = $this->raw("
+        $sql = "
               SELECT 
                 `stocks`.`id` as stock_id,
                 `stocks`.`type` as stock_type,
@@ -107,7 +107,17 @@ Class Stocks extends Base
                 `stocks`.`status` as stock_status,
                 `stocks`.`price` as stock_price,
                 `stocks`.`isRequest` as stock_isRequest,
-                `stocks`.`unit` as stock_unit
+                `stocks`.`unit` as stock_unit,     
+        ";
+
+        if ($group) {
+              $sql .= "
+                count(*) as count_stocks,
+                sum(`stocks`.`price`) total_stock_price
+              ";
+        }
+
+        $sql .= "
               FROM 
                 `stocks`
               JOIN
@@ -117,11 +127,68 @@ Class Stocks extends Base
               WHERE 
                 `stocks`.`status` != 'Deleted'
               AND
-                `stock_requisitions`.`requisition_id` = $requisitionId");
+                `stock_requisitions`.`requisition_id` = $requisitionId
+                ";
+
+        if ($stockName) {
+           $sql .= "
+              AND
+                `stocks`.`name` like '%".$stockName."%'
+              AND
+                `stocks`.`isRequest` = 'FALSE'
+           ";
+        } else {
+            $sql .= "
+              AND
+                `stocks`.`isRequest` = 'FALSE'
+            ";
+        }
+
+        if ($group) {
+          $sql .= "
+                  GROUP BY
+                        `stocks`.`name`
+                ";
+        }
+
+        // die($sql);
+        $result = $this->raw($sql);
 
         return $result;
   }
 
+  public function getAllStockByRequisitionIdTypeJOB($requisitionId)
+  {
+      $sql = "
+              SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`status` as stock_status,
+                `stocks`.`price` as stock_price,
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit 
+              FROM 
+                `stocks`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              JOIN
+                `requisitions`
+              ON
+                `stock_requisitions`.`requisition_id` = `requisitions`.`id`
+              WHERE 
+                `stocks`.`status` != 'Deleted'
+              AND
+                `stock_requisitions`.`requisition_id` = $requisitionId
+              AND
+                `requisitions`.`type` = '".Constant::REQUISITION_JOB."'
+                ";
+
+       return $this->raw($sql);
+  } 
   /**
    * Get all stock by area id
    */

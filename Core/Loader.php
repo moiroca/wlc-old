@@ -38,4 +38,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Services/NotificationService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/DepartmentAreaService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/StockRequisitionService.php';
 
+/* Load All Decorators */
+
+include $_SERVER['DOCUMENT_ROOT'].'/Decorators/RequisitionDecorator.php';
 ?>

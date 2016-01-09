@@ -504,9 +504,6 @@
                                     <li>
                                         <a href="<?php echo Link::createUrl('Pages/Requisitions/Items/listing.php'); ?>">Item Requisition</a>
                                     </li>
-                                    <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Requisitions/Jobs/listing.php'); ?>">Job Requisition</a>
-                                    </li>
                                 </ul>
                             </li>
                         <?php } ?>

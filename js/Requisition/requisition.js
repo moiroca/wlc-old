@@ -202,7 +202,7 @@ $(document).ready(function() {
 			success: function(data) {
 				
 				if (!data.isError) {
-					td.prev().empty().append('<label class="label label-info">'+data.successMSG+'</label>')
+					td.prev().empty().append(data.successMSG);
 					td.empty().append("<label class='label label-info'> <i class='fa fa-info'></i> No action Found.</label>");	
 				}
 			}
@@ -456,7 +456,6 @@ $(document).ready(function() {
 			var checkedstocksCheckBoxes = $('input[type="checkbox"]:not(.select-all):checked'),
 				stocksCheckBoxes = $('input[type="checkbox"]:not(.select-all)'),
 				stockIds = [];
-			
 
 			// Remove Success Class
 			$.each(stocksCheckBoxes, function(index, item) {

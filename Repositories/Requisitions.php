@@ -313,6 +313,12 @@ Class Requisitions extends Base
                 `$this->table`.`type` = '".$requisitionType."'
           ";
       } elseif ($userType == Constant::USER_GSD_OFFICER || $userType == Constant::USER_PROPERTY_CUSTODIAN) {
+          //-----------------------------------
+          // Query To Get Requisition Noted By Department Head
+          // Please Do not delete this query
+          //-----------------------------------
+
+          /*
           $sql .= "
               LEFT JOIN
                 `requisition_status`
@@ -323,6 +329,37 @@ Class Requisitions extends Base
               AND
                 `$this->table`.`type` = '".$requisitionType."'
           ";
+          */
+
+          $sql .= "
+              LEFT JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`requisition_id` = `$this->table`.`id`
+              JOIN 
+                `stocks`
+              ON
+                `stocks`.`id` = `stock_requisitions`.`stock_id`
+              WHERE 
+                `stocks`.`status` != 'Deleted'
+              AND
+                `$this->table`.`type` = '".$requisitionType."'
+          ";
+
+          if ($userType == Constant::USER_GSD_OFFICER) {
+              $sql .= "
+                  AND `stocks`.`type` = '".Constant::ITEM_MATERIAL_EQUIPMENT."' 
+              ";
+          } else {
+              $sql .= "
+                  AND `stocks`.`type` = '".Constant::ITEM_OFFICE_SUPPLY."' 
+              ";
+          }
+
       } elseif ($userType == Constant::USER_TREASURER) {
           $sql .= "
               LEFT JOIN
@@ -348,6 +385,13 @@ Class Requisitions extends Base
               ORDER BY `requisition_status`.`datetime_added` DESC
           ";
       } elseif ($userType == Constant::USER_PRESIDENT) {
+          
+          //-----------------------------------
+          // Query To Get Requisition APPROVED BY TREASURER AND COMPTROLLER
+          // Please Do not delete this query
+          //-----------------------------------
+
+          /*
           $sql .= "
               JOIN
                 `requisition_status`
@@ -360,6 +404,22 @@ Class Requisitions extends Base
                 `$this->table`.`type` = '".$requisitionType."'
               ORDER BY `requisition_status`.`datetime_added` DESC
           ";
+          */
+
+          $sql .= "
+              JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              WHERE
+                `requisition_status`.`status` 
+                IN ('".CONSTANT::VERIFIED_BY_GSD_OFFICER."', '".CONSTANT::VERIFIED_BY_PROPERTY_CUSTODIAN."',
+                    '".CONSTANT::DECLINED_BY_PRESIDENT."')
+              AND
+                `$this->table`.`type` = '".$requisitionType."'
+
+          ";
+
       } else {
           $sql .= "
               LEFT JOIN
