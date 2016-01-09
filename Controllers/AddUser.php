@@ -31,30 +31,27 @@ Login::sessionStart();
       if (!$errors) { 
 
         $userService = new UserService();
-        $result = false;
+        $userRepo    = new User();
+        $result      = false;
 
+        //--. Save New User .--//
+        $userId = $userService->save($_POST);
+
+        //--. Save New Department Head .--//
         if ($_POST['user_type'] == Constant::USER_DEPARTMENT_HEAD) {
 
             $departmentRepo = new Department();
-            $userRepo       = new User();
             $departmentService = new DepartmentService();
 
             $departmentHead = $departmentRepo->getDepartmentHeadByDepartmentId((int)$_POST['department_id']);
             $departmentHead = $departmentHead->fetch_assoc();
 
-            // Save New User
-            $userId = $userService->save($_POST);
-
             if ($departmentHead) {
 
-                // Update User
+                //--. Update User .--//
                 $updateUserType = $userRepo->update(
-                    [
-                      'type' => Constant::USER_EMPLOYEE
-                    ],
-                    [ 
-                      'id' => (int)$departmentHead['user_id'] 
-                    ]);
+                    [ 'type' => Constant::USER_EMPLOYEE ],
+                    [ 'id' => (int)$departmentHead['user_id'] ]);
                 
                 $departmentService->updateDepartmentHead([
                     'user_id' => $departmentHead['user_id'],
@@ -68,9 +65,38 @@ Login::sessionStart();
             ]);
 
             $result = true;
+        } 
+
+        //--. Save New Treasurer .--//
+        if ($_POST['user_type'] == Constant::USER_TREASURER) {
+          $currentTreasurer = $userRepo->getAll(['id as treasuer_id'], ['type' => Constant::USER_TREASURER]);
+          $currentTreasurer = $currentTreasurer->fetch_assoc();
+
+          if ($currentTreasurer) {
+
+            //--. Update User .--//
+            $updateUserType = $userRepo->update(
+                [ 'type' => Constant::USER_EMPLOYEE ],
+                [ 'id'   => $currentTreasurer['treasuer_id'] ]);
+          }
         }
 
-        if ($result) {
+        //--. Save New Comptroller .--//
+        if ($_POST['user_type'] == Constant::USER_COMPTROLLER) {
+          
+          $currentComptroller = $userRepo->getAll(['id as comptroller_id'], ['type' => Constant::USER_COMPTROLLER]);
+          $currentComptroller = $currentComptroller->fetch_assoc();
+
+          if ($currentComptroller) {
+
+            //--. Update User .--//
+            $updateUserType = $userRepo->update(
+                [ 'type' => Constant::USER_EMPLOYEE ],
+                [ 'id'   => $currentComptroller['comptroller_id'] ]);
+          }
+        }
+
+        if ($userId) {
           $_SESSION['record_successful_added'] = true;      
         } else {
           $_SESSION['something_wrong'] = true;

@@ -350,13 +350,7 @@
                                         <a href="<?php echo Link::createUrl('Pages/Users/add.php'); ?>"> <i class="fa fa-plus"></i> Add</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Users/GeneralServices/listing.php'); ?>"> General Services</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Users/Presidents/listing.php'); ?>"> President</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo Link::createUrl('Pages/Users/Deans/listing.php'); ?>"> Dean</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Users/list.php'); ?>"> View List</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
