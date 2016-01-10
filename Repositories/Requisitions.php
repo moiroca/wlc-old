@@ -12,7 +12,7 @@ Class Requisitions extends Base
 	/**
 	 * Get All Stocks By Type
 	 */
-	public function getAllRequesition($type)
+	public function getAllRequesition($type = false)
 	{
     $sql = "SELECT 
                 `$this->table`.`id` as requisition_id,
@@ -35,10 +35,14 @@ Class Requisitions extends Base
               JOIN
                 `areas`
               ON
-                `$this->table`.`area_id` = `areas`.`id`
-              WHERE
-                `$this->table`.`type` = '".$type."'";
+                `$this->table`.`area_id` = `areas`.`id`";
 
+    if ($type) {
+        $sql .= "
+              WHERE
+                `$this->table`.`type` = '".$type."'
+          ";
+    }
 		$result = $this->raw($sql);
 
 		return $result;
@@ -137,13 +141,31 @@ Class Requisitions extends Base
                 `$this->table`.`requester_id` as requisition_requester_id,
                 `$this->table`.`control_identifier` as requisition_control_identifier,
                 `$this->table`.`datetime_added` as requisition_datetime_added,
-                `areas`.`name` as requisition_area_name
+                `areas`.`name` as requisition_area_name,
+                `users`.`firstname` as user_firstname,
+                `users`.`middlename` as user_middlename,
+                `users`.`lastname` as user_lastname,
+                `departments`.`name` as requisition_department_name,
+                `departments`.`id` as requisition_department_id,
+                `$this->table`.`datetime_added` as datetime_added
               FROM 
                 `$this->table`
+              JOIN 
+                `users`
+              ON
+                `users`.`id` = `$this->table`.`requester_id`
               JOIN
                 `areas`
               ON
                 `$this->table`.`area_id` = `areas`.`id`
+              JOIN
+                `department_areas`
+              ON
+                `department_areas`.`area_id` = `$this->table`.`area_id`
+              JOIN
+                `departments`
+              ON
+                `departments`.`id` = `department_areas`.`department_id`
               WHERE
                 `$this->table`.`control_identifier` = $controlIdentifier";
 

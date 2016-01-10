@@ -48,8 +48,6 @@ $userRequisition = $requisitions->getRequisitionByUserType(null, null, Login::ge
                         </tr>
                     </thead>
                     <tbody>
-                      <input type="hidden" id="declined_item_requisition_url" value="<?php echo Link::createUrl('Controllers/DeclineRequisition.php'); ?>" />
-                      <input type="hidden" id="approve_item_requisition_url" value="<?php echo Link::createUrl('Controllers/ApproveRequisitionByPresident.php'); ?>" />
                       <?php if ($userRequisition && 0 != $userRequisition->num_rows) { ?>
                           <?php  while ($item = $userRequisition->fetch_assoc()) { ?>
 

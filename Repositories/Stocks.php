@@ -108,6 +108,7 @@ Class Stocks extends Base
                 `stocks`.`price` as stock_price,
                 `stocks`.`isRequest` as stock_isRequest,
                 `stocks`.`unit` as stock_unit,     
+                `stock_requisitions`.`changeTo` as stock_update,
         ";
 
         if ($group) {
@@ -140,7 +141,7 @@ Class Stocks extends Base
         } else {
             $sql .= "
               AND
-                `stocks`.`isRequest` = 'FALSE'
+                `stocks`.`isRequest` = 'TRUE'
             ";
         }
 
@@ -151,7 +152,6 @@ Class Stocks extends Base
                 ";
         }
 
-        // die($sql);
         $result = $this->raw($sql);
 
         return $result;
@@ -168,7 +168,8 @@ Class Stocks extends Base
                 `stocks`.`status` as stock_status,
                 `stocks`.`price` as stock_price,
                 `stocks`.`isRequest` as stock_isRequest,
-                `stocks`.`unit` as stock_unit 
+                `stocks`.`unit` as stock_unit,
+                `stock_requisitions`.`changeTo` as stock_update
               FROM 
                 `stocks`
               JOIN

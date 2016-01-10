@@ -31,9 +31,9 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
             $result = $userObj->getAll([
                 'email',
-                'firstname',
+                'firstname as user_firstname',
                 'middlename',
-                'lastname',
+                'lastname as user_lastname',
                 'status',
                 'datetime_added',
                 'type'
@@ -69,7 +69,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 <?php  while ($user = $result->fetch_assoc()) { ?>
                   <tr>
                     <td><?php echo $user['type']; ?></td>
-                    <td><?php echo $user['firstname']; ?></td>
+                    <td><?php echo RequesterUtility::getFullName($user); ?></td>
                     <td><?php echo $user['email']; ?></td>
                     <td><?php echo UserUtility::formatStatus($user['status']); ?></td>
                     <td><?php echo $user['datetime_added']; ?></td>

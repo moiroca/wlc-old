@@ -8,10 +8,12 @@ if (isset($_GET['control_identifier'])) { $controlIdentifier = $_GET['control_id
 $requisitionObj = new Requisitions();
 $requisition = $requisitionObj->getRequisitionByControlIdentifier($controlIdentifier);
 
-
 if ($requisition && 0 != $requisition->num_rows) {
     $requisition = $requisition->fetch_assoc();
 }
+
+//--. Get Requisition Current Status .--//
+$requisitionCurrentStatus = $requisitionObj->getCurrentRequisitionStatus($requisition['requisition_id']);
 
 $userObj = new User();
 $stocksRepo = new Stocks();
@@ -50,7 +52,7 @@ if ($requisition['requisition_type'] == Constant::REQUISITION_JOB) {
                     <table class="table table-bordered table-hover table-striped" id='stocks_in_requisition'>
                         <thead>
                             <tr>
-                                <th colspan=7> REQUESTED ITEMS</th>
+                                <th colspan=7> ITEMS IN REQUISITION </th>
                             </tr>
                             <tr>
                                 <th>Control Identifier</th>
@@ -58,7 +60,7 @@ if ($requisition['requisition_type'] == Constant::REQUISITION_JOB) {
                                 <?php if ($requisition['requisition_type'] == Constant::REQUISITION_ITEM): ?>
                                     <th>Quantity</th>
                                 <?php endif ?>
-                                <th>Price</th>
+                                <th>Price (in PHP)</th>
                                 <th>Unit</th>
                                 <th>Condition</th>
                                 <th>Type</th>
@@ -85,22 +87,28 @@ if ($requisition['requisition_type'] == Constant::REQUISITION_JOB) {
                                         <td><?php echo $item['stock_control_number'] ?></td>
                                         <td><?php echo $item['stock_name'] ?></td>
                                         <?php $stockNames[] = $item['stock_name']; ?>
+
                                         <?php if ($requisition['requisition_type'] == Constant::REQUISITION_ITEM): ?>
                                             <td>
-                                                <input class='form-control input-sm' type='number' min=1 value="<?php echo $item['count_stocks'] ?>">
+                                                <?php if ($requisitionCurrentStatus != Constant::APPROVED_BY_PRESIDENT && Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
+                                                    <input class='form-control input-sm' type='number' min=1 value="<?php echo $item['count_stocks'] ?>">
+                                                <?php else: ?>
+                                                    <?php echo $item['count_stocks'] ?>
+                                                <?php endif ?>
                                             </td>
                                         <?php endif ?>
                                         <td><?php echo $item['stock_price'] ?></td>
                                         <td><?php echo strtoupper($item['stock_unit']); ?></td>
                                         <td><?php echo $item['stock_status'] ?></td>
                                         <td><?php echo $item['stock_type'] ?></td>
+                                        <?php $total += $item['total_stock_price']; ?>
                                     </tr>
                                     <?php $index++; ?>
                                 <?php } ?>
                                     <?php if ($requisition['requisition_type'] == Constant::REQUISITION_ITEM): ?>
                                         <tr>
-                                            <td colspan="<?php echo (Login::getUserLoggedInType() == Constant::USER_PRESIDENT) ? 3 : 2; ?>"> <span class='pull-right'>TOTAL</span></td>
-                                            <td colspan="4"><span class='pull-left'><?php echo $total; ?></span></td>
+                                            <td colspan="3"> <span class='pull-right'><b>TOTAL</b></span></td>
+                                            <td colspan="4"><span class='pull-left'>PHP <?php echo $total; ?></span></td>
                                         </tr>
                                     <?php endif ?>
                             <?php else: ?>
@@ -110,50 +118,57 @@ if ($requisition['requisition_type'] == Constant::REQUISITION_JOB) {
                             <?php endif ?>
                         </tbody>
                     </table>
-                    <?php if ($requisition['requisition_type'] == Constant::REQUISITION_ITEM): ?>
+                    <?php if ($requisitionCurrentStatus != Constant::APPROVED_BY_PRESIDENT && Login::getUserLoggedInType() == Constant::USER_PRESIDENT && $requisition['requisition_type'] == Constant::REQUISITION_ITEM): ?>
                         <table class="table table-bordered table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th colspan=7>ITEMS IN STOCKS</th>
-                            </tr>
-                            <tr>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Unit</th>
-                                <th>Condition</th>
-                                <th>Type</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if ($stockNames): ?>
-                                    <?php foreach ($stockNames as $key => $stockName): ?>
-                                            <?php
-                                                $searchItems = $stocksRepo->getStockByRequisitionId($requisition['requisition_id'], true, $stockName);
-                                            ?>
-                                            <?php while($searchItems && $item = $searchItems->fetch_assoc()) { ?>
-                                            <?php if (0 == $index): ?>
-                                                <?php $firstItem = $item; ?>
-                                            <?php endif ?>
-                                            <tr data-id="<?php echo $item['stock_id'] ?>" class="<?php echo ($item['stock_isRequest'] == 'FALSE') ? "success" : ""; ?>" />
-                                                <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
-                                                    <!-- <td>
-                                                        <input type='checkbox' class='check-box' <?php echo ($item['stock_isRequest'] == 'FALSE') ? "checked" : ""; ?> />
-                                                    </td> -->
-                                                <?php endif ?>
-                                                <td><?php echo $item['stock_name'] ?></td>
-                                                <td>
-                                                    <input class='form-control input-sm' type='number' min=1 value="<?php echo $item['count_stocks'] ?>">
-                                                </td>
-                                                <td><?php echo strtoupper($item['stock_unit']); ?></td>
-                                                <td><?php echo $item['stock_status'] ?></td>
-                                                <td><?php echo $item['stock_type'] ?></td>
-                                            </tr>
-                                        <?php } ?>
-                                    <?php endforeach ?>
-                            <?php endif ?>
-                            <tr></tr>
-                        </tbody>
-                    </table>
+                            <thead>
+                                <tr>
+                                    <th colspan=7>ITEMS IN STOCKS</th>
+                                </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Condition</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $emptySearch = 0; ?>
+                                <?php if ($stockNames): ?>
+                                        <?php foreach ($stockNames as $key => $stockName): ?>
+                                                <?php
+                                                    $searchItems = $stocksRepo->getStockByRequisitionId($requisition['requisition_id'], true, $stockName);
+                                                    if ($searchItems->num_rows == 0) {  $emptySearch += 1; }
+                                                ?>
+                                                <?php while($searchItems && $item = $searchItems->fetch_assoc()) { ?>
+                                                    <?php if (0 == $index): ?>
+                                                        <?php $firstItem = $item; ?>
+                                                    <?php endif ?>
+                                                    <tr data-id="<?php echo $item['stock_id'] ?>" class="<?php echo ($item['stock_isRequest'] == 'FALSE') ? "success" : ""; ?>" />
+                                                        <?php if (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
+                                                            <!-- <td>
+                                                                <input type='checkbox' class='check-box' <?php echo ($item['stock_isRequest'] == 'FALSE') ? "checked" : ""; ?> />
+                                                            </td> -->
+                                                        <?php endif ?>
+                                                        <td><?php echo $item['stock_name'] ?></td>
+                                                        <td>
+                                                            <input class='form-control input-sm' type='number' min=1 value="<?php echo $item['count_stocks'] ?>">
+                                                        </td>
+                                                        <td><?php echo strtoupper($item['stock_unit']); ?></td>
+                                                        <td><?php echo $item['stock_status'] ?></td>
+                                                        <td><?php echo $item['stock_type'] ?></td>
+                                                    </tr>
+                                                <?php } ?>
+                                        <?php endforeach ?>
+                                <?php endif ?>
+
+                                <?php if($emptySearch == sizeof($stockNames)) : ?>
+                                    <tr class='info'>
+                                        <td colspan=5 > No Same Items Found </td>
+                                    </tr>
+                                <?php endif ?>
+                            </tbody>
+                        </table>
                     <?php endif ?>
     		</div>
     	</div>
@@ -183,11 +198,6 @@ if ($requisition['requisition_type'] == Constant::REQUISITION_JOB) {
                         </p>
                     </div>
                     <div>
-                        <?php
-                            //--. Get Requisition Current Status .--//
-                            $requisitionCurrentStatus = $requisitionObj->getCurrentRequisitionStatus($requisition['requisition_id']);
-                        ?>
-
                         <p>
                             <b>Status: </b> 
                             <?php echo RequisitionDecorator::status($requisitionCurrentStatus) ;?>
