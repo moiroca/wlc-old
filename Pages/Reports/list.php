@@ -13,21 +13,13 @@ $requisitions = $requisitionsRepo->getAllRequesition();
   <div class="row">
       <div class="col-lg-12">
           <h1 class="page-header">REPORTS</h1>
-          <ol class="breadcrumb">
-              <li>
-                  <i class="fa fa-dashboard"></i>  <a href="#">Requisitions</a>
-              </li>
-              <li class='active'>
-                  <i class="fa fa-table"></i>  <a href="#">My Requisition</a>
-              </li>
-          </ol>
       </div>
   </div>
   <div class="row">
     <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <div class="panel-title">My Requisitions</div>
+                <div class="panel-title">Requisitions</div>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
