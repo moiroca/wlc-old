@@ -5,6 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 Login::sessionStart();
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
+$error = false;
 ?>
 <?php Template::header(); ?>
   <style type="text/css">.help-block{ color: #f00;}</style>
@@ -73,6 +74,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                                   ?>
                               </select>
                           <?php else: ?>
+                              <?php $error = true; ?>
                               <div class="alert alert-info">
                                   There are no department. Please add A Department first.
                               </div>
@@ -130,7 +132,12 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </div>
                     </fieldset>
 
-                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save User" type="submit" />
+                    <?php if ($error): ?>
+                        <div class="alert alert-warning"> <i class='fa fa-info'></i> Fix first the issue above in order to add item to stocks.</div>
+                    <?php else: ?>
+                        <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save User" type="submit" />  
+                    <?php endif ?>
+                    
                 </form>
                 <?php if (isset($_SESSION['errors'])) { unset($_SESSION['errors']); }; ?>
           </div>
