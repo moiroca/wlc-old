@@ -5,6 +5,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Core/Loader.php';
 Login::sessionStart();
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
+$error = false;
 $areaObj = new Area(); 
 $areas = $areaObj->getAll();
 
@@ -78,6 +79,7 @@ while ($area = $areas->fetch_assoc()) {
                             <?php } ?>
                         </select>
                         <?php } else { ?>
+                            <?php $error = true; ?>
                             <div class="alert alert-info"> There are no Departments. Please Add A Department First.</div>
                         <?php } ?>
                         <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
@@ -95,6 +97,7 @@ while ($area = $areas->fetch_assoc()) {
                                   </select>
                                   <p class="help-block"></p>
                           <?php else : ?>
+                              <?php $error = true; ?>
                               <div class='alert alert-info'> <i class='fa fa-info'></i> There are no areas yet. Please Add Area First. </div>
                           <?php endif ?>
                         </div>
@@ -128,7 +131,12 @@ while ($area = $areas->fetch_assoc()) {
                         </select>
                         <p class="help-block"></p>
                     </div>
-                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Stock" type="submit" />
+                    <?php if (!$error): ?>
+                        <input class='btn btn-primary clear btn-5x pull-right' name="submit" class="formbutton" value="Save Stock" type="submit" />
+                    <?php else: ?>
+                        <div class="alert alert-warning"> <i class='fa fa-info'></i> Fix first the issue above in order to add item to stocks.</div>
+                    <?php endif ?>
+                    
                 </form>
             </fieldset>
           </div>
