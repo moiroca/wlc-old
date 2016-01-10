@@ -356,7 +356,7 @@
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                                <a href="<?php echo Link::createUrl('Pages/Reports/list.php'); ?>"><i class="fa fa-edit fa-fw"></i> Reports</a>
                             </li>
                         <?php } ?>
                         
@@ -392,7 +392,7 @@
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                                <a href="<?php echo Link::createUrl('Pages/Reports/list.php'); ?>"><i class="fa fa-edit fa-fw"></i> Reports</a>
                             </li>
                         <?php } ?>
 
@@ -431,7 +431,7 @@
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                                <a href="<?php echo Link::createUrl('Pages/Reports/list.php'); ?>"><i class="fa fa-edit fa-fw"></i> Reports</a>
                             </li>
                         <?php } ?>
 
@@ -465,7 +465,7 @@
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                                <a href="<?php echo Link::createUrl('Pages/Reports/list.php'); ?>"><i class="fa fa-edit fa-fw"></i> Reports</a>
                             </li>
                         <?php } ?>
 

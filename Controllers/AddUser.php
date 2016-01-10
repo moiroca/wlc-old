@@ -23,8 +23,9 @@ Login::sessionStart();
       } else {
         //--. Check if Username Already Exist .--//
         $checkedUser = $userRepo->getAll(['count(*) as user_count'], ['email' => $_POST['username']]);
+        $checkedUser = $checkedUser->fetch_assoc();
 
-        if (0 != $checkedUser->num_rows) {
+        if ($checkedUser && 0 != $checkedUser['user_count']) {
           $checkedUser = $checkedUser->fetch_assoc();
           $errors['username'] = 'Username already Exist';
         } 
@@ -103,6 +104,36 @@ Login::sessionStart();
             $updateUserType = $userRepo->update(
                 [ 'type' => Constant::USER_EMPLOYEE ],
                 [ 'id'   => $currentComptroller['comptroller_id'] ]);
+          }
+        }
+
+        //--. Save New President .--//
+        if ($_POST['user_type'] == Constant::USER_PRESIDENT) {
+
+          $currentPresident = $userRepo->getAll(['id as president_id'], ['type' => Constant::USER_PRESIDENT]);
+          $currentPresident = $currentPresident->fetch_assoc();
+
+          if ($currentPresident) {
+
+            //--. Update User .--//
+            $updateUserType = $userRepo->update(
+                [ 'type' => Constant::USER_EMPLOYEE ],
+                [ 'id'   => $currentPresident['president_id'] ]);
+          }
+        }
+
+        //--. Save New GSD Officer .--//
+        if ($_POST['user_type'] == Constant::USER_GSD_OFFICER) {
+
+          $currentGSDOfficer = $userRepo->getAll(['id as gsd_officer_id'], ['type' => Constant::USER_GSD_OFFICER]);
+          $currentGSDOfficer = ($currentGSDOfficer) ? $currentGSDOfficer->fetch_assoc() : $currentGSDOfficer;
+
+          if ($currentGSDOfficer) {
+
+            //--. Update User .--//
+            $updateUserType = $userRepo->update(
+                [ 'type' => Constant::USER_EMPLOYEE ],
+                [ 'id'   => $currentGSDOfficer['gsd_officer_id'] ]);
           }
         }
 
