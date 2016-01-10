@@ -162,6 +162,32 @@ LOCK TABLES `notifications` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `requisition_status`
+--
+
+DROP TABLE IF EXISTS `requisition_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `requisition_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `requisition_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `status` enum('Noted By Department Head','Declined By Department Head','Verified By Property Custodian','Declined By Property Custodian','Verified By GSD Officer','Declined By GSD Officer','Approved By Treasurer','Declined By Treasurer','Approved By Comptroller','Declined By Comptroller','Approved By President','Declined By President') DEFAULT NULL,
+  `datetime_added` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `requisition_status`
+--
+
+LOCK TABLES `requisition_status` WRITE;
+/*!40000 ALTER TABLE `requisition_status` DISABLE KEYS */;
+/*!40000 ALTER TABLE `requisition_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `requisitions`
 --
 
@@ -173,22 +199,10 @@ CREATE TABLE `requisitions` (
   `type` varchar(10) NOT NULL,
   `requester_id` varchar(50) NOT NULL,
   `purpose` varchar(255) NOT NULL,
-  `datetime_added` datetime NOT NULL,
-  `status` varchar(45) NOT NULL,
   `control_identifier` varchar(45) NOT NULL,
   `area_id` int(11) NOT NULL,
-  `datetime_approveddeclined_by_gsd_officer` datetime DEFAULT NULL,
-  `datetime_approveddeclined_by_president` datetime DEFAULT NULL,
-  `gsd_officer_id` int(50) DEFAULT NULL,
-  `president_id` int(50) DEFAULT NULL,
-  `department_head_id` int(50) DEFAULT NULL,
-  `comptroller_id` int(50) DEFAULT NULL,
-  `property_custodian_id` int(50) DEFAULT NULL,
-  `treasurer_id` int(50) DEFAULT NULL,
-  `datetime_approveddeclined_by_comptroller` datetime DEFAULT NULL,
-  `datetime_approveddeclined_by_property_custodian` datetime DEFAULT NULL,
-  `datetime_approveddeclined_by_department_head` datetime DEFAULT NULL,
-  `datetime_approveddeclined_by_treasurer` datetime DEFAULT NULL,
+  `datetime_added` datetime NOT NULL,
+  `datetime_deleted` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -282,7 +296,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `user_id` (`id`),
   UNIQUE KEY `user_id_2` (`id`),
   UNIQUE KEY `user_id_3` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10062 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10078 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,7 +305,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Soria','Mae','Gonzalez','Active','Inventory Officer','2015-11-29 15:34:21','','',2),(10018,'ella','5f4dcc3b5aa765d61d8327deb882cf99','Caranyagan','Tita Ella','Rosales','Active','GSD Officer','2015-12-07 21:24:02','','',1),(10019,'daniel','5f4dcc3b5aa765d61d8327deb882cf99','Roca','Daniel','Homeres','Active','President','2015-12-13 22:28:32','','',1),(10020,'nino','5f4dcc3b5aa765d61d8327deb882cf99','Siose','Nino','Mabihinhigan','Active','Property Custodian','2015-12-30 11:58:52','','',1),(10061,'comptroller','5f4dcc3b5aa765d61d8327deb882cf99','Comptroller','John','John','Active','Comptroller','2015-12-31 14:29:32','','',1),(10059,'testing','5f4dcc3b5aa765d61d8327deb882cf99','employs','ladis','employs','Active','Employee','2015-12-31 14:28:51','','',1),(10060,'temp','5f4dcc3b5aa765d61d8327deb882cf99','Department Head','New','testing','Active','Department Head','2015-12-31 14:29:32','','',1);
+INSERT INTO `users` VALUES (10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Soria','Mae','Gonzalez','Active','Inventory Officer','2015-11-29 15:34:21','','',2);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -304,4 +318,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-03 22:53:36
+-- Dump completed on 2016-01-10 13:36:14
