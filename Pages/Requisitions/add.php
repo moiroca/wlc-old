@@ -7,6 +7,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
 $areaObj = new Area(); 
 $areas = $areaObj->getAll();
+$error = false;
 
 $index = 1;
 
@@ -83,15 +84,16 @@ while ($area = $areas->fetch_assoc()) {
                               <input type='hidden' id='getAreaUrl' value='<?php echo Link::createUrl('Controllers/GetArea.php'); ?>' />
 
                               <?php  if (0 != $departments->num_rows) { ?>
-                              <select name='department_id' class='form-control department_id'>
-                                <option value=''>Select Department</option>
-                                <?php while ($department =  $departments->fetch_assoc()) { ?>
-                                          <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
-                                <?php } ?>
-                            </select>
-                            <?php } else { ?>
-                                <div class="alert alert-info"> There are no Departments. Please Add A Department First.</div>
-                            <?php } ?>
+                                <select name='department_id' class='form-control department_id'>
+                                    <option value=''>Select Department</option>
+                                    <?php while ($department =  $departments->fetch_assoc()) { ?>
+                                              <option value='<?php echo $department['id']; ?>' ><?php echo $department['name']; ?></option>
+                                    <?php } ?>
+                                </select>
+                              <?php } else { ?>
+                                  <?php $error = true; ?>
+                                  <div class="alert alert-info"> There are no Departments. Please Add A Department First.</div>
+                              <?php } ?>
                             <p class="help-block"><?php echo (isset($_SESSION['errors']['area_id'])) ? $_SESSION['errors']['area_id'] : ''; ?></p>
                         </div>
 
@@ -107,6 +109,7 @@ while ($area = $areas->fetch_assoc()) {
                                       </select>
                                       <p class="help-block"></p>
                               <?php else : ?>
+                                  <?php $error = true; ?>
                                   <div class='alert alert-info'> <i class='fa fa-info'></i> There are no areas yet. Please Add Area First. </div>
                               <?php endif ?>
                             </div>
@@ -171,6 +174,10 @@ while ($area = $areas->fetch_assoc()) {
                               </div>
                           </div>
                         </div>
+
+                        <?php if ($error): ?>
+                            <div class="alert alert-warning"> <i class='fa fa-info'></i> Fix first the issue above in order to add item to stocks.</div>
+                        <?php endif ?>
                     </div>
 
                     <!-- Job Requisition -->
@@ -255,9 +262,15 @@ while ($area = $areas->fetch_assoc()) {
                                 </tbody>
                             </table>
                         </div>
+
+                        <?php if ($error): ?>
+                            <div class="alert alert-warning"> <i class='fa fa-info'></i> Fix first the issue above in order to add item to stocks.</div>
+                        <?php endif ?>
                     </div>
 
-                    <input class='btn btn-primary clear btn-5x pull-right' name="submit" value="Save Requisition" type="submit" />
+                    <?php if (!$error): ?>
+                        <input class='btn btn-primary clear btn-5x pull-right' name="submit" value="Save Requisition" type="submit" />
+                    <?php endif ?>
                 </form>
                 <span id='links'>
                   <input id='searchRequisitionLink' type='hidden' value='<?php echo Link::createUrl('Controllers/SearchRequisition.php'); ?>'/>
