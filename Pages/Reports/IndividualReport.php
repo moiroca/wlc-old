@@ -11,6 +11,9 @@
 
 	if ($requisition && 0 != $requisition->num_rows) {
 	    $requisition = $requisition->fetch_assoc();
+	} else {
+		echo json_encode(['error' => true, 'msg' => 'Control Indentifier Not Found']);
+		die();
 	}
 
 	//--. Get Requisition Current Status .--//

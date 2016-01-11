@@ -44,7 +44,7 @@ class StockService
 								isRequest,
 								datetime_added) 
 						VALUES (
-							".hexdec(uniqid()).",
+							".time().",
 							'".$this->connection->real_escape_string($stocks['name'])."',
 							'".$this->connection->real_escape_string($stocks['type'])."',
 							'".$this->connection->real_escape_string($stocks['status'])."',

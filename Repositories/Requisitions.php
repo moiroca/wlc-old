@@ -201,7 +201,7 @@ Class Requisitions extends Base
 
      $requisition = $this->connection->query($sql);
 
-     if (0 != $requisition->num_rows) {
+     if ($requisition && 0 != $requisition->num_rows) {
         return $requisition->fetch_assoc()['status'];
      } else {
         return null;

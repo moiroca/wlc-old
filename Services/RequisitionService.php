@@ -41,7 +41,7 @@ class RequisitionService
 						'".$this->connection->real_escape_string($data['purpose'])."', 
 						'".$this->connection->real_escape_string($data['type'])."',
 						'".$datetime_added."',
-						'".hexdec(uniqid())."',
+						'".time()."',
 						".$this->connection->real_escape_string($data['area_id']).")";
 
 		$insertRequistionQUery = $this->connection->query($query) or die(mysqli_error($this->connection));
