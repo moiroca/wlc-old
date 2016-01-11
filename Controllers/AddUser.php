@@ -45,11 +45,11 @@ Login::sessionStart();
         $userService = new UserService();
         $result      = false;
 
-        //--. Save New User .--//
-        $userId = $userService->save($_POST);
-
         //--. Save New Department Head .--//
         if ($_POST['user_type'] == Constant::USER_DEPARTMENT_HEAD) {
+
+            //--. Save New User .--//
+            $userId = $userService->save($_POST);
 
             $departmentRepo = new Department();
             $departmentService = new DepartmentService();
@@ -90,6 +90,9 @@ Login::sessionStart();
                 [ 'type' => Constant::USER_EMPLOYEE ],
                 [ 'id'   => $currentTreasurer['treasuer_id'] ]);
           }
+
+          //--. Save New User .--//
+          $userId = $userService->save($_POST);
         }
 
         //--. Save New Comptroller .--//
@@ -105,6 +108,9 @@ Login::sessionStart();
                 [ 'type' => Constant::USER_EMPLOYEE ],
                 [ 'id'   => $currentComptroller['comptroller_id'] ]);
           }
+
+          //--. Save New User .--//
+          $userId = $userService->save($_POST);
         }
 
         //--. Save New President .--//
@@ -120,6 +126,9 @@ Login::sessionStart();
                 [ 'type' => Constant::USER_EMPLOYEE ],
                 [ 'id'   => $currentPresident['president_id'] ]);
           }
+
+          //--. Save New User .--//
+          $userId = $userService->save($_POST);
         }
 
         //--. Save New GSD Officer .--//
@@ -135,6 +144,28 @@ Login::sessionStart();
                 [ 'type' => Constant::USER_EMPLOYEE ],
                 [ 'id'   => $currentGSDOfficer['gsd_officer_id'] ]);
           }
+
+          //--. Save New User .--//
+          $userId = $userService->save($_POST);
+
+        }
+
+        //--. Save New GSD Officer .--//
+        if ($_POST['user_type'] == Constant::USER_PROPERTY_CUSTODIAN) {
+
+          $currentPropertyCustodian = $userRepo->getAll(['id as property_custodian_id'], ['type' => Constant::USER_PROPERTY_CUSTODIAN]);
+          $currentPropertyCustodian = ($currentPropertyCustodian) ? $currentPropertyCustodian->fetch_assoc() : $currentPropertyCustodian;
+
+          if ($currentPropertyCustodian) {
+
+            //--. Update User .--//
+            $updateUserType = $userRepo->update(
+                [ 'type' => Constant::USER_EMPLOYEE ],
+                [ 'id'   => $currentPropertyCustodian['property_custodian_id'] ]);
+          }
+
+          //--. Save New User .--//
+          $userId = $userService->save($_POST);
         }
 
         if ($userId) {
