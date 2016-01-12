@@ -215,4 +215,59 @@ Class Stocks extends Base
 
     return $result;
   }
+
+  /**
+   * Get Stocks By Stock Name
+   */
+  public function getStockByStockName($group = false, $stockName = '', $itemIds)
+  {
+        $sql = "
+              SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`status` as stock_status,
+                `stocks`.`price` as stock_price,
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit,
+                `areas`.`name` as area_name
+        ";
+
+        $sql .= "
+              FROM 
+                `stocks`
+              JOIN 
+                `areas`
+              ON
+                `areas`.`id` = `stocks`.`area_id`
+                ";
+
+        if ($itemIds) {
+            $itemIds = implode(',', $itemIds);
+            
+            $sql .= "
+              WHERE `stocks`.`id` NOT IN (".$itemIds.")
+
+            ";
+        }
+
+        $sql .= "
+              AND
+                `stocks`.`status` != 'Deleted'
+              AND
+                `stocks`.`isRequest` = 'FALSE'
+              AND
+                `stocks`.`name` like '%".$stockName."%'
+        ";
+
+        $result = $this->raw($sql);
+
+        if ($result && 0 != $result->num_rows) {
+          return $result;
+        } else {
+          return null;
+        }
+  }
+
 }
