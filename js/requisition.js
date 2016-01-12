@@ -22,13 +22,14 @@ var Requisition = function($){
 		/**
 		 * Search Item Control Number
 		 */
-		search: function(itemControlNumber, callback) {
+		search: function(data, callback) {
 			$.ajax({
 				method: 'GET',
 				url: $('#searchRequisitionLink').val(),
 				datatype: 'application/json',
 				data: {
-					itemControlNumber : itemControlNumber,
+					itemIds : data.itemIds,
+					itemControlNumber : data.itemControlNumber,
 				},
 				beforeSend: function() {
 					callback.beforeSend();

@@ -7,7 +7,7 @@ Login::sessionStart();
 $tools = new Tools();
 $stocks = new Stocks();
 
-if (!isset($_GET['area'])) { throw new Exception('Error 404: Page Not Found!'); }
+if (!isset($_GET['area'])) { echo json_encode(['error' => true, 'msg' => 'Area Not Found.']); die(); }
 
 if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
@@ -48,6 +48,12 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             'isEqual' => true,
                             'andOrWhere' => 'AND',
                           ],
+                          [
+                            'field' => '`stocks`.`isRequest`',
+                            'value' => 'False',
+                            'isEqual' => true,
+                            'andOrWhere' => 'AND'
+                          ]
                       ]);
         ?>
 

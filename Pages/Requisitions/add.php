@@ -225,12 +225,12 @@ while ($area = $areas->fetch_assoc()) {
                         </div>
 
                         <div id='attached_item_group' class="control-group">
-                            <label class='control-label' for="purpose"> Attach Item by searching Item by Control Identifier</label>    
+                            <label class='control-label' for="purpose"> Attach Item by searching Item by Item Name</label>    
                             <div class="form-group input-group">
                                     <span class="input-group-addon">
-                                      Item Control Number
+                                      Name
                                     </span>
-                                    <input placeholder='Enter Control Number' id='item_control_number' type="text" class="form-control">
+                                    <input placeholder='Enter Name' id='item_control_number' type="text" class="form-control">
                                     <span class="input-group-btn">
                                       <button type='button' id='search_control_number' class="btn btn-default" type="button">
                                         <i class="fa fa-search"></i>

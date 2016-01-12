@@ -99,14 +99,29 @@ $(document).ready(function() {
 		var itemControlNumber = $('#item_control_number'),
 			itemsList = $('#item_list').find('tr'),
 			isExistInItemsList = false;
+			itemIds = '';
+
+		//--. Comment Out For Testing .--//
+		// if (itemControlNumber.val().length != 16) {
+		// 	$('#attached_item_group').find('p.help-block').show();
+		// 	$('#attached_item_group').find('p.help-block').text('Item Control Number Not Valid.');
+		// 	return false;
+		// }
 
 
-		if (itemControlNumber.val().length != 16) {
-			$('#attached_item_group').find('p.help-block').show();
-			$('#attached_item_group').find('p.help-block').text('Item Control Number Not Valid.');
-			return false;
-		}
+		$.each(itemsList, function(index, itemInList) {
+			console.log(index);
+			var id = $(itemInList).attr('data-id')
 
+			if (index == 0) {
+				itemIds += id;
+			} else if (index > 0) {
+				itemIds += '&'+ id;
+			}
+		});
+		
+		//--. Temporarily Remove For Debugging .--//
+		/*
 		$.each(itemsList, function(index, itemInList) {
 			if (itemControlNumber.val() == $(itemInList).attr('data-control_number')) {
 				isExistInItemsList = true;
@@ -119,18 +134,22 @@ $(document).ready(function() {
 			$('#attached_item_group').find('p.help-block').text('Item Already Exist.');
 			return false;
 		}
+		*/
 
 		if (0 === itemControlNumber.val().length) {
 			$('#attached_item_group').find('p.help-block').show();
-			$('#attached_item_group').find('p.help-block').addClass('warning').text('Please Enter Item Control Number.');
+			$('#attached_item_group').find('p.help-block').addClass('warning').text('Please Enter Item Name.');
 			return false;
 		} else {
-			$('#attached_item_group').find('p.help-block').text('Item Control Numbe Required').hide();
+			$('#attached_item_group').find('p.help-block').text('Item Name Required').hide();
 		}
 
 
 		Requisition.search(
-			itemControlNumber.val(), 
+			{
+				itemIds : itemIds,
+				itemControlNumber : itemControlNumber.val()
+			}, 
 			{	
 				beforeSend: function() {
 					$('#loader').show();					
