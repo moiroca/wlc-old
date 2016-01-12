@@ -27,6 +27,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Tools.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Area.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/ItemRequisition.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Repositories/Notification.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Repositories/RequisitionComments.php';
 
 /* Load All Services */
 include $_SERVER['DOCUMENT_ROOT'].'/Services/AreaService.php';
@@ -37,6 +38,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/Services/UserService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/NotificationService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/DepartmentAreaService.php';
 include $_SERVER['DOCUMENT_ROOT'].'/Services/StockRequisitionService.php';
+include $_SERVER['DOCUMENT_ROOT'].'/Services/RequisitionCommentService.php';
 
 /* Load All Decorators */
 

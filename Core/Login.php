@@ -110,4 +110,12 @@ Class Login {
 	{
 		return $_SESSION['type'];
 	}
+
+	/**
+	 * Get Full Name
+	 */
+	public static function getFullName()
+	{
+		return ucwords($_SESSION['lastname']).', '.ucwords($_SESSION['firstname']).' ';
+	}
 }

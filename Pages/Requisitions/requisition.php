@@ -24,7 +24,6 @@ if ($requisition['requisition_type'] == Constant::REQUISITION_JOB) {
     $itemsInRequisition = $stocksRepo->getStockByRequisitionId($requisition['requisition_id'], true);
 }
 
-
 ?>
 <?php Template::header(); ?>
   <div class="row">
@@ -170,6 +169,42 @@ if ($requisition['requisition_type'] == Constant::REQUISITION_JOB) {
                             </tbody>
                         </table>
                     <?php endif ?>
+
+                    <div id="comments_wrapper" data-requisition_id="<?php echo $requisition['requisition_id']; ?>">
+                        <input type='hidden' id='add_requisition_comment' value='<?php echo Link::createUrl('Controllers/AddComment.php'); ?>'>
+                        <?php
+                            $requisitionCommentsRepo = new RequisitionComments();
+
+                            $comments =  $requisitionCommentsRepo->getAllRequisitionCommentsByRequisitionId($requisition['requisition_id']);
+                            
+                        ?>
+                        <h4>Requisition Comments</h4>
+                        <div class="list-group">
+
+                            <?php if ($comments && 0 != $comments->num_rows): ?>
+
+                                <?php while($comment = $comments->fetch_assoc()): ?>
+                                    <a href="javascript:void(0)" class="list-group-item">
+                                        <h4 class="list-group-item-heading"><?php echo RequesterUtility::getFullName($comment); ?> <small><?php echo date_create($comment['comment_datetime_added'])->format('Y-m-d'); ?></small></h4>
+                                        <p class="list-group-item-text"><?php echo $comment['requisition_comment']; ?></p>
+                                    </a>
+                                <?php endwhile; ?>
+                                
+                            <?php else: ?>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <label class="label label-info"><i class="fa fa-info"></i>  There is no comment available.</label>
+                                </a>
+                            <?php endif ?>
+                        </div>
+                        <div class=''>
+                            <?php if ($requisitionCurrentStatus != Constant::APPROVED_BY_PRESIDENT): ?>
+                                <a href="javascript:void(0)" class="list-group-item">
+                                    <textarea style='margin-bottom: 10px;' id="comment" class='form-control'></textarea>
+                                    <button id='save-comment' type='button' class='form-control btn btn-primary'> Save Comment</button>
+                                </a>    
+                            <?php endif ?>
+                        </div>
+                    </div>
     		</div>
     	</div>
     </div>

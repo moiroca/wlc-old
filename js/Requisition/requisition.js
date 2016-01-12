@@ -582,4 +582,36 @@ $(document).ready(function() {
 
 		if (error) { event.preventDefault(); }
 	});
+
+	$('#comment').on('keyup', function() {
+		if ($(this).val().length != 0) {
+			$('#save-comment').prop('disabled', false);
+		} else {
+			$('#save-comment').prop('disabled', 'disabled');
+		}
+	}).trigger('keyup');
+
+	$('#save-comment').on('click', function() {
+		var requisition_id = $('#comments_wrapper').data('requisition_id'),
+			comment = $('#comment').val(),
+			comments = $('#comments_wrapper').find('div.list-group');	
+
+		Requisition.saveRequisitionComment({
+			requisition_id : requisition_id,
+			comment : comment
+		}, {
+			beforeSend : function() {
+
+			},
+			success : function(resp) {
+				if (!resp.isError) {
+					comments.append('<a href="javascript:void(0)" class="list-group-item"><h4 class="list-group-item-heading">'+resp.data.user+' <small>'+resp.data.datetime+'</small></h4><p class="list-group-item-text">'+comment+'</p></a>');
+				} else {
+					console.log('Check');
+				}
+				
+				$('#comment').val('');
+			}
+		})
+	});
 });

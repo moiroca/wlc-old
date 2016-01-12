@@ -133,6 +133,23 @@ var Requisition = function($){
 					callback.success(response);
 				}
 			});
+		},
+
+		saveRequisitionComment: function(data, callback) {
+			$.ajax({
+				method: 'POST',
+				url: $('#add_requisition_comment').val(),
+				data: {
+					requisition_id : data.requisition_id,
+					comment : data.comment	
+				},
+				beforeSend: function() {
+					callback.beforeSend();
+				},
+				success: function(response) {
+					callback.success(response);
+				}
+			});
 		}
 	};
 }(jQuery);
