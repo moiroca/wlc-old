@@ -68,10 +68,9 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 <?php  while ($item = $result->fetch_assoc()) { ?>
                   <?php
                       $stocksRepo = new Stocks();
-                      $itemsInRequisition = $stocksRepo->getStockByRequisitionId($item['requisition_id']);
+                      $itemsInRequisition = $stocksRepo->getStockByRequisitionId($item['requisition_id'], true);
                       
                       $firstItem = '';
-
                       if ($itemsInRequisition) { $firstItem = $itemsInRequisition->fetch_assoc(); }
 
                       //--. Get Requisition Current Status .--//
@@ -148,7 +147,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </td> -->
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN || Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
                         <td> 
-                          <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($item['requisition_status'])): ?>
+                          <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($requisitionCurrentStatus)): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Verify</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>

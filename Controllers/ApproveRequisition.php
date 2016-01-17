@@ -46,6 +46,21 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 			$msg = Constant::NOTIFICATION_NOTED_BY_DEPARTMENT_HEAD;
 		}
 
+		if ($data['approver_type'] == Constant::USER_GSD_OFFICER || $data['approver_type'] == Constant::USER_PROPERTY_CUSTODIAN) {
+			
+			$userObj = new User();
+			$users = $userObj->getAll(['id'], ['type' => Constant::USER_PRESIDENT]);
+			$user = ($users && $users->num_rows != 0) ? $users->fetch_assoc() : '';
+
+          	if ($user) {
+				$notificationService->saveNotification([
+		          'sender_id'    => $sender_id,
+		          'recepient_id' => $user['id'],
+		          'msg'          => Constant::NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT
+		        ]); 
+		    }
+		}
+
         $notificationService->saveNotification([
           'sender_id'    => $sender_id,
           'recepient_id' => $requisition->fetch_assoc()['requester_id'],

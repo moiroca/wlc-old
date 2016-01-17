@@ -62,25 +62,32 @@ Login::sessionStart();
       }
 
       if ($requisition_id) {
-         // $userObj = new User();
-         // $users = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
 
-         // $sender_id = Login::getUserLoggedInId();
-         // $notificationService = new NotificationService();
+          $userObj = new User();
+          $users = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
 
-         // if ($_POST['requisition_type'] == Constant::REQUISITION_ITEM) {
-         //    $msg = Constant::NOTIFICATION_NEW_ITEM_REQUISITION;
-         // } else {
-         //    $msg = Constant::NOTIFICATION_NEW_JOB_REQUISITION; 
-         // }
-         
-         // while ($user = $users->fetch_assoc()) {
-         //    $notificationService->saveNotificationsApprovedByPresident([
-         //      'sender_id'    => $sender_id,
-         //      'recepient_id' => $user['id'],
-         //      'msg'          => $msg
-         //    ]); 
-         // }
+          $notificationService = new NotificationService();
+
+          $msg = ($_POST['requisition_type'] == Constant::REQUISITION_ITEM) ? Constant::NOTIFICATION_NEW_ITEM_REQUISITION : Constant::NOTIFICATION_NEW_JOB_REQUISITION; 
+
+          $userObj = new User();
+
+          //--. .--//
+          if ($itemType == Constant::ITEM_MATERIAL_EQUIPMENT) {
+            $users = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
+          } else {
+            $users = $userObj->getAll(['id'], ['type' => Constant::USER_PROPERTY_CUSTODIAN]);
+          }
+
+          $user = ($users && $users->num_rows != 0) ? $users->fetch_assoc() : '';
+
+          if ($user) {
+            $notificationService->saveNotification([
+              'sender_id'    => Login::getUserLoggedInId(),
+              'recepient_id' => $user['id'],
+              'msg'          => $msg
+            ]);  
+          }
 
          $_SESSION['record_successful_added'] = true;      
       } else {
