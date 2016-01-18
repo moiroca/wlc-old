@@ -162,6 +162,33 @@ LOCK TABLES `notifications` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `requisition_comments`
+--
+
+DROP TABLE IF EXISTS `requisition_comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `requisition_comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `requisition_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment` text NOT NULL,
+  `datetime_added` datetime NOT NULL,
+  `datetime_updated` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `requisition_comments`
+--
+
+LOCK TABLES `requisition_comments` WRITE;
+/*!40000 ALTER TABLE `requisition_comments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `requisition_comments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `requisition_status`
 --
 
@@ -172,7 +199,7 @@ CREATE TABLE `requisition_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `requisition_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `status` enum('Noted By Department Head','Declined By Department Head','Verified By Property Custodian','Declined By Property Custodian','Verified By GSD Officer','Declined By GSD Officer','Approved By Treasurer','Declined By Treasurer','Approved By Comptroller','Declined By Comptroller','Approved By President','Declined By President') DEFAULT NULL,
+  `status` enum('Noted By Department Head','Declined By Department Head','Verified By Property Custodian','Declined By Property Custodian','Verified By GSD Officer','Declined By GSD Officer','Approved By Treasurer','Declined By Treasurer','Approved By Comptroller','Declined By Comptroller','Approved By President','Declined By President','Released By Property Custodian','Released By GSD Officer','Received By Requester') DEFAULT NULL,
   `datetime_added` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -296,7 +323,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `user_id` (`id`),
   UNIQUE KEY `user_id_2` (`id`),
   UNIQUE KEY `user_id_3` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10078 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10082 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -318,4 +345,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-10 13:36:14
+-- Dump completed on 2016-01-18  8:13:05
