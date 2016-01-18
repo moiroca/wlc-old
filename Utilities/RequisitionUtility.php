@@ -116,6 +116,9 @@ class RequisitionUtility
 					Constant::APPROVED_BY_COMPTROLLER,
 					Constant::APPROVED_BY_PRESIDENT,
 					Constant::APPROVED_BY_TREASURER,
+					Constant::RELEASED_BY_PROPERTY_CUSTODIAN,
+					Constant::RELEASED_BY_GSD_OFFICER,
+					Constant::RECEIVED_BY_REQUESTER,
 				]);
 		} else {
 		
@@ -125,6 +128,9 @@ class RequisitionUtility
 					Constant::APPROVED_BY_COMPTROLLER,
 					Constant::APPROVED_BY_PRESIDENT,
 					Constant::APPROVED_BY_TREASURER,
+					Constant::RELEASED_BY_PROPERTY_CUSTODIAN,
+					Constant::RELEASED_BY_GSD_OFFICER,
+					Constant::RECEIVED_BY_REQUESTER,
 
 					Constant::DECLINED_BY_PROPERTY_CUSTODIAN,
 					Constant::DECLINED_BY_GSD_OFFICER,

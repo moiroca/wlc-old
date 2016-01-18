@@ -71,6 +71,7 @@ Class Constant {
 		APPROVED_BY_PRESIDENT = 'Approved By President',
 		DECLINED_BY_PRESIDENT = 'Declined By President',
 
+		RELEASED_BY_PROPERTY_CUSTODIAN = 'Released By Property Custodian',
 		RELEASED_BY_GSD_OFFICER = 'Released By GSD Officer',
 		RECEIVED_BY_REQUESTER = 'Received By Requester',
 
@@ -97,6 +98,8 @@ Class Constant {
 		NOTIFICATION_APPROVED_BY_PRESIDENT 		= "Your requesition has been APPROVED by the President.",
 		NOTIFICATION_DECLINED_BY_PRESIDENT 	   = "Your requesition has been DECLINED by the President.",
 		
+		NOTIFICATION_RELEASED = "Your Item Requisition has been released.",
+
 		NOTIFICATION_NEW_ITEM_REQUISITION 	   = "New Item Requisition",
 		NOTIFICATION_NEW_JOB_REQUISITION 	   = "New Job Requisition",
 		NOTIFICATION_FOR_APPROVAL_BY_PRESIDENT = "New Requistion For Approval";

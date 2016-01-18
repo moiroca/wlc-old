@@ -38,7 +38,10 @@ class RequisitionDecorator {
 		return in_array($status, [
 				Constant::APPROVED_BY_PRESIDENT,
 				Constant::VERIFIED_BY_GSD_OFFICER,
-				Constant::VERIFIED_BY_PROPERTY_CUSTODIAN
+				Constant::VERIFIED_BY_PROPERTY_CUSTODIAN,
+				Constant::RELEASED_BY_PROPERTY_CUSTODIAN,
+				Constant::RELEASED_BY_GSD_OFFICER,
+				Constant::RECEIVED_BY_REQUESTER,
 			]);
 	}
 }

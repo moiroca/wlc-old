@@ -80,6 +80,42 @@ class RequisitionService
 	}
 
 	/**
+	 * Release Requisition BY GSD Officer or Property Custodian
+	 * 
+	 * @param Array $data
+	 */
+	public function release($data)
+	{
+		if ($data['approver_type'] == Constant::USER_GSD_OFFICER) {
+			$status = Constant::RELEASED_BY_GSD_OFFICER;
+		} elseif ($data['approver_type'] == Constant::USER_PROPERTY_CUSTODIAN) {
+			$status = Constant::RELEASED_BY_PROPERTY_CUSTODIAN;
+		}
+
+		if ($status) {
+			$this->saveRequisitionStatus(
+				$data['approved_by'],
+				$data['requisition_id'],
+				$status
+			);
+		}
+	}
+
+	/**
+	 * Release Requisition BY GSD Officer or Property Custodian
+	 * 
+	 * @param Array $data
+	 */
+	public function receive($data)
+	{
+		$this->saveRequisitionStatus(
+			$data['approved_by'],
+			$data['requisition_id'],
+			Constant::RECEIVED_BY_REQUESTER
+		);
+	}
+
+	/**
 	 * Insert Requisition Status
 	 *
 	 * @param Int $userId

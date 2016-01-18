@@ -150,6 +150,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                           <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($requisitionCurrentStatus)): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Verify</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php elseif ($item['requisition_type'] == Constant::REQUISITION_ITEM && $requisitionCurrentStatus == Constant::APPROVED_BY_PRESIDENT): ?>
+                            <button class='btn btn-default btn-lg approve_item_requisition'>RELEASE</button>
                           <?php else: ?>
                             <label class="label label-info">No Actions Found</label>
                           <?php endif ?>
@@ -174,6 +176,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                           <?php endif; ?>
                       </td>
                     <?php endif ?>
+
                   </tr>  
                 <?php } ?>
             <?php } else { ?>

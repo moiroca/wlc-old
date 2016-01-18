@@ -45,6 +45,7 @@ $userRequisition = $requisitions->getRequisitionByUserType(null, null, Login::ge
                             <!-- <th> Approved By Comptroller </th> -->
                             <th> Approved By President </th>
                             <th> Status </th>
+                            <th> Action </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,6 +126,21 @@ $userRequisition = $requisitions->getRequisitionByUserType(null, null, Login::ge
                               <td>
                                   <?php echo RequisitionDecorator::status($requisitionCurrentStatus) ;?>
                               </td>
+
+                              <td>
+                                  <?php if ($item['requisition_type'] == Constant::REQUISITION_ITEM): ?>
+                                    <?php if ($requisitionCurrentStatus == Constant::RELEASED_BY_GSD_OFFICER || $requisitionCurrentStatus == Constant::RELEASED_BY_PROPERTY_CUSTODIAN): ?>
+                                        <button class='btn btn-default btn-lg approve_item_requisition'>Receive</button>
+                                    <?php elseif($requisitionCurrentStatus == Constant::RECEIVED_BY_REQUESTER) : ?>
+                                        <label class='label label-info'>Received By Requester</label>
+                                    <?php else: ?>
+                                        <label class='label label-info'>Receive Not Yet Available</label>
+                                    <?php endif ?>
+                                  <?php else: ?>
+                                      <label class='label label-info'>Action is for Item Requisition Only</label>
+                                  <?php endif ?>
+                              </td>  
+                              
                             </tr>  
                           <?php } ?>
                       <?php } else { ?>
