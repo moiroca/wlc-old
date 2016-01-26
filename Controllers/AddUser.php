@@ -168,6 +168,13 @@ Login::sessionStart();
           $userId = $userService->save($_POST);
         }
 
+        //--. Save New Employee .--//
+        if ($_POST['user_type'] == Constant::USER_EMPLOYEE) {
+
+          //--. Save New User .--//
+          $userId = $userService->save($_POST);
+        }
+
         if ($userId) {
           $_SESSION['record_successful_added'] = true;      
         } else {
@@ -176,6 +183,7 @@ Login::sessionStart();
 
         header("location: ".Link::createUrl('Pages/Users/list.php'));
       } else {
+        
         $_SESSION['errors'] = $errors;
         header("location: ".Link::createUrl('Pages/Users/add.php'));
       }

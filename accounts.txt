@@ -1,3 +1,33 @@
 INVENTORY OFFICER
 	Username: mae
 	Password: password
+
+GSD Officer
+	Name: Angel Locsin
+	Username: gsd_officer
+	Password: password
+
+Property Custodian
+	Name: Bea Alonzo
+	Username: property_custodian
+	Password: password
+
+Department Head
+	Name: Rhean Ramos
+	Username: department_head
+	Password: password
+
+President
+	Name: Maxin Magalona
+	Username: department_head
+	Password: password
+
+Comptroller
+	Name: Kim Chu
+	Username: comptroller
+	Password: password
+
+Employee
+	Name: Diana Zubiri
+	Username: employee
+	Password: password	
