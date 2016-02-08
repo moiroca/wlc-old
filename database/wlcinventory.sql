@@ -49,6 +49,9 @@ DROP TABLE IF EXISTS `areas`;
 CREATE TABLE `areas` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -120,6 +123,9 @@ DROP TABLE IF EXISTS `departments`;
 CREATE TABLE `departments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -346,4 +352,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-08 12:59:38
+-- Dump completed on 2016-02-08 15:40:23
