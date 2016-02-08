@@ -199,7 +199,7 @@ CREATE TABLE `requisition_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `requisition_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `status` enum('Noted By Department Head','Declined By Department Head','Verified By Property Custodian','Declined By Property Custodian','Verified By GSD Officer','Declined By GSD Officer','Approved By Treasurer','Declined By Treasurer','Approved By Comptroller','Declined By Comptroller','Approved By President','Declined By President','Released By Property Custodian','Released By GSD Officer','Received By Requester') DEFAULT NULL,
+  `status` enum('Item Verified By President','Noted By Department Head','Declined By Department Head','Verified By Property Custodian','Declined By Property Custodian','Verified By GSD Officer','Declined By GSD Officer','Approved By Treasurer','Declined By Treasurer','Approved By Comptroller','Declined By Comptroller','Approved By President','Declined By President','Released By Property Custodian','Released By GSD Officer','Received By Requester') DEFAULT NULL,
   `datetime_added` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -253,7 +253,8 @@ DROP TABLE IF EXISTS `stock_requisitions`;
 CREATE TABLE `stock_requisitions` (
   `requisition_id` int(11) NOT NULL,
   `stock_id` varchar(45) NOT NULL,
-  `changeTo` enum('For Replace','For Repair') DEFAULT NULL
+  `changeTo` enum('For Replace','For Repair') DEFAULT NULL,
+  `status` enum('Deleted','Approved','Received') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -323,7 +324,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `user_id` (`id`),
   UNIQUE KEY `user_id_2` (`id`),
   UNIQUE KEY `user_id_3` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10082 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10090 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -332,7 +333,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Soria','Mae','Gonzalez','Active','Inventory Officer','2015-11-29 15:34:21','','',2);
+INSERT INTO `users` VALUES (10013,'mae','5f4dcc3b5aa765d61d8327deb882cf99','Soria','Mae','Gonzalez','Active','Inventory Officer','2015-11-29 15:34:21','','',2),(10086,'comptroller','5f4dcc3b5aa765d61d8327deb882cf99','Chu','Kim','Magalona','Active','Comptroller','2016-01-26 21:42:02','','',1),(10088,'employee','5f4dcc3b5aa765d61d8327deb882cf99','Zubiri','Diana ','Magalona','Active','Employee','2016-01-26 21:53:14','','',1),(10089,'employee2','5f4dcc3b5aa765d61d8327deb882cf99','Gibson','Mel','Franco','Active','Employee','2016-01-26 22:43:12','','',1),(10084,'department_head','5f4dcc3b5aa765d61d8327deb882cf99','Ramos','Rhean ','Magalona','Active','Department Head','2016-01-26 21:38:44','','',1),(10085,'president','5f4dcc3b5aa765d61d8327deb882cf99','Magalona','Maxin ','Magalona','Active','President','2016-01-26 21:41:13','','',1),(10083,'property_custodian','5f4dcc3b5aa765d61d8327deb882cf99','Alonzo','Bea','Magalona','Active','Property Custodian','2016-01-26 21:37:29','','',1),(10082,'gsd_officer','5f4dcc3b5aa765d61d8327deb882cf99','Locsin','Angel','Magalona','Active','GSD Officer','2016-01-26 21:36:35','','',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -345,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-18  8:28:32
+-- Dump completed on 2016-02-08 12:59:38
