@@ -235,7 +235,7 @@ Class Stocks extends Base
   /**
    * Get Approved Item By Requisition Id
    */
-  public function getApprovedItemInRequisition($requisitionId, $received = false) 
+  public function getApprovedItemInRequisition($requisitionId, $query = false) 
   {
       $sql = "
           SELECT
@@ -258,23 +258,32 @@ Class Stocks extends Base
           ON
               `stocks`.`area_id` = `areas`.`id` ";
 
-        if ($received) {
-          
+        $status = 'TRUE';
+        if ($query == Constant::STOCK_RECEIVED) {
+          $status = 'FALSE';
           $sql .= "
               WHERE
                 `stock_requisitions`.`status` = '".Constant::STOCK_RECEIVED."'";
+        } else if ($query == Constant::STOCK_APPROVED) {
+          $status = 'FALSE';
+          $sql .= "
+              WHERE
+                `stock_requisitions`.`status` = '".Constant::STOCK_APPROVED."'";
         } else {
 
           $sql .= "
               WHERE
-                `stock_requisitions`.`status` in ('".Constant::STOCK_APPROVED."','".Constant::STOCK_RECEIVED."')";
+                `stock_requisitions`.`status` in ('".Constant::STOCK_APPROVED."','".Constant::STOCK_RECEIVED."')
+              OR
+                `stock_requisitions`.`status` IS NULL ";
+
         }
         
         $sql .="
           AND
               `stock_requisitions`.`requisition_id` = $requisitionId
           AND
-              `stocks`.`isRequest` = 'FALSE'";
+              `stocks`.`isRequest` = '".$status."'";
 
       return $this->raw($sql);
   }

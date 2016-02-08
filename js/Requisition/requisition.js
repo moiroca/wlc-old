@@ -785,7 +785,7 @@ $(document).ready(function() {
 			},
 
 			success : function(resp) {
-				// window. location.reload();
+				window. location.reload();
 			}
 		});
 		e.preventDefault();

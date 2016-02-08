@@ -23,15 +23,23 @@
 	$stocksRepo = new Stocks();
 	$departmentRepo = new Department();
 
+	if ($requisitionCurrentStatus == Constant::ITEM_VERIFIED_BY_PRESIDENT) {
+		$status = Constant::STOCK_APPROVED;
+	} else if ($requisitionCurrentStatus == Constant::RECEIVED_BY_REQUESTER) {
+		$status = Constant::STOCK_RECEIVED;
+	} else {
+		$status = false;
+	}
+
 	$itemsInRequisition = ($requisition['requisition_type'] == Constant::REQUISITION_JOB) ? 
 							$stocksRepo->getAllStockByRequisitionIdTypeJOB($requisition['requisition_id']) :
-							$stocksRepo->getApprovedItemInRequisition($requisition['requisition_id'], true); 				
+							$stocksRepo->getApprovedItemInRequisition($requisition['requisition_id'], $status); 				
 
 	$firstItem = ($itemsInRequisition) ? $itemsInRequisition->fetch_assoc() : null; 
 
 	$itemsInRequisition = ($requisition['requisition_type'] == Constant::REQUISITION_JOB) ? 
 							$stocksRepo->getAllStockByRequisitionIdTypeJOB($requisition['requisition_id']) :
-							$stocksRepo->getApprovedItemInRequisition($requisition['requisition_id'], true);
+							$stocksRepo->getApprovedItemInRequisition($requisition['requisition_id'], $status);
 ?>
 <!DOCTYPE html>
 <head>
@@ -164,8 +172,10 @@
                                     <td class='status'>
                                         <?php if ($item['stock_requisition_status'] == Constant::STOCK_APPROVED): ?>
                                             <label class="label label-info"><?php echo $item['stock_requisition_status']; ?></label>    
-                                        <?php else: ?>
+                                        <?php elseif($item['stock_requisition_status'] == Constant::STOCK_RECEIVED): ?>
                                             <label class="label label-success"><?php echo $item['stock_requisition_status']; ?></label>    
+                                        <?php else: ?>
+                                        	<label class="label label-info">Item not yet received or approved</label>    
                                         <?php endif ?>
                                     </td>
                                 </tr>
