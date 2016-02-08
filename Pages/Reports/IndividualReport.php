@@ -82,7 +82,9 @@
 </style>
 <div id="container">
 	<div id="header" class="row">
-		<div class="col-lg-2"></div>
+		<div class="col-lg-2">
+			<img width='100'; src="../../images/ict.jpg">
+		</div>
 		<div class="col-lg-8" align="center">
 			<p><b>WESTERN LEYTE COLLEGE OF ORMOC INC.</b></p>
 			<p><i>BONIFACIO ST. ORMOC, CITY</i></p>
@@ -95,7 +97,9 @@
 			</i></p>
 			<p>Date: <i style='text-decoration:underline'><?php echo date_create($requisition['datetime_added'])->format('M d, Y'); ?></i></p>
 		</div>
-		<div class="col-lg-2"></div>
+		<div class="col-lg-2">
+			<img width='100'; src="../../images/school.jpg">
+		</div>
 	</div>
 	
 	<div id="content" class="row">
