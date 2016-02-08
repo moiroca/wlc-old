@@ -10,18 +10,35 @@ Login::sessionStart();
 
   if ($_POST['submit']) {
 
-      $departmentServiceObj = new DepartmentService();
+      if (isset($_POST['department_id'])) {
+        $departmentRepo = new Department();
 
-      $result = $departmentServiceObj->save([
-                  'name'    => $_POST['name']
-                ]);
+        $department = $departmentRepo->getAll(['*'],['id' => $_POST['department_id']]);
+        $department = $department->fetch_assoc();
 
-      if ($result) {
-        $_SESSION['record_successful_added'] = true;      
+        $departmentRepo->update([
+          'name'    => $_POST['name'],
+          'updated_at' => date_create()->format('Y-m-d H:i:s')
+        ], [
+          'id' => $department['id']
+        ]);
+
+        header('location: '.Link::createUrl('Pages/Departments/update.php?department='.$department['id']));
       } else {
-        $_SESSION['something_wrong'] = true;
-      }
+        $departmentServiceObj = new DepartmentService();
 
-      header('location: '.Link::createUrl('Pages/Departments/list.php'));
+        $result = $departmentServiceObj->save([
+                    'name'    => $_POST['name']
+                  ]);
+
+        if ($result) {
+          $_SESSION['record_successful_added'] = true;      
+        } else {
+          $_SESSION['something_wrong'] = true;
+        }  
+
+        header('location: '.Link::createUrl('Pages/Departments/list.php'));
+      }
+      
   }
 ?>

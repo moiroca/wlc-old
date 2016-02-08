@@ -93,4 +93,21 @@ Class Department extends Base
 
 		return $this->raw($sql);
 	}
+
+	/**
+	 * Get All None Deleted Department
+	 */
+	public function getAllDepartment($deleted = false)
+	{
+		$sql = "
+			SELECT
+				*
+			FROM
+				`departments`
+			where
+				`deleted_at` is null
+		";
+
+		return $this->connection->query($sql);
+	}
 }

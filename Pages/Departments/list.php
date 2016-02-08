@@ -28,7 +28,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
       <div class="table-responsive">
 
         <?php 
-            $result = $departments->getAll();
+            $result = $departments->getAllDepartment();
         ?>
 
         <?php if (isset($_SESSION['record_successful_added'])) { ?>
@@ -57,8 +57,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   <tr>
                     <td> <?php echo $item['name']; ?></td>
                     <td> 
-                      <a class="btn btn-sm btn-info"> Edit </a>
-                      <a class="btn btn-sm btn-warning"> Delete </a>
+                      <a href="<?php echo Link::createUrl('Pages/Departments/update.php?department='.$item['id']); ?>" class="btn btn-sm btn-info"> Edit </a>
+                      <a href="<?php echo Link::createUrl('Pages/Departments/delete.php?department='.$item['id']); ?>" class="btn btn-sm btn-warning"> Delete </a>
                     </td>
                   </tr>  
                 <?php } ?>
