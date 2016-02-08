@@ -93,11 +93,15 @@ Login::sessionStart();
       } else {
          $_SESSION['something_wrong'] = true;
       }
+
+      /*
       if ($requisitionType == Constant::REQUISITION_JOB) {
         $url = Link::createUrl('Pages/Requisitions/Jobs/listing.php');
       } else {
         $url = Link::createUrl('Pages/Requisitions/Items/listing.php');
       }
+      */
+      $url = Link::createUrl('Pages/Requisitions/myrequisitions.php');
       
       header('location: '.$url);
   }

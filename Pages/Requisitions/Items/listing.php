@@ -150,7 +150,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                           <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($requisitionCurrentStatus)): ?>
                             <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Verify</a>
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
-                          <?php elseif ($item['requisition_type'] == Constant::REQUISITION_ITEM && $requisitionCurrentStatus == Constant::APPROVED_BY_PRESIDENT): ?>
+                          <?php elseif ($item['requisition_type'] == Constant::REQUISITION_ITEM && $requisitionCurrentStatus == Constant::ITEM_VERIFIED_BY_PRESIDENT): ?>
                             <button class='btn btn-default btn-lg approve_item_requisition'>RELEASE</button>
                           <?php else: ?>
                             <label class="label label-info">No Actions Found</label>
@@ -167,9 +167,10 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </td> -->
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PRESIDENT): ?>
                       <td> 
-                          <?php if (!RequisitionUtility::isRequisitionActionedByPresident($requisitionCurrentStatus)): ?>
+
+                          <?php if (!RequisitionUtility::isRequisitionActionedByPresident($requisitionCurrentStatus) && $requisitionCurrentStatus != Constant::ITEM_VERIFIED_BY_PRESIDENT): ?>
                             <a class='btn btn-sm btn-default' href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"> <i class='fa fa-check'> Verify</i> </a>
-                            <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a>
+                            <!-- <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Approve</a> -->
                             <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
                           <?php else: ?>
                             <label class="label label-info">No Actions Found</label>

@@ -295,6 +295,28 @@ Class Requisitions extends Base
   }
 
   /**
+   * Get Requisition Items
+   */
+  public function getRequisitionItems($requisitionId, $stockName)
+  {
+      $sql = "
+          SELECT 
+            `stock_requisitions`.`stock_id` as stock_id
+          FROM
+            `stock_requisitions`
+          JOIN
+            `stocks`
+          ON
+            `stocks`.`id` = `stock_requisitions`.`stock_id`
+          WHERE
+            `stock_requisitions`.`requisition_id` = $requisitionId
+          AND
+            `stocks`.`name` like '%".$stockName."%'
+      ";
+
+      return $this->raw($sql);
+  }
+  /**
    * Get Requisition By User Type and Requisition Type
    *
    * @param String $userType
@@ -464,5 +486,27 @@ Class Requisitions extends Base
       } else {
         return null;
       }
+  }
+
+  /**
+   * Check if Item Exists
+   */
+  public function checkItemExist($requisitionId, $stockId)
+  {
+     $sql = "
+        Select 
+          *
+        FROM
+          `stock_requisitions`
+        WHERE
+          `requisition_id` = $requisitionId
+        AND
+          `stock_id` = $stockId
+        LIMIT 1
+     ";
+
+     $query = $this->raw($sql);
+
+     return ($query && $query->num_rows != 0);
   }
 }

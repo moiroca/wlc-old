@@ -614,4 +614,360 @@ $(document).ready(function() {
 			}
 		})
 	});
+
+	/**
+	 * Add Remove Item in Item Requisition
+	 */
+	$('.approve-item').on('change', function() {
+		var $item = $(this);
+
+		var key = ApproveItemsUtility.getKey(this);
+
+		console.log($item.val());
+	});
+
+
+	/**
+	 * Add From Item Requsition
+	 */
+	$('.plus-item-requisition').on('click', function() {
+		var $plusBtn = $(this),
+			key 	 = ApproveItemsUtility.getKey(this);
+
+		if (!ApproveItemsUtility.itemCountIsEqualToCountInStock(key)) {
+			
+			ItemsForApprovalUtility.addItemToApprove(this);
+			ApproveItemsUtility.addItemToApprove(key);
+			ApproveItemsUtility.addItemFromRequisition(key);
+
+			$minusBtn = ItemsForApprovalUtility.getMinusBtn(key);
+			if (ApproveItemsUtility.itemCountIsEqualToCountInStock(key)) { $plusBtn.hide(); };
+			
+			$minusBtn.show();
+		}
+
+		
+	});
+
+	/**
+	 * Minus From Item Requisition
+	 */
+	$('.minus-item-requisition').on('click', function() {
+		var $minusBtn = $(this);
+
+		var key = ApproveItemsUtility.getKey(this);
+
+		// Subtract item for approval temp
+		if (!ApproveItemsUtility.itemCountIsZero(key)) {
+
+			ItemsForApprovalUtility.subtractItemToApprove(this);
+			ApproveItemsUtility.subtractItemToApprove(key);
+			ApproveItemsUtility.subtractItemFromRequisition(key);
+
+			$plusBtn = ItemsForApprovalUtility.getPlusBtn(key);
+
+			if (ApproveItemsUtility.itemCountIsZero(key)) { $minusBtn.hide(); };
+			$plusBtn.show();
+		} 
+	});
+
+	/**
+	 * Plus From Item Stocks
+	 */
+	$('.plus-item-stocks').on('click', function() {
+		var $plusBtn = $(this),
+			key 	 = ItemsInStocks.getKey(this);
+
+		if (!ApproveItemsUtility.itemCountIsEqualToCountInStock(key)) {
+			
+			ItemsInStocks.subtractItemToApprove(this);
+			ApproveItemsUtility.addItemToApprove(key);
+			ApproveItemsUtility.addItemFromStocks(key);
+			// $minusBtn = ItemsInStocks.getMinusBtn(key);
+			// if (ApproveItemsUtility.itemCountIsEqualToCountInStock(key, this)) { $plusBtn.hide(); };
+			// $minusBtn.show();
+		}
+	});
+
+	/**
+	 * Minus From Item Stocks
+	 */
+	$('.minus-item-stocks').on('click', function() {
+		var $minusBtn = $(this),
+			key = ApproveItemsUtility.getKey(this);
+
+		// Check if Item From Stock is Original
+
+		if (ItemsInStocks.getItemCount(this) == ItemsInStocks.getOriginalItemCount(this)) {
+			return false;
+		}
+
+		if (!ApproveItemsUtility.itemCountIsZero(key)) {
+
+			ItemsInStocks.addItemToApprove(this);
+			ApproveItemsUtility.subtractItemToApprove(key);
+			ApproveItemsUtility.subtractItemFromStocks(key);
+			// $plusBtn = ItemsForApprovalUtility.getPlusBtn(key);
+
+			// if (ApproveItemsUtility.itemCountIsZero(key)) { $minusBtn.hide(); };
+			// $plusBtn.show();
+		} 
+	});
+
+	/**
+	 * Receive Item
+	 */
+	$('#receivedBtn').on('click', function(e) {
+		var items = $('.stock'),
+			itemIds = [],
+			requisition_id = $('#requisition_id').val();
+
+		$.each(items, function(key, item) {
+			id = $(item).val();
+
+			itemIds.push(JSON.stringify({ id : id, isChecked : $(item).is(':checked') }));
+		});
+
+		Requisition.receive({
+			itemIds : itemIds,
+			requisition_id : requisition_id
+		}, {
+			beforeSend : function() {
+				console.log('Before Send...');
+			},
+			success : function(resp) {
+				var table = $('#tempItemsForApproval');
+				$.each(itemIds, function(key, item) {
+					parseItem = JSON.parse(item);
+					tr = table.find('tr[data-id='+parseItem.id+']');
+					td = tr.find('td.status');
+
+					if (parseItem.isChecked) {
+						$(td).empty().html('<label class="label label-success">Received</label>');
+					} else {
+						$(td).empty().html('<label class="label label-info">Approved</label>');
+					}
+				});				
+			}
+		});
+
+		e.preventDefault();
+	});
+	/**
+	 * Approve Requisition Button
+	 */
+	$('#approveRequisitionButton').on('click', function(e) {
+
+		$(this).empty().html('<p>Approving... <i class="fa fa-spinner fa-spin"></i></p>');
+
+		var items = ApproveItemsUtility.getAllItem(),
+			submitItem = { 
+				requisitionId : $('#requisition_id').val(), 
+				items : []
+			};
+
+		for (var i = items.length - 1; i >= 0; i--) {
+			item = $(items[i]);
+
+			submitItem.items.push({
+				key : item.data('key'),
+				countFromRequisition : parseInt(item.find('td.from-item-requisition').text()),
+				countFromStocks : parseInt(item.find('td.from-item-stocks').text())
+			});
+		};
+
+		Requisition.approveItemInRequisition({
+			items : submitItem.items,
+			requisitionId : submitItem.requisitionId
+		}, {
+			beforeSend : function() {
+				console.log('Saving Items In Requisition');
+			},
+
+			success : function(resp) {
+				// window. location.reload();
+			}
+		});
+		e.preventDefault();
+	});
+
+	var ItemsInStocks = {
+
+		/** 
+		 * Get Key Of The Current Element
+		 * @param Object element
+		 * @return Object
+		 */
+		getKey : function(element) {
+			return $(element).closest('tr').data('key');
+		},
+
+		/**
+		 * Get Item In Stock
+		 * @param string key
+		 * @return Object
+		 */
+		getItem : function(key) {
+			return $('#ItemInStock').find('tr[data-key="'+key+'"]');
+		},
+
+		/**
+		 * Get Item Count
+		 * @param Object element
+		 * @return int 
+		 */
+		getItemCount : function(element) {
+			return parseInt($(element).closest('tr').data('count_stocks'));			
+		},
+
+		/**
+		 * Get Original Item Count
+		 * @param Object element
+		 * @return int 
+		 */
+		getOriginalItemCount : function(element) {
+			return parseInt($(element).closest('tr').data('original_stock_count'));			
+		},		
+
+		/**
+		 * Get Minus Button
+		 * @param String Key
+		 * @return Object 
+		 */
+		getMinusBtn : function(key) {
+			return ItemsInStocks.getItem(key).find('.minus-item-stocks');
+		},
+
+		/**
+		 * Get Plus Btn
+		 * @param String Key
+		 * @return Object 
+		 */
+		getPlusBtn : function(key) {
+			return ItemsInStocks.getItem(key).find('.plus-item-stocks');
+		},
+
+		/**
+		 * Subtract Item in Item Stocks
+		 * @param Object element
+		 */
+		subtractItemToApprove : function(element) {
+			$(element).closest('tr').find('td.count-stocks').text(parseInt($(element).closest('tr').find('td.count-stocks').text()) - 1);
+			$(element).closest('tr').data('count_stocks', parseInt($(element).closest('tr').data('count_stocks')) - 1);
+		},
+
+		/**
+		 * Add Item In Item Stocks
+		 * @param Object element
+		 */ 
+		addItemToApprove: function(element) {
+			$(element).closest('tr').find('td.count-stocks').text(parseInt($(element).closest('tr').find('td.count-stocks').text()) + 1);
+			$(element).closest('tr').data('count_stocks', parseInt($(element).closest('tr').data('count_stocks')) + 1);
+		},
+	};
+
+	// Temporary Items in for Approval in list
+	var ItemsForApprovalUtility = {
+
+		getItem : function(key) {
+			return $('#tempItemsForApproval').find('tr[data-key="'+key+'"]');
+		},
+
+		getMinusBtn : function(key) {
+			return ItemsForApprovalUtility.getItem(key).find('.minus-item-requisition');
+		},
+
+		getPlusBtn : function(key) {
+			return ItemsForApprovalUtility.getItem(key).find('.plus-item-requisition');
+		},
+
+		getItemCount : function(element) {
+			return parseInt($(element).closest('tr').data('count_stocks'));			
+		},
+
+		getAllItem : function() {
+
+		},
+
+		addItemToApprove: function(element) {
+			$(element).closest('tr').find('td.count-stocks').text(parseInt($(element).closest('tr').find('td.count-stocks').text()) + 1);
+			$(element).closest('tr').data('count_stocks', parseInt($(element).closest('tr').data('count_stocks')) + 1);
+		},
+
+		subtractItemToApprove: function(element) {
+			$(element).closest('tr').find('td.count-stocks').text(parseInt($(element).closest('tr').find('td.count-stocks').text()) - 1);
+			$(element).closest('tr').data('count_stocks', parseInt($(element).closest('tr').data('count_stocks')) - 1);
+		},
+
+		itemCountIsZero: function() {
+
+		}
+	};
+
+	// Temporary Items in for Approval in queue
+	var ApproveItemsUtility = {
+
+		/** 
+		 * Get Key Of The Current Element
+		 * @param Object element
+		 * @return Object
+		 */
+		getKey : function(element) {
+			return $(element).closest('tr').data('key');
+		},
+
+		getItem : function(key) {
+			return $('#itemsForApproval').find('tr[data-key="'+key+'"]')
+		},
+
+		getAllItem : function() {
+			return $('#itemsForApproval').find('tr');
+		},
+
+		getTotalItemCount : function(key) {
+			return parseInt(ApproveItemsUtility.getItem(key).find('td.count-stocks').text());
+		},
+
+		getItemCount : function(key) {
+			return parseInt(ApproveItemsUtility.getItem(key).data('count_stocks'));
+		},
+
+		subtractItemFromRequisition : function(key) {
+			var item = ApproveItemsUtility.getItem(key);
+			item.find('td.from-item-requisition').text(parseInt(item.find('td.from-item-requisition').text()) - 1);
+		},
+
+		addItemFromRequisition : function(key) {
+			var item = ApproveItemsUtility.getItem(key);
+			item.find('td.from-item-requisition').text(parseInt(item.find('td.from-item-requisition').text()) + 1);
+		},
+
+		subtractItemFromStocks : function(key) {
+			var item = ApproveItemsUtility.getItem(key);
+			item.find('td.from-item-stocks').text(parseInt(item.find('td.from-item-stocks').text()) - 1);
+		},		
+
+		addItemFromStocks : function(key) {
+			var item = ApproveItemsUtility.getItem(key);
+			item.find('td.from-item-stocks').text(parseInt(item.find('td.from-item-stocks').text()) + 1);
+		},
+
+		addItemToApprove: function(key) {
+			var item = ApproveItemsUtility.getItem(key);
+			item.find('td.count-stocks').text(parseInt(item.find('td.count-stocks').text()) + 1);
+		},
+
+		subtractItemToApprove : function(key) {
+			var item = ApproveItemsUtility.getItem(key);
+			item.find('td.count-stocks').text(parseInt(item.find('td.count-stocks').text()) - 1);
+		},
+
+		itemCountIsZero: function(key) {
+			return (ApproveItemsUtility.getTotalItemCount(key) == 0);
+		},
+
+		itemCountIsEqualToCountInStock : function(key) {
+			return (ApproveItemsUtility.getTotalItemCount(key) == ApproveItemsUtility.getItemCount(key));
+		},
+	};
 });

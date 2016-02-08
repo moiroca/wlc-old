@@ -42,6 +42,7 @@ class RequisitionDecorator {
 				Constant::RELEASED_BY_PROPERTY_CUSTODIAN,
 				Constant::RELEASED_BY_GSD_OFFICER,
 				Constant::RECEIVED_BY_REQUESTER,
+				Constant::ITEM_VERIFIED_BY_PRESIDENT
 			]);
 	}
 }

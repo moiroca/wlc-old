@@ -108,6 +108,12 @@ class RequisitionService
 	 */
 	public function receive($data)
 	{
+		//--. Change Status of Requisition .--//
+		foreach ($data['itemIds'] as $item) {
+			$decodedItem = json_decode($item);
+			$this->updateItemRequisitionStatus((int)$decodedItem->id, $data['requisition_id'], ($decodedItem->isChecked) ? Constant::STOCK_RECEIVED : Constant::STOCK_APPROVED);
+		}
+
 		$this->saveRequisitionStatus(
 			$data['approved_by'],
 			$data['requisition_id'],
@@ -143,4 +149,27 @@ class RequisitionService
 
 		return $this->connection->query($sql);
 	}
+
+	/**
+	 * Update Item Requisition Status
+	 *
+	 * @param Int $itemId
+	 * @param Int $requisitionId
+	 * @param String $status
+	 */
+	public function updateItemRequisitionStatus($itemId, $requisitionId, $status)
+	{
+		$sql = "
+			UPDATE
+				`stock_requisitions`
+			SET
+				`stock_requisitions`.`status` = '".$status."'
+			WHERE
+				`stock_requisitions`.`stock_id` = $itemId
+			AND
+				`stock_requisitions`.`requisition_id` = $requisitionId
+		";
+
+		return $this->connection->query($sql);
+	}	
 }

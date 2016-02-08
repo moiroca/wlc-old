@@ -10,7 +10,7 @@ $isError = false;
 $errorMSG = '';
 $msg = '';
 
-if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
+if (isset($_POST['requisition_id'])) {
 
 	$requisitionService = new RequisitionService();
 
@@ -31,7 +31,7 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
 	//--. Get Requisition Current Status .--//
     $requisitionCurrentStatus = $requisitionObj->getCurrentRequisitionStatus($requisitionId);
 
-    if ($requisitionCurrentStatus == Constant::APPROVED_BY_PRESIDENT) {
+    if ($requisitionCurrentStatus == Constant::APPROVED_BY_PRESIDENT || $requisitionCurrentStatus == Constant::ITEM_VERIFIED_BY_PRESIDENT) {
     	
     	//--. Release Item Requisition .--//
     	$requisitionService->release($data);	
@@ -45,6 +45,10 @@ if (isset($_POST['requisition_id']) && isset($_POST['type'])) {
     } elseif($requisitionCurrentStatus == Constant::RELEASED_BY_GSD_OFFICER || $requisitionCurrentStatus == Constant::RELEASED_BY_PROPERTY_CUSTODIAN) {
 
     	//--. Receive Item Requisition .--//
+		if (isset($_POST['itemIds'])) {
+			$data = array_merge($data, ['itemIds' => $_POST['itemIds']]);
+		}
+
     	$requisitionService->receive($data);
 
     	//--. @todo Send Notification to Approved .--//

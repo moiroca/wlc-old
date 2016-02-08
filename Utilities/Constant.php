@@ -35,6 +35,10 @@ Class Constant {
 		STOCK_REPLACE = 'For Replace',
 		STOCK_DELETED = 'Deleted',
 
+		//Stock Requisition Statuses
+		STOCK_APPROVED = 'Approved',
+		STOCK_RECEIVED = 'Received',
+
 		// Item Type
 		ITEM_OFFICE_SUPPLY = 'Office Supply',
 		ITEM_EQUIPMENT      = 'Equipment',
@@ -75,6 +79,8 @@ Class Constant {
 		RELEASED_BY_GSD_OFFICER = 'Released By GSD Officer',
 		RECEIVED_BY_REQUESTER = 'Received By Requester',
 
+		ITEM_VERIFIED_BY_PRESIDENT = 'Item Verified By President',
+		
 		// Notifications Status
 		NOTIFICATION_VIEWED = 'True',
 		NOTIFICATION_NOT_VIEWED = 'False',
@@ -98,6 +104,8 @@ Class Constant {
 		NOTIFICATION_APPROVED_BY_PRESIDENT 		= "Your requesition has been APPROVED by the President.",
 		NOTIFICATION_DECLINED_BY_PRESIDENT 	   = "Your requesition has been DECLINED by the President.",
 		
+		NOTIFICATION_ITEM_VERIFIED_BY_PRESIDENT = "Your Requested Items has been approved",
+
 		NOTIFICATION_RELEASED = "Your Item Requisition has been released.",
 
 		NOTIFICATION_NEW_ITEM_REQUISITION 	   = "New Item Requisition",

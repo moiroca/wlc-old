@@ -119,6 +119,7 @@ class RequisitionUtility
 					Constant::RELEASED_BY_PROPERTY_CUSTODIAN,
 					Constant::RELEASED_BY_GSD_OFFICER,
 					Constant::RECEIVED_BY_REQUESTER,
+					Constant::ITEM_VERIFIED_BY_PRESIDENT
 				]);
 		} else {
 		
@@ -131,6 +132,7 @@ class RequisitionUtility
 					Constant::RELEASED_BY_PROPERTY_CUSTODIAN,
 					Constant::RELEASED_BY_GSD_OFFICER,
 					Constant::RECEIVED_BY_REQUESTER,
+					Constant::ITEM_VERIFIED_BY_PRESIDENT,
 
 					Constant::DECLINED_BY_PROPERTY_CUSTODIAN,
 					Constant::DECLINED_BY_GSD_OFFICER,

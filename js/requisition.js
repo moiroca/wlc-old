@@ -62,6 +62,27 @@ var Requisition = function($){
 		},
 
 		/**
+		 * Receive Item Requisition
+		 */
+		receive: function(data, callback) {
+			$.ajax({
+				method: 'POST',
+				url : $('#approval_item_requisition_link').val(),
+				data: {
+					requisition_id : data.requisition_id,
+					itemIds : data.itemIds
+				},
+				datatype: 'application/json',
+				beforeSend: function() {
+					callback.beforeSend();
+				},
+				success: function(data) {
+					callback.success(data);
+				}
+			});
+		},
+
+		/**
 		 * Attach Item To Requisition
 		 */
 		attach: function(data, callback) {
@@ -124,7 +145,8 @@ var Requisition = function($){
 				method: 'POST',
 				url: $('#approve_item_in_requisition').val(),
 				data: {
-					stockIds : data.stockIds	
+					items : data.items,
+					requisitionId : data.requisitionId	
 				},
 				beforeSend: function() {
 					callback.beforeSend();

@@ -108,8 +108,11 @@ Class Stocks extends Base
                 `stocks`.`price` as stock_price,
                 `stocks`.`isRequest` as stock_isRequest,
                 `stocks`.`unit` as stock_unit,     
-                `stock_requisitions`.`changeTo` as stock_update,
         ";
+
+        if (!$stockName) {
+          $sql .= "`stock_requisitions`.`changeTo` as stock_update,";
+        }
 
         if ($group) {
               $sql .= "
@@ -121,15 +124,30 @@ Class Stocks extends Base
         $sql .= "
               FROM 
                 `stocks`
+              ";
+
+        if (!$stockName) {
+
+        $sql  .= "
               JOIN
                 `stock_requisitions`
               ON
-                `stock_requisitions`.`stock_id` = `stocks`.`id`
+                `stock_requisitions`.`stock_id` = `stocks`.`id`";
+
+        }
+
+        $sql  .="
               WHERE 
                 `stocks`.`status` != 'Deleted'
+                ";
+        if (!$stockName) {
+        
+        $sql .= "
               AND
                 `stock_requisitions`.`requisition_id` = $requisitionId
-                ";
+          ";
+
+        }
 
         if ($stockName) {
            $sql .= "
@@ -190,9 +208,7 @@ Class Stocks extends Base
 
        return $this->raw($sql);
   } 
-  /**
-   * Get all stock by area id
-   */
+
   /**
    * Get All Stocks By Type
    */
@@ -216,6 +232,52 @@ Class Stocks extends Base
     return $result;
   }
 
+  /**
+   * Get Approved Item By Requisition Id
+   */
+  public function getApprovedItemInRequisition($requisitionId, $received = false) 
+  {
+      $sql = "
+          SELECT
+              `stock_requisitions`.`status` as stock_requisition_status,
+              `stocks`.`id` as stock_id,
+              `stocks`.`name` as stock_name,
+              `stocks`.`control_number` as stock_control_number,
+              `stocks`.`price` as stock_price,
+              `stocks`.`type` as stock_type,
+              `stocks`.`status` as stock_status,
+              `areas`.`name` as area_name
+          FROM
+              `stock_requisitions`
+          JOIN
+              `stocks`
+          ON
+              `stocks`.`id` = `stock_requisitions`.`stock_id`
+          JOIN
+              `areas`
+          ON
+              `stocks`.`area_id` = `areas`.`id` ";
+
+        if ($received) {
+          
+          $sql .= "
+              WHERE
+                `stock_requisitions`.`status` = '".Constant::STOCK_RECEIVED."'";
+        } else {
+
+          $sql .= "
+              WHERE
+                `stock_requisitions`.`status` in ('".Constant::STOCK_APPROVED."','".Constant::STOCK_RECEIVED."')";
+        }
+        
+        $sql .="
+          AND
+              `stock_requisitions`.`requisition_id` = $requisitionId
+          AND
+              `stocks`.`isRequest` = 'FALSE'";
+
+      return $this->raw($sql);
+  }
   /**
    * Get Stocks By Stock Name
    */

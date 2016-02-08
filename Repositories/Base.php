@@ -50,7 +50,7 @@ Class Base {
 	 */
 	public function raw($sql)
 	{
-		return $this->connection->query($sql); // or die(mysqli_error($this->connection));
+		return $this->connection->query($sql);// or die(mysqli_error($this->connection));
 	}
 
 	/**
