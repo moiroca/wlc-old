@@ -60,8 +60,8 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                     <td> <?php echo $item['department_name']; ?></td>
                     <td> 
                       <a href="<?php echo Link::createUrl('Pages/Areas/stocks.php?area='.$item['area_id']); ?>" class="btn btn-large btn-info"> <i class='fa fa-eye'></i> View Stocks </a>
-                      <a class="btn btn-sm btn-default"> <i class='fa fa-edit'></i> Edit </a>
-                      <a class="btn btn-sm btn-warning"> Delete </a>
+                      <a href="<?php echo Link::createUrl('Pages/Areas/update.php?area='.$item['area_id']); ?>" class="btn btn-sm btn-default"> <i class='fa fa-edit'></i> Edit </a>
+                      <a href="<?php echo Link::createUrl('Pages/Areas/delete.php?area='.$item['area_id']); ?>" class="btn btn-sm btn-warning"> Delete </a>
                     </td>
                   </tr>  
                 <?php } ?>

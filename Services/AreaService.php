@@ -33,11 +33,54 @@ class AreaService
 
 		$area_id = mysqli_insert_id($this->connection);
 
+		return $this->saveAreaInDepartment($area_id, $area['department_id']);
+	}
+
+	/**
+	 * Save Area in Department
+	 */
+	public function saveAreaInDepartment($areaId, $departmentId)
+	{
 		$departmentAreaService = new DepartmentAreaService();
 
 		return $departmentAreaService->save([
-				'department_id' => $area['department_id'],
-				'area_id'	=> $area_id
+				'department_id' => $departmentId,
+				'area_id'	=> $areaId
 			]);
+	}
+	/**
+	 * Delete Area
+	 *
+	 * @param Int $areaId
+	 */
+	public function delete($areaId)
+	{
+		$sql = "
+			DELETE
+			FROM
+				`areas`
+			WHERE
+				`areas`.`id` = $areaId
+		";
+
+		$this->connection->query($sql);
+	}
+
+	/**
+	 * Delete Area in Department
+	 *
+	 * @param Int $areaId
+	 */
+	public function deleteAreaFromDepartment($areaId)
+	{
+		$sql = "
+			DELETE
+			FROM
+				`department_areas`
+			WHERE
+				`department_areas`.`area_id` = $areaId
+		";
+
+		$this->connection->query($sql);
 	}
 }

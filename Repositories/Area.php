@@ -15,13 +15,14 @@ Class Area extends Base
 	/**
 	 * Get All Area With Department
 	 */
-	public function getAllAreaWithDeparment()
+	public function getAllAreaWithDeparment($areaId = false)
 	{
 		$query = "
 			SELECT 
 				`areas`.`name` as area_name,
 				`areas`.`id` as area_id,
-				`departments`.`name` as department_name
+				`departments`.`name` as department_name,
+				`departments`.`id` as department_id
 			FROM 
 				`department_areas`
 			JOIN
@@ -32,7 +33,18 @@ Class Area extends Base
 				`areas`
 			ON
 				`areas`.`id` = `department_areas`.`area_id`
+			WHERE
+				`areas`.`id` is not null
+			AND
+				`areas`.`deleted_at` is null
 		";
+
+		if ($areaId) {
+			$query .= "
+				AND
+					`areas`.`id` = $areaId
+			";
+		}
 
 		return $this->connection->query($query);
 	}

@@ -81,6 +81,25 @@ Class Base {
 
 		return $this->connection->query($sql) or die(mysqli_error($this->connection));
 	}
+
+	/**
+	 * Delete
+	 */
+	public function delete($where)
+	{
+		$sql = "
+			DELETE
+			FROM
+				`$this->table`
+			WHERE
+		";
+
+		$where = implode('AND', $where);
+
+		$sql .= $where;
+
+		die($sql);
+	}
 }
 
 ?>
