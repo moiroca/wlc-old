@@ -12,7 +12,7 @@ Class Requisitions extends Base
 	/**
 	 * Get All Stocks By Type
 	 */
-	public function getAllRequesition($type = false)
+	public function getAllRequesition($type = false, $filters = [])
 	{
     $sql = "SELECT 
                 `$this->table`.`id` as requisition_id,
@@ -33,16 +33,97 @@ Class Requisitions extends Base
               ON 
                 `users`.`id`=`$this->table`.`requester_id`
               JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              JOIN
                 `areas`
               ON
-                `$this->table`.`area_id` = `areas`.`id`";
+                `$this->table`.`area_id` = `areas`.`id`
+              WHERE
+                `users`.`id` IS NOT NULL";
 
     if ($type) {
         $sql .= "
-              WHERE
+              AND
                 `$this->table`.`type` = '".$type."'
           ";
     }
+
+    if (!$type && count($filters) != 0) {
+
+        if (isset($filters['requester_name'])) {
+            $sql .= "
+              AND
+                concat(`users`.`firstname`, `users`.`lastname`, `users`.`middlename`) like '%".$filters['requester_name']."%'
+            ";
+        } 
+
+        if (isset($filters['requisition_status'])) {
+          $statuses = RequisitionUtility::getRequisitionStatuses();
+          $status = (isset($statuses[$filters['requisition_status']])) ? $statuses[$filters['requisition_status']] : null;
+          
+          if ($status) {
+
+              $sql .= "
+                AND
+                  `requisition_status`.`status` = '".$status."'
+              ";
+          }
+        } 
+
+        if (isset($filters['requisition_type'])) {
+
+            if ($filters['requisition_type'] == 1) {
+              $type =  Constant::REQUISITION_JOB;
+            } else if ($filters['requisition_type'] == 2) {
+              $type = Constant::REQUISITION_ITEM;
+            } else {
+              $type = null;
+            }
+
+            if ($type) {
+
+                $sql .= "
+                    AND
+                      `$this->table`.`type` = '".$type."'
+                ";
+
+            }
+        }
+
+        if (isset($filters['start_date']) && isset($filters['end_date'])) {
+            $startDatetime = date_create($filters['start_date'])->format('Y-m-d H:i:s');
+            $endDatetime = date_create($filters['end_date'])->format('Y-m-d H:i:s');
+
+            $sql .= "
+                AND
+                  `$this->table`.`datetime_added` between '".$startDatetime."' and '".$endDatetime."'
+            ";
+        } else if (isset($filters['start_date']) && !isset($filters['end_date'])) {
+            $startDatetime = date_create($filters['start_date'])->format('Y-m-d H:i:s');
+
+            $sql .= "
+                AND
+                  `$this->table`.`datetime_added` > '".$startDatetime."'
+            ";
+        } else if (!isset($filters['start_date']) && isset($filters['end_date'])) {
+            $endDatetime = date_create($filters['end_date'])->format('Y-m-d H:i:s');
+            $sql .= "
+                AND
+                  `$this->table`.`datetime_added` < '".$endDatetime."'
+            ";
+        } else {
+
+        }
+    }
+
+    $sql .= "
+            GROUP BY `$this->table`.`control_identifier`
+            ORDER BY
+                `requisition_status`.`datetime_added` DESC";
+    
+    $query = $this->connection->query($sql) or die(mysqli_error($this->connection));
 		$result = $this->raw($sql);
 
 		return $result;

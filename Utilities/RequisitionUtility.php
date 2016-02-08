@@ -28,10 +28,15 @@ class RequisitionUtility
 	public static function getRequisitionStatuses()
 	{
 		return [
-			Constant::REQUISITION_APPROVED,
-			Constant::REQUISITION_PENDING,
-			Constant::REQUISITION_ONGOING,
-			Constant::REQUISITION_FINISHED,
+			Constant::VERIFIED_BY_PROPERTY_CUSTODIAN, 
+			Constant::DECLINED_BY_PROPERTY_CUSTODIAN, 
+			Constant::VERIFIED_BY_GSD_OFFICER, 
+			Constant::DECLINED_BY_GSD_OFFICER, 
+			Constant::ITEM_VERIFIED_BY_PRESIDENT,
+			Constant::DECLINED_BY_PRESIDENT,
+			Constant::RELEASED_BY_PROPERTY_CUSTODIAN,
+			Constant::RELEASED_BY_GSD_OFFICER,
+			Constant::RECEIVED_BY_REQUESTER,
 		];
 	}
 
