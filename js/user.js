@@ -39,4 +39,19 @@ $(document).ready(function() {
 			departmentHeadName.hide();
 		}
 	});
+
+	/**
+	 *
+	 */
+	$('#retainPassword').on('change', function() {
+		var userCredentials = $('#user_credentials'),
+			isRetainPasswod = $(this);
+
+		if (isRetainPasswod.is(':checked')) {
+			userCredentials.slideDown(1000);
+		} else {
+			userCredentials.slideUp(1000);
+		}
+
+	}).trigger('change');
 });

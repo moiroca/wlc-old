@@ -30,6 +30,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
         <?php 
 
             $result = $userObj->getAll([
+                'id',
                 'email',
                 'firstname as user_firstname',
                 'middlename',
@@ -67,21 +68,23 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           <tbody>
             <?php if ($result && 0 != $result->num_rows) { ?>
                 <?php  while ($user = $result->fetch_assoc()) { ?>
-                  <tr>
-                    <td><?php echo $user['type']; ?></td>
-                    <td><?php echo RequesterUtility::getFullName($user); ?></td>
-                    <td><?php echo $user['email']; ?></td>
-                    <td><?php echo UserUtility::formatStatus($user['status']); ?></td>
-                    <td><?php echo $user['datetime_added']; ?></td>
-                    <td>
-                        <a href="#" class='btn btn-sm btn-primary'>
-                          <i class='fa fa-pencil'> Edit</i>
-                        </a>
-                        <a href="#" class='btn btn-sm btn-warning'>
-                          <i class='fa fa-delete'>Delete</i>
-                        </a>
-                    </td>
-                  </tr>  
+                  <?php if ($user['type'] != Constant::USER_INVENTORY_OFFICER): ?>
+                    <tr>
+                      <td><?php echo $user['type']; ?></td>
+                      <td><?php echo RequesterUtility::getFullName($user); ?></td>
+                      <td><?php echo $user['email']; ?></td>
+                      <td><?php echo UserUtility::formatStatus($user['status']); ?></td>
+                      <td><?php echo $user['datetime_added']; ?></td>
+                      <td>
+                          <a href="<?php echo Link::createUrl('Pages/Users/update.php?user='.$user['id']); ?>" class='btn btn-sm btn-primary'>
+                            <i class='fa fa-pencil'> Edit</i>
+                          </a>
+                          <a href="#" class='btn btn-sm btn-warning'>
+                            <i class='fa fa-delete'>Delete</i>
+                          </a>
+                      </td>
+                    </tr>  
+                  <?php endif ?>
                 <?php } ?>
             <?php } else { ?>
                   <tr>
