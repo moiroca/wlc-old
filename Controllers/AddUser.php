@@ -79,7 +79,8 @@ Login::sessionStart();
                     'lastname' => $_POST['last_name'],
                     'firstname' => $_POST['first_name'],
                     'middlename' => $_POST['middle_name'],
-                    'type'  => $_POST['user_type']
+                    'type'  => $_POST['user_type'],
+                    'datetime_updated' => date_create()->format('Y-m-d H:i:s')
                 ];
 
                 if (!$isRetainPassword) {
@@ -151,7 +152,8 @@ Login::sessionStart();
                 'lastname' => $_POST['last_name'],
                 'firstname' => $_POST['first_name'],
                 'middlename' => $_POST['middle_name'],
-                'type'  => $_POST['user_type']
+                'type'  => $_POST['user_type'],
+                'datetime_updated' => date_create()->format('Y-m-d H:i:s')
               ];
 
               if (!$isRetainPassword) {
@@ -187,7 +189,8 @@ Login::sessionStart();
                 'lastname' => $_POST['last_name'],
                 'firstname' => $_POST['first_name'],
                 'middlename' => $_POST['middle_name'],
-                'type'  => $_POST['user_type']
+                'type'  => $_POST['user_type'],
+                'datetime_updated' => date_create()->format('Y-m-d H:i:s')
               ];
 
               if (!$isRetainPassword) {
@@ -223,7 +226,8 @@ Login::sessionStart();
                 'lastname' => $_POST['last_name'],
                 'firstname' => $_POST['first_name'],
                 'middlename' => $_POST['middle_name'],
-                'type'  => $_POST['user_type']
+                'type'  => $_POST['user_type'],
+                'datetime_updated' => date_create()->format('Y-m-d H:i:s')
               ];
 
               if (!$isRetainPassword) {
@@ -259,7 +263,8 @@ Login::sessionStart();
                 'lastname' => $_POST['last_name'],
                 'firstname' => $_POST['first_name'],
                 'middlename' => $_POST['middle_name'],
-                'type'  => $_POST['user_type']
+                'type'  => $_POST['user_type'],
+                'datetime_updated' => date_create()->format('Y-m-d H:i:s')
               ];
 
               if (!$isRetainPassword) {
@@ -295,7 +300,8 @@ Login::sessionStart();
                 'lastname' => $_POST['last_name'],
                 'firstname' => $_POST['first_name'],
                 'middlename' => $_POST['middle_name'],
-                'type'  => $_POST['user_type']
+                'type'  => $_POST['user_type'],
+                'datetime_updated' => date_create()->format('Y-m-d H:i:s')
               ];
 
               if (!$isRetainPassword) {
@@ -320,7 +326,8 @@ Login::sessionStart();
                 'lastname' => $_POST['last_name'],
                 'firstname' => $_POST['first_name'],
                 'middlename' => $_POST['middle_name'],
-                'type'  => $_POST['user_type']
+                'type'  => $_POST['user_type'],
+                'datetime_updated' => date_create()->format('Y-m-d H:i:s')
               ];
 
               if (!$isRetainPassword) {

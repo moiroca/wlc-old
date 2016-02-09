@@ -13,7 +13,7 @@ if (Login::checkIfUsernamePasswordSet()) {
 	Login::redirectToLogin();
 }
 
-$result = $db->query("SELECT * FROM users WHERE email = '".$username."' AND status = 'Active' AND password = '".md5($password)."' ") or die(mysqli_error($this->connection)); 
+$result = $db->query("SELECT * FROM users WHERE email = '".$username."' AND status = '".Constant::USER_ACTIVE."' AND password = '".md5($password)."' ") or die(mysqli_error($this->connection)); 
 if ($user = $result->fetch_assoc()){ 
 
 	Log::saveLogin($db, $user['id']);

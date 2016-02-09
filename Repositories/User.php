@@ -31,7 +31,6 @@ Class User extends Base
 				`users`.`email`= '".$email."'
 			";
 
-		die($sql);
 		return $this->raw($sql);
 	}
 }

@@ -79,7 +79,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                           <a href="<?php echo Link::createUrl('Pages/Users/update.php?user='.$user['id']); ?>" class='btn btn-sm btn-primary'>
                             <i class='fa fa-pencil'> Edit</i>
                           </a>
-                          <a href="#" class='btn btn-sm btn-warning'>
+                          <a href="<?php echo Link::createUrl('Pages/Users/delete.php?user='.$user['id']); ?>" class='btn btn-sm btn-warning'>
                             <i class='fa fa-delete'>Delete</i>
                           </a>
                       </td>
