@@ -17,8 +17,10 @@ class StockUtility
 	{
 		$statuses = [
 			Constant::STOCK_GOOD,
-			Constant::STOCK_REPAIR,
-			Constant::STOCK_REPLACE,
+			Constant::STOCK_NEW_CONDITION,
+			Constant::STOCK_FAIR_CONDITION,
+			Constant::STOCK_POOR_CONDITION,
+			Constant::STOCK_OBSOLETE
 		];
 
 		if (!$notDelete) {

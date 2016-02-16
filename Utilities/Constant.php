@@ -33,7 +33,13 @@ Class Constant {
 		STOCK_GOOD = 'Good Condition',
 		STOCK_REPAIR = 'For Repair',
 		STOCK_REPLACE = 'For Replace',
-		STOCK_DELETED = 'Deleted',
+		
+
+		STOCK_NEW_CONDITION  = 'New Condition',
+		STOCK_FAIR_CONDITION = 'Fair Condition',
+		STOCK_POOR_CONDITION = 'Poor Condition',
+		STOCK_DELETED 		 = 'Deleted',
+		STOCK_OBSOLETE		 = 'Obsolete',
 
 		//Stock Requisition Statuses
 		STOCK_APPROVED = 'Approved',
