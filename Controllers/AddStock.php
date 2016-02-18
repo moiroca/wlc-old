@@ -10,24 +10,29 @@ Login::sessionStart();
 
   if ($_POST['submit']) {
 
-      $stockServiceObj = new StockService();
+      $stockService = new StockService();
+      $actorId = Login::getUserLoggedInId();
+      $status = $_POST['status'];
 
-      $result = $stockServiceObj->save([
-                  'name'    => $_POST['name'],
-                  'quantity'=> $_POST['quantity'],
-                  'area_id' => $_POST['area_id'],
-                  'price'   => $_POST['price'],
-                  'status'  => $_POST['status'],
-                  'type'    => $_POST['type'],
-                  'unit'    => $_POST['unit'],
-                  'isRequest' => false
-                ]);
+      for ($i=1; $i <= $_POST['quantity']; $i++) { 
 
-      if ($result) {
-        $_SESSION['record_successful_added'] = true;      
-      } else {
-        $_SESSION['something_wrong'] = true;
+          // Save Stock
+          $stockId = $stockService->saveStock([
+                          'name'    => $_POST['name'],
+                          'price'   => $_POST['price'],
+                          'type'    => $_POST['type'],
+                          'unit'    => $_POST['unit'],
+                          'isRequest' => false
+                      ]);
+
+          // Save Stock Location
+          $stockService->saveStockLocation($stockId, $_POST['area_id'], $actorId);
+          
+          // Save Stock Status
+          $stockService->saveStockStatus($stockId, $status, $actorId);
       }
+
+      $_SESSION['record_successful_added'] = true;      
 
       if (isset($_POST['type'])) {
         if ($_POST['type'] == Constant::ITEM_MATERIAL_EQUIPMENT) {

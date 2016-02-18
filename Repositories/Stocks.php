@@ -9,6 +9,108 @@ Class Stocks extends Base
 		parent::__construct();
 	}
 
+  public function getStockById($id) { }
+  public function getCurrentItemType($id) { }
+  public function getStockByStatus($status) { }
+  public function getStockByControlNumber($controlNumber) { }
+  public function getAllRequestedStock() { }
+  public function getAllStocksByAreaId($id) { }
+  public function getAllStocksByDepartmentId($id) { }
+  public function getAllStockByRequisitionId($id) { }
+  public function getAllApprovedStockByItemRequisitionId($id) { }
+  public function getAllApprovedStockByJobRequisitionId($id) { }
+
+  /**
+   * Get Current Item Location
+   *
+   * @param Int $itemId
+   */
+  public function getStockCurrentLocation($itemId)
+  {
+     $sql = "
+        SELECT
+          `areas`.`name` as area_name,
+          `areas`.`id` as area_id
+        FROM
+          `area_items`
+        JOIN
+          `areas`
+        ON
+          `areas`.`id` = `area_items`.`area_id`
+        WHERE
+          `item_id` = $itemId
+        AND
+          `deleted_at` IS NULL
+     ";
+
+     return $this->connection->query($sql);
+  }
+
+  /**
+   * Get All Stock Locations
+   *
+   * @param Int $itemId
+   */
+  public function getStockLocations($itemId)
+  {
+      $sql = "
+        SELECT
+          `areas`.`name` as area_name,
+          `areas`.`id` as area_id,
+          `area_items`.`deleted_at` as area_items_deleted_at
+        FROM
+          `area_items`
+        JOIN
+          `areas`
+        ON
+          `areas`.`id` = `area_items`.`area_id`
+        WHERE
+          `item_id` = $itemId
+      ";
+     
+      return $this->connection->query($sql);
+  }
+
+  /**
+   * Get Current Item Status
+   *
+   * @param Int $itemIddeleted_at
+   */
+  public function getItemCurrentStatus($itemId)
+  {
+     $sql = "
+        SELECT
+          *
+        FROM
+          `stocks_status`
+        WHERE
+          `stock_id` = $itemId
+        AND
+          `deleted_at` IS NULL
+     ";
+
+     return $this->connection->query($sql);
+  }
+
+  /**
+   * Get All Stock Status
+   *
+   * @param Int $itemId
+   */
+  public function getStockStatus($itemId)
+  {
+      $sql = "
+        SELECT
+          *
+        FROM
+          `stocks_status`
+        WHERE
+          `stock_id` = $itemId
+      ";
+     
+      return $this->connection->query($sql);
+  }
+
 	/**
 	 * Get All Stocks By Type
 	 */
@@ -20,14 +122,10 @@ Class Stocks extends Base
                 COUNT(*) as stock_quantity
               FROM 
                 stocks 
-              WHERE 
-                status != 'Deleted'
-              AND
+              WHERE
                 `stocks`.`type` = '".$this->connection->real_escape_string($type)."'
-              AND
-                `stocks`.`isRequest` != 'TRUE'
               GROUP BY
-                `stocks`.`name`");
+                `stocks`.`name`, `stocks`.`datetime_added`");
 
 		return $result;
 	}
@@ -71,12 +169,11 @@ Class Stocks extends Base
    */
   public function getStocks($where)
   {
-      $sql  = "SELECT 
-                `stocks`.`control_number` as stock_control_number, 
-                `stocks`.`name` as stock_name, 
-                `stocks`.`status` as stock_status
-              FROM 
-                stocks";
+      $sql  = "
+        SELECT 
+          *
+        FROM 
+          `stocks`";
 
       foreach ($where as $index => $param) {
         $operator = ($param['isEqual']) ? '=' : '!=';
