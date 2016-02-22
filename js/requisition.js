@@ -39,7 +39,7 @@ var Requisition = function($){
 				}
 			});
 		},
-
+		
 		/**
 		 * Approve Requisition
 		 */

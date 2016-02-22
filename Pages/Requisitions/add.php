@@ -47,7 +47,10 @@ while ($area = $areas->fetch_assoc()) {
           <div class="panel-body">
             <fieldset>
                 <form id='requisition_form' action ="<?php echo Link::createUrl('Controllers/AddRequisition.php'); ?>" method="post">
-                    
+                    <div id="form-validation" class="alert alert-warning" style='display:none'>
+                        <i class="fa fa-warning"></i><b></b>
+                    </div>
+
                     <div class="control-group">
                         <label class='control-label' for="type">Requisition Type</label>
                         <select id='requisition_type' class='form-control' name='requisition_type' required>
@@ -61,6 +64,8 @@ while ($area = $areas->fetch_assoc()) {
 
                     <!-- Item Requisition -->
                     <div id="itemRequisition">
+
+
                         <div class="control-group" id='itemRequisitionType'>
                             <label class='control-label' for="type">Item Type</label>
                             <div class="row">

@@ -7,7 +7,7 @@ Login::sessionStart();
 ?>
 
 <?php 
-
+  
   if (isset($_POST['submit'])) {
 
       $requisitionServiceObj = new RequisitionService();
@@ -25,40 +25,51 @@ Login::sessionStart();
                     'area_id'   => $areaId
                   ]);
 
+      $requisitionServiceObj->saveRequisitionStatus(Login::getUserLoggedInId(), $requisition_id, Constant::REQUISITION_PENDING);
+
       $stockRequisitionService = new StockRequisitionService();
 
       if ($requisitionType == Constant::REQUISITION_JOB) {
 
-        $result = $stockRequisitionService->saveStockRequisition([
-                    'items' => $_POST['items'],
-                    'requisition_id' => $requisition_id,
-                    'statuses' => $_POST['statuses']
-                  ], true);
+        foreach ($_POST['items'] as $index => $item) {
+            $stockRequisitionService->saveStockRequisition([
+              'item'            => $item,
+              'requisition_id'  => $requisition_id,
+              'status'          => $_POST['statuses'][$index]
+            ], true);
+        }
 
-      } else if ($requisitionType == Constant::REQUISITION_ITEM) {
+      } else {
 
         $stockService = new StockService();
         $stockIds = [];
+        $actorId = Login::getUserLoggedInId();
 
-        foreach ($_POST['names'] as $index => $name) { 
-          $ids = $stockService->save([
-                        'name' => $_POST['names'][$index],
-                        'type' => $itemType,
-                        'price' => $_POST['amounts'][$index],
-                        'area_id' => $areaId,
-                        'quantity' => $_POST['quantities'][$index],
-                        'status' => Constant::STOCK_GOOD,
-                        'isRequest' => true,
-                        'unit'  => $_POST['units'][$index]
-                      ], true, $stockIds);
+        foreach ($_POST['names'] as $index => $name) {
+          for ($i = 1; $i <= $_POST['quantities'][$index] ; $i++) { 
+              $stockId = $stockService->saveStock([
+                            'control_number' => strtotime('+'.$i.' seconds'),
+                            'name'    => $_POST['names'][$index],
+                            'price'   => $_POST['amounts'][$index],
+                            'type'    => $itemType,
+                            'unit'    => $_POST['units'][$index],
+                            'isRequest' => true
+                        ]);
 
-          $stockIds = array_merge($stockIds, $ids);
+              // Save Stock Requisition 
+              $stockRequisitionService->saveStockRequisition([
+                          'item'            => $stockId,
+                          'requisition_id'  => $requisition_id,
+                          'status'          => Constant::STOCK_FOR_APPROVAL
+                        ]);
+
+              // Save Stock Location
+              $stockService->saveStockLocation($stockId, $areaId, $actorId);
+              
+              // Save Stock Status
+              $stockService->saveStockStatus($stockId, Constant::STOCK_NEW_CONDITION, $actorId);
+          }
         }
-
-        $result = $stockRequisitionService->saveStockRequisition([
-                    'items' => $stockIds,
-                    'requisition_id' => $requisition_id
-                  ]);
       }
 
       if ($requisition_id) {
@@ -73,7 +84,7 @@ Login::sessionStart();
           $userObj = new User();
 
           //--. .--//
-          if ($itemType == Constant::ITEM_MATERIAL_EQUIPMENT) {
+          if ($itemType == Constant::ITEM_MATERIAL_EQUIPMENT || $_POST['requisition_type'] == Constant::REQUISITION_JOB) {
             $users = $userObj->getAll(['id'], ['type' => Constant::USER_GSD_OFFICER]);
           } else {
             $users = $userObj->getAll(['id'], ['type' => Constant::USER_PROPERTY_CUSTODIAN]);
@@ -94,16 +105,7 @@ Login::sessionStart();
          $_SESSION['something_wrong'] = true;
       }
 
-      /*
-      if ($requisitionType == Constant::REQUISITION_JOB) {
-        $url = Link::createUrl('Pages/Requisitions/Jobs/listing.php');
-      } else {
-        $url = Link::createUrl('Pages/Requisitions/Items/listing.php');
-      }
-      */
-      $url = Link::createUrl('Pages/Requisitions/myrequisitions.php');
-      
-      header('location: '.$url);
+      header('location: '.Link::createUrl('Pages/Requisitions/myrequisitions.php'));
   }
 
 ?>

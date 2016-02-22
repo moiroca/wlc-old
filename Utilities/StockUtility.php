@@ -38,8 +38,8 @@ class StockUtility
 	public static function jobRequisitionStatusType()
 	{
 		$statuses = [
-			Constant::STOCK_REPAIR,
-			Constant::STOCK_REPLACE,
+			Constant::STOCK_FOR_REPLACEMENT,
+			Constant::STOCK_FOR_REPAIR,
 		];
 
 		return $statuses;

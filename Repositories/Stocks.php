@@ -17,8 +17,142 @@ Class Stocks extends Base
   public function getAllStocksByAreaId($id) { }
   public function getAllStocksByDepartmentId($id) { }
   public function getAllStockByRequisitionId($id) { }
-  public function getAllApprovedStockByItemRequisitionId($id) { }
-  public function getAllApprovedStockByJobRequisitionId($id) { }
+
+  /**
+   * Get All Approved And Received Stock By Job Requisition Id
+   *
+   * @param Int $requisitionId
+   */
+  public function getAllApprovedAndReceivedStockByJobRequisitionId($requisitionId) {
+    $sql = "
+            SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit,
+                `stock_requisitions`.`status` as stock_status
+              FROM 
+                `stocks`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              JOIN
+                `requisitions`
+              ON
+                `stock_requisitions`.`requisition_id` = `requisitions`.`id`
+              WHERE
+                `stock_requisitions`.`requisition_id` = $requisitionId
+              AND
+                `requisitions`.`type` = '".Constant::REQUISITION_JOB."'
+              AND
+                `stock_requisitions`.`status` IN ('".Constant::STOCK_REPAIRED."', '".Constant::STOCK_REPLACED."', '".Constant::STOCK_RECEIVED."')";
+
+     return $this->connection->query($sql);
+  }
+
+  /**
+   * Get All Approved Stock By Job Requisition Id
+   *
+   * @param Int $requisitionId
+   */
+  public function getAllApprovedStockByJobRequisitionId($requisitionId) {
+    $sql = "
+            SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit,
+                `stock_requisitions`.`status` as stock_status
+              FROM 
+                `stocks`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              JOIN
+                `requisitions`
+              ON
+                `stock_requisitions`.`requisition_id` = `requisitions`.`id`
+              WHERE
+                `stock_requisitions`.`requisition_id` = $requisitionId
+              AND
+                `requisitions`.`type` = '".Constant::REQUISITION_JOB."'
+              AND
+                `stock_requisitions`.`status` IN ('".Constant::STOCK_REPAIRED."', '".Constant::STOCK_REPLACED."')";
+
+     return $this->connection->query($sql);
+  }
+
+  /**
+   * Get All Approved Stock By Item Requisition Id
+   *
+   * @param Int $requisitionId
+   */
+  public function getAllApprovedStockByItemRequisitionId($requisitionId) { 
+      $sql = "
+            SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`price` as stock_price,
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit,
+                `stock_requisitions`.`status` as stock_status
+              FROM 
+                `stocks`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              JOIN
+                `requisitions`
+              ON
+                `stock_requisitions`.`requisition_id` = `requisitions`.`id`
+              WHERE
+                `stock_requisitions`.`requisition_id` = $requisitionId
+              AND
+                `requisitions`.`type` = '".Constant::REQUISITION_ITEM."'
+              AND
+                `stock_requisitions`.`status` IN ('".Constant::STOCK_APPROVED."', '".Constant::STOCK_RECEIVED."')";
+
+     return $this->connection->query($sql);
+  }
+
+  /**
+   * Get First Item Of Requisition
+   *
+   * @param Int $requisitionId
+   */
+  public function getFirstItemOfRequisition($requisitionId) 
+  { 
+    $sql = "
+      SELECT
+        `stocks`.`id` as stock_id,
+        `stocks`.`control_number` as stock_control_number,
+        `stocks`.`name` as stock_name,
+        `stocks`.`isRequest` as stock_isRequest,
+        `stocks`.`unit` as stock_unit,
+        `stocks`.`price` as stock_price,
+        `stocks`.`type` as stock_type
+      FROM
+        `stock_requisitions`
+      JOIN
+        `stocks`
+      ON
+        `stock_requisitions`.`stock_id` = `stocks`.`id`
+      WHERE
+        `stock_requisitions`.`requisition_id` = $requisitionId
+      LIMIT 1
+    ";
+
+    return $this->connection->query($sql);
+  }
 
   /**
    * Get Current Item Location
@@ -38,9 +172,9 @@ Class Stocks extends Base
         ON
           `areas`.`id` = `area_items`.`area_id`
         WHERE
-          `item_id` = $itemId
+          `area_items`.`item_id` = $itemId
         AND
-          `deleted_at` IS NULL
+          `area_items`.`deleted_at` IS NULL
      ";
 
      return $this->connection->query($sql);
@@ -86,7 +220,7 @@ Class Stocks extends Base
         WHERE
           `stock_id` = $itemId
         AND
-          `deleted_at` IS NULL
+          `stocks_status`.`deleted_at` IS NULL
      ";
 
      return $this->connection->query($sql);
@@ -141,7 +275,6 @@ Class Stocks extends Base
                 `stocks`.`type` as stock_type,
                 `stocks`.`control_number` as stock_control_number,
                 `stocks`.`name` as stock_name,
-                `stocks`.`status` as stock_status,
                 `areas`.`name` as area_name
               FROM 
                 stocks
@@ -153,6 +286,56 @@ Class Stocks extends Base
                 status != 'Deleted'
               AND
                 `stocks`.`isRequest` != 'TRUE'
+              AND
+                `stocks`.`control_number` 
+                LIKE '%".$this->connection->real_escape_string($contolNumber)."%'") or die(mysqli_error($this->connection));
+
+    return $result;
+  }
+
+  /**
+   * Get Item By Control Number
+   */
+  public function searchItemForJobRequisition($contolNumber)
+  {
+    $result = $this->raw("
+              SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks_status`.`status` as stock_status
+              FROM 
+                `stocks`
+              JOIN
+                `stocks_status`
+              ON
+                `stocks_status`.`stock_id`=`stocks`.`id`
+              WHERE
+                `stocks`.`isRequest` != 'TRUE'
+              AND
+                `stocks_status`.`deleted_at` IS NULL
+              AND
+                `stocks_status`.`status` != '".Constant::STOCK_OBSOLETE."'
+              AND
+                `stocks`.`id` NOT IN (
+                    SELECT 
+                      `stock_id` as id
+                    FROM
+                      `stock_requisitions`
+                    JOIN
+                      `requisitions`
+                    ON
+                      `requisitions`.`id` = `stock_requisitions`.`requisition_id`
+                    JOIN
+                      `requisition_status`
+                    ON
+                      `requisitions`.`id` = `requisition_status`.`requisition_id`
+                    WHERE
+                      `requisition_status`.`status` != '".Constant::RECEIVED_BY_REQUESTER."'
+                    AND
+                      `requisition_status`.`datetime_deleted` IS NULL
+                  )
               AND
                 `stocks`.`control_number` 
                 LIKE '%".$this->connection->real_escape_string($contolNumber)."%'") or die(mysqli_error($this->connection));
@@ -189,6 +372,17 @@ Class Stocks extends Base
   }
 
   /**
+   * Search Item in Stocks By Name For Item Requisition
+   *
+   * @param Int $requisitionId
+   * @param String $itemName
+   */
+  public function searchItemInStocksByNameForItemRequisition($requisitionId, $itemName)
+  {
+    # code...
+  }
+
+  /**
    * Get Stock By Requisition Id
    *
    * @param int $requisitionId
@@ -201,7 +395,6 @@ Class Stocks extends Base
                 `stocks`.`type` as stock_type,
                 `stocks`.`control_number` as stock_control_number,
                 `stocks`.`name` as stock_name,
-                `stocks`.`status` as stock_status,
                 `stocks`.`price` as stock_price,
                 `stocks`.`isRequest` as stock_isRequest,
                 `stocks`.`unit` as stock_unit,     
@@ -235,7 +428,7 @@ Class Stocks extends Base
 
         $sql  .="
               WHERE 
-                `stocks`.`status` != 'Deleted'
+                `stocks`.`id` IS NOT NULL
                 ";
         if (!$stockName) {
         
@@ -267,6 +460,7 @@ Class Stocks extends Base
                 ";
         }
 
+        // $this->connection->query($sql) or die(mysqli_error($this->connection));
         $result = $this->raw($sql);
 
         return $result;
@@ -280,11 +474,10 @@ Class Stocks extends Base
                 `stocks`.`type` as stock_type,
                 `stocks`.`control_number` as stock_control_number,
                 `stocks`.`name` as stock_name,
-                `stocks`.`status` as stock_status,
                 `stocks`.`price` as stock_price,
                 `stocks`.`isRequest` as stock_isRequest,
                 `stocks`.`unit` as stock_unit,
-                `stock_requisitions`.`changeTo` as stock_update
+                `stock_requisitions`.`status` as stock_status
               FROM 
                 `stocks`
               JOIN
@@ -295,17 +488,180 @@ Class Stocks extends Base
                 `requisitions`
               ON
                 `stock_requisitions`.`requisition_id` = `requisitions`.`id`
-              WHERE 
-                `stocks`.`status` != 'Deleted'
-              AND
+              WHERE
                 `stock_requisitions`.`requisition_id` = $requisitionId
               AND
                 `requisitions`.`type` = '".Constant::REQUISITION_JOB."'
                 ";
 
-       return $this->raw($sql);
+        return $this->raw($sql);
   } 
 
+  /**
+   * Search Item By Name
+   */
+  public function getAllStockByName($stockName)
+  { 
+      $query = "
+              SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks_status`.`status` as stock_status,
+                count(*) as count_stocks,
+                `stocks`.`unit` as stock_unit
+              FROM 
+                `stocks`
+              JOIN
+                `stocks_status`
+              ON
+                `stocks_status`.`stock_id` = `stocks`.`id`
+              WHERE
+                `stocks`.`isRequest` != 'TRUE'
+              AND
+                `stocks_status`.`deleted_at` IS NULL
+              AND
+                `stocks_status`.`status` != '".Constant::STOCK_OBSOLETE."'
+              AND
+                `stocks`.`id` NOT IN (
+                    SELECT 
+                      `stock_id` as id
+                    FROM
+                      `stock_requisitions`
+                    JOIN
+                      `requisitions`
+                    ON
+                      `requisitions`.`id` = `stock_requisitions`.`requisition_id`
+                    JOIN
+                      `requisition_status`
+                    ON
+                      `requisitions`.`id` = `requisition_status`.`requisition_id`
+                    WHERE
+                      `requisition_status`.`status` != '".Constant::RECEIVED_BY_REQUESTER."'
+                    AND
+                      `requisition_status`.`datetime_deleted` IS NULL
+                  )
+              AND
+                `stocks`.`name` 
+                LIKE '%".$this->connection->real_escape_string(trim($stockName))."%'
+              GROUP BY
+                `stocks`.`name`, `stocks`.`unit`, `stocks`.`type`";
+
+      // Not Included in a Job Requisition 
+      // But if included Job Requisition, 
+      // Job Requisition Status Must Be Received by Requester
+      // And Stock Status Must not be Obsolete
+
+      /*
+      $sql = "
+              SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`price` as stock_price,
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit,
+                `stock_requisitions`.`status` as stock_status,
+                count(*) as count_stocks
+              FROM 
+                `stocks`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              JOIN
+                `requisitions`
+              ON
+                `stock_requisitions`.`requisition_id` = `requisitions`.`id`
+              WHERE
+                `stock_requisitions`.`requisition_id` = $requisitionId
+              AND
+                `requisitions`.`type` = '".Constant::REQUISITION_ITEM."'
+              GROUP BY
+                `stocks`.`name`";
+      */
+      return $this->connection->query($query); //or die(mysqli_error($this->connection));
+  } 
+
+  /**
+   * Get All Stock By Item Requisition Id
+   * 
+   * @param Int $requisitionId
+   */
+  public function getAllStockByRequisitionIdTypeITEM($requisitionId)
+  {
+      $sql = "
+              SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`price` as stock_price,
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit,
+                `stock_requisitions`.`status` as stock_status,
+                count(*) as count_stocks
+              FROM 
+                `stocks`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              JOIN
+                `requisitions`
+              ON
+                `stock_requisitions`.`requisition_id` = `requisitions`.`id`
+              WHERE
+                `stock_requisitions`.`requisition_id` = $requisitionId
+              AND
+                `requisitions`.`type` = '".Constant::REQUISITION_ITEM."'
+              GROUP BY
+                `stocks`.`name`";
+
+        return $this->raw($sql);
+  } 
+
+  /**
+   * Get All Approved Item And Attached Item in Requisition
+   *
+   * @param Int $int
+   */
+  public function getAllApprovedAndAttachedItemInRequisition($requisitionId)
+  {
+     $sql = "
+            SELECT 
+                `stocks`.`id` as stock_id,
+                `stocks`.`type` as stock_type,
+                `stocks`.`control_number` as stock_control_number,
+                `stocks`.`name` as stock_name,
+                `stocks`.`price` as stock_price,
+                `stocks`.`isRequest` as stock_isRequest,
+                `stocks`.`unit` as stock_unit,
+                `stock_requisitions`.`status` as stock_status,
+                count(*) as count_stocks
+              FROM 
+                `stocks`
+              JOIN
+                `stock_requisitions`
+              ON
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              JOIN
+                `requisitions`
+              ON
+                `stock_requisitions`.`requisition_id` = `requisitions`.`id`
+              WHERE
+                `stock_requisitions`.`requisition_id` = $requisitionId
+              AND
+                `requisitions`.`type` = '".Constant::REQUISITION_ITEM."'
+              AND
+                `stock_requisitions`.`status` = '".Constant::STOCK_APPROVED."'
+              GROUP BY
+                `stocks`.`name`";
+
+     return $this->connection->query($sql);
+  }
   /**
    * Get All Stocks By Type
    */

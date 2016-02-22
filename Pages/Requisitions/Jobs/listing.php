@@ -51,9 +51,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
               <tr id='th'>
                   <th> Control Identifier </th>
                   <th> Requester Name </th>
-                  <!-- <th> Department Head Details </th> -->
                   <th> GSD Officer Details</th>
-                  <!-- <th> Treasurer Details</th> -->
                   <th> President Details</th>
                   <th> Status </th>
                   <?php if (UserUtility::isApprover(Login::getUserLoggedInType())): ?>
@@ -74,19 +72,9 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                   ?>
                   <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                     <td> 
-                        <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
+                        <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier'].'&requisition='.'Job'); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
                     </td>
                     <td> <?php echo RequesterUtility::getFullName($item); ?></td>
-                    <!-- <td>
-                        <?php
-                            $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::NOTED_BY_DEPARTMENT_HEAD, Constant::DECLINED_BY_DEPARTMENT_HEAD], true);
-                        ?>
-                        <?php if ($actor) { ?>
-                              <?php echo RequesterUtility::getFullName($actor);  ?>
-                        <?php } else { ?>
-                            <label class='label label-info'>Not Available</label>
-                        <?php } ?>
-                    </td> -->
                     <td>
                         <?php 
                               $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::VERIFIED_BY_GSD_OFFICER, Constant::DECLINED_BY_GSD_OFFICER], true);
@@ -97,16 +85,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             <label class='label label-info'>Not Available</label>
                         <?php } ?>
                     </td>
-                    <!-- <td>
-                        <?php 
-                              $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::APPROVED_BY_TREASURER, Constant::DECLINED_BY_TREASURER], true);
-                        ?>
-                        <?php if ($actor) { ?>
-                            <?php echo RequesterUtility::getFullName($actor); ?>
-                        <?php } else { ?>
-                            <label class='label label-info'>Not Available</label>
-                        <?php } ?>
-                    </td> -->
                     <td>
                         <?php 
                               $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::APPROVED_BY_PRESIDENT, Constant::DECLINED_BY_PRESIDENT], true);
@@ -131,9 +109,14 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                         </td> -->
                     <?php elseif (Login::getUserLoggedInType() == Constant::USER_PROPERTY_CUSTODIAN || Login::getUserLoggedInType() == Constant::USER_GSD_OFFICER): ?>
                         <td> 
-                          <?php if (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($requisitionCurrentStatus)): ?>
-                            <a style='margin-bottom: 5px;' href="javascript:void(0)" class='btn btn-large btn-primary approve_item_requisition'> <i class='fa fa-thumbs-up'></i> Verify</a>
-                            <a href="javascript:void(0)" class='btn btn-sm btn-warning decline_requisition'> <i class='fa fa-thumbs-down'></i> Decline</a>
+                          <?php if ($requisitionCurrentStatus == Constant::APPROVED_BY_PRESIDENT): ?>
+                            <a class='btn btn-large btn-info' title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier'].'&requisition='.'Job'); ?>">
+                                RELEASE ITEMS
+                            </a>
+                          <?php elseif (!RequisitionUtility::isRequisitionActionedByPropertyCustodianOrGSDOfficer($requisitionCurrentStatus) || $requisitionCurrentStatus == Constant::APPROVED_BY_PRESIDENT): ?>
+                            <a class='btn btn-large btn-primary' title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier'].'&requisition='.'Job'); ?>">
+                                View Items
+                            </a>
                           <?php else: ?>
                             <label class="label label-info">No Actions Found</label>
                           <?php endif ?>

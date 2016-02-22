@@ -174,8 +174,26 @@ class RequisitionUtility
 	{
 		return in_array($status, [
 				Constant::APPROVED_BY_PRESIDENT,
-
 				Constant::DECLINED_BY_PRESIDENT,
 			]);
 	}
+
+	public static function getRequisitionStockStatuses($pending = true)
+	{
+		if ($pending) {
+			return [
+				Constant::STOCK_DECLINED,
+				Constant::STOCK_FOR_REPLACEMENT,
+				Constant::STOCK_FOR_REPAIR
+			];
+		} else {
+			return [
+				Constant::STOCK_REPLACED,
+				Constant::STOCK_FOR_REPLACEMENT,
+				Constant::STOCK_FOR_REPAIR,
+				Constant::STOCK_REPAIRED,
+			];
+		}
+	}
 }
+	

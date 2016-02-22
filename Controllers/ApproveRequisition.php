@@ -31,7 +31,7 @@ if (isset($_POST['requisition_id'])) {
 	//--. Get Requisition Current Status .--//
     $requisitionCurrentStatus = $requisitionObj->getCurrentRequisitionStatus($requisitionId);
 
-    if ($requisitionCurrentStatus == Constant::APPROVED_BY_PRESIDENT || $requisitionCurrentStatus == Constant::ITEM_VERIFIED_BY_PRESIDENT) {
+    if ($requisitionCurrentStatus == Constant::APPROVED_BY_PRESIDENT) {
     	
     	//--. Release Item Requisition .--//
     	$requisitionService->release($data);	
@@ -42,7 +42,7 @@ if (isset($_POST['requisition_id'])) {
           'msg'          => Constant::NOTIFICATION_RELEASED
         ]);
 
-    } elseif($requisitionCurrentStatus == Constant::RELEASED_BY_GSD_OFFICER || $requisitionCurrentStatus == Constant::RELEASED_BY_PROPERTY_CUSTODIAN) {
+    } elseif ($requisitionCurrentStatus == Constant::RELEASED_BY_GSD_OFFICER || $requisitionCurrentStatus == Constant::RELEASED_BY_PROPERTY_CUSTODIAN) {
 
     	//--. Receive Item Requisition .--//
 		if (isset($_POST['itemIds'])) {

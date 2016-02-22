@@ -24,28 +24,18 @@ Login::sessionStart();
       if (!isset($_POST['username'])) { $errors['username'] = 'Username is Required'; 
       } else {
 
-        if (isset($_POST['user_id']) && !$isRetainPassword) {
+        //--. Check if Username Already Exist For Updating Account.--//  
+        if (isset($_POST['user_id'])) {
 
-          //--. Check if Username Already Exist .--//
-          $checkedUser = $userRepo->findNotUser(
-              (int)$_POST['user_id'],
-              $_POST['username']
-            );
+          if ($isRetainPassword) {
 
-          if ($checkedUser && $checkedUser->num_rows != 0) {
-              $errors['username'] = 'Username already Exist';
+            $checkedUser = $userRepo->getAllUserExceptThisUserByUserId((int)$_POST['user_id'], $_POST['username']);
+            if ($checkedUser && 0 != $checkedUser->num_rows) { $errors['username'] = 'Username already Exist'; }
           }
         } else {
 
-          if (!isset($_POST['user_id'])) {
-            //--. Check if Username Already Exist .--//
-            $checkedUser = $userRepo->getAll(['count(*) as user_count'], ['email' => $_POST['username']]);  
-            $checkedUser = $checkedUser->fetch_assoc();
-
-            if ($checkedUser && 0 != $checkedUser['user_count']) {
-              $errors['username'] = 'Username already Exist';
-            }
-          }
+          $checkedUser = $userRepo->getUserByUsername($_POST['username']);  
+          if ($checkedUser && 0 != $checkedUser->num_rows) { $errors['username'] = 'Username already Exist'; }
         }
       }
 
@@ -60,15 +50,10 @@ Login::sessionStart();
       }
 
       // End Of Validation
-
       if (!$errors) { 
 
         $userService = new UserService();
         $result      = false;
-
-        // if (isset($_POST['user_id'])) {
-          
-        // } else {
 
           //--. Save New Department Head .--//
           if ($_POST['user_type'] == Constant::USER_DEPARTMENT_HEAD) {
@@ -88,15 +73,10 @@ Login::sessionStart();
                   $data['password'] = $_POST['password'];
                 }
 
-                $userId = $userRepo->update($data,[
-                      'id' => $_POST['user_id']
-                  ]);
-
+                $userId = $userRepo->update($data,[ 'id' => $_POST['user_id'] ]);
                 $userId = (int)$_POST['user_id'];
 
-              } else {
-                $userId = $userService->save($_POST);
-              }
+              } else { $userId = $userService->save($_POST); }
 
               $departmentRepo = new Department();
               $departmentService = new DepartmentService();
@@ -108,17 +88,14 @@ Login::sessionStart();
 
                   //--. Update User .--//
                   $updateUserType = $userRepo->update(
-                      [ 
-                        'type' => Constant::USER_EMPLOYEE 
-                      ],
-                      [ 
-                        'id' => (int)$departmentHead['user_id'] 
-                      ]);
+                      [ 'type' => Constant::USER_EMPLOYEE ],
+                      [ 'id'   => (int)$departmentHead['user_id'] 
+                  ]);
                   
                   $departmentService->updateDepartmentHead([
-                      'user_id' => $departmentHead['user_id'],
+                      'user_id'       => $departmentHead['user_id'],
                       'department_id' => (int)$_POST['department_id']
-                    ]);
+                  ]);
               }
 
               if (!isset($departmentHead['user_id']) || 
@@ -149,21 +126,20 @@ Login::sessionStart();
 
             if (isset($_POST['user_id'])) {
               $data = [
-                'lastname' => $_POST['last_name'],
-                'firstname' => $_POST['first_name'],
-                'middlename' => $_POST['middle_name'],
-                'type'  => $_POST['user_type'],
-                'datetime_updated' => date_create()->format('Y-m-d H:i:s')
+                'lastname'          => $_POST['last_name'],
+                'firstname'         => $_POST['first_name'],
+                'middlename'        => $_POST['middle_name'],
+                'type'              => $_POST['user_type'],
+                'datetime_updated'  => date_create()->format('Y-m-d H:i:s')
               ];
 
               if (!$isRetainPassword) {
-                $data['email'] = $_POST['username'];
+                $data['email']    = $_POST['username'];
                 $data['password'] = $_POST['password'];
               }
 
-              $userId = $userRepo->update($data,[
-                  'id' => $_POST['user_id']
-              ]);       
+              $userId = $userRepo->update($data,[ 'id' => $_POST['user_id'] ]);       
+
             } else {
               //--. Save New User .--//
               $userId = $userService->save($_POST);

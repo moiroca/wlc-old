@@ -18,6 +18,7 @@ Login::sessionStart();
 
           // Save Stock
           $stockId = $stockService->saveStock([
+                          'control_number' => strtotime('+'.$i.' seconds'),
                           'name'    => $_POST['name'],
                           'price'   => $_POST['price'],
                           'type'    => $_POST['type'],

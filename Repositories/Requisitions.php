@@ -9,6 +9,46 @@ Class Requisitions extends Base
 		parent::__construct();
 	}
 
+  /**
+   * Get Requisition By Id
+   */ 
+  public function getRequisitionById($requisitionId)
+  {
+    $sql = "
+        SELECT
+          *
+        FROM
+          `requisitions`
+        WHERE
+          `requisitions`.`id` = $requisitionId
+        LIMIT 1
+    ";
+    
+    return $this->connection->query($sql);  
+  }
+
+  /**
+   * Get Item By Item Id and Requisition Id
+   *
+   * @param Int $itemId
+   * @param Int $requisitionId
+   */
+  public function getAllRequisitionItemsByItemIdAndRequisitionId($itemId, $requisitionId)
+  {
+    $sql = "
+      SELECT
+        *
+      FROM 
+        `stock_requisitions`
+      WHERE
+        `stock_requisitions`.`stock_id` = $itemId
+      AND
+        `stock_requisitions`.`requisition_id` = $requisitionId
+      LIMIT 1
+    ";
+
+    return $this->connection->query($sql);
+  }
 	/**
 	 * Get All Stocks By Type
 	 */
@@ -269,15 +309,10 @@ Class Requisitions extends Base
           `requisition_status`.`status` as status
         FROM
           `requisition_status`
-        JOIN
-          `users`
-        ON
-          `users`.`id` = `requisition_status`.`user_id`
         WHERE
           `requisition_status`.`requisition_id` = $requisitionId
-        ORDER BY
-          `requisition_status`.`datetime_added` DESC
-        LIMIT 1
+        AND
+          `requisition_status`.`datetime_deleted` IS NULL
      ";
 
      $requisition = $this->connection->query($sql);
@@ -392,7 +427,7 @@ Class Requisitions extends Base
           WHERE
             `stock_requisitions`.`requisition_id` = $requisitionId
           AND
-            `stocks`.`name` like '%".$stockName."%'
+            `stocks`.`name` like '%".trim($stockName)."%'
       ";
 
       return $this->raw($sql);
@@ -438,52 +473,42 @@ Class Requisitions extends Base
                 `$this->table`.`type` = '".$requisitionType."'
           ";
       } elseif ($userType == Constant::USER_GSD_OFFICER || $userType == Constant::USER_PROPERTY_CUSTODIAN) {
-          //-----------------------------------
-          // Query To Get Requisition Noted By Department Head
-          // Please Do not delete this query
-          //-----------------------------------
-
-          /*
-          $sql .= "
-              LEFT JOIN
-                `requisition_status`
-              ON
-                `requisition_status`.`requisition_id` = `$this->table`.`id`
-              WHERE
-                `requisition_status`.`status` = '".CONSTANT::NOTED_BY_DEPARTMENT_HEAD."'
-              AND
-                `$this->table`.`type` = '".$requisitionType."'
-          ";
-          */
 
           $sql .= "
-              LEFT JOIN
-                `requisition_status`
-              ON
-                `requisition_status`.`requisition_id` = `$this->table`.`id`
               JOIN
+                `requisition_status`
+              ON
+                `requisition_status`.`requisition_id` = `$this->table`.`id`
+              RIGHT JOIN
                 `stock_requisitions`
               ON
                 `stock_requisitions`.`requisition_id` = `$this->table`.`id`
-              JOIN 
+              RIGHT JOIN
                 `stocks`
               ON
-                `stocks`.`id` = `stock_requisitions`.`stock_id`
-              WHERE 
-                `stocks`.`status` != 'Deleted'
+                `stock_requisitions`.`stock_id` = `stocks`.`id`
+              WHERE
+                `requisition_status`.`datetime_deleted` IS NULL
               AND
                 `$this->table`.`type` = '".$requisitionType."'
           ";
 
-          if ($userType == Constant::USER_GSD_OFFICER) {
-              $sql .= "
-                  AND `stocks`.`type` = '".Constant::ITEM_MATERIAL_EQUIPMENT."' 
-              ";
+          if ($requisitionType == Constant::REQUISITION_JOB) {
+            
           } else {
+            if ($userType == Constant::USER_GSD_OFFICER) {  
               $sql .= "
-                  AND `stocks`.`type` = '".Constant::ITEM_OFFICE_SUPPLY."' 
+                AND
+                  `stocks`.`type` =  '".Constant::ITEM_MATERIAL_EQUIPMENT."'
               ";
+            } else {
+              $sql .= "
+                AND
+                  `stocks`.`type` =  '".Constant::ITEM_OFFICE_SUPPLY."'
+              ";
+            }
           }
+
 
       } elseif ($userType == Constant::USER_TREASURER) {
           $sql .= "
@@ -547,12 +572,13 @@ Class Requisitions extends Base
 
       } else {
           $sql .= "
-              LEFT JOIN
+              JOIN
                 `requisition_status`
               ON
                 `requisition_status`.`requisition_id` = `$this->table`.`id`
               WHERE
                 `$this->table`.`requester_id` = $userId
+
           ";
       }
 

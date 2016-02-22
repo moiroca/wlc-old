@@ -31,8 +31,12 @@ Class Constant {
 
 		// Stock Status
 		STOCK_GOOD = 'Good Condition',
-		STOCK_REPAIR = 'For Repair',
-		STOCK_REPLACE = 'For Replace',
+		STOCK_FOR_REPAIR = 'For Repair',
+		STOCK_REPAIRED = 'Repaired',
+		STOCK_FOR_APPROVAL = 'For Approval',
+		STOCK_FOR_REPLACEMENT = 'For Replacement',
+		STOCK_REPLACED = 'Replaced',
+		STOCK_DECLINED = 'Declined',
 		
 
 		STOCK_NEW_CONDITION  = 'New Condition',
@@ -41,7 +45,7 @@ Class Constant {
 		STOCK_DELETED 		 = 'Deleted',
 		STOCK_OBSOLETE		 = 'Obsolete',
 
-		//Stock Requisition Statuses
+		// Stock Requisition Statuses
 		STOCK_APPROVED = 'Approved',
 		STOCK_RECEIVED = 'Received',
 

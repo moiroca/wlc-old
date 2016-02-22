@@ -12,13 +12,98 @@ Class User extends Base
 		parent::__construct();
 	}
 
-	/**
-	 * Get All Data
+	/** 
+	 * Get All User
 	 *
-	 * @param Int $userId
-	 * @param String $email
+	 * @return Mysqli Connection
 	 */
-	public function findNotUser($userId, $email)
+	public function getAllUser() 
+	{ 
+		$sql = "
+			SELECT 
+				*
+			FROM
+				`users`
+		";
+
+		return $this->connection->query($sql);
+	}
+
+	/**
+	 * Get User By Username
+	 *
+	 * @param String $username
+	 *
+	 * @return Mysqli
+	 */
+	public function getUserByUsername($username) { 
+
+		$sql = "
+			SELECT
+				*
+			FROM
+				`users`
+			WHERE
+				`users`.`email` = '".$username."'
+			LIMIT 1
+		";
+
+		return $this->connection->query($sql);
+	}
+
+	/**
+	 * Get User By Id
+	 */
+	public function getUserById($id) { 
+		
+		$sql = "
+			SELECT
+				*
+			FROM
+				`users`
+			WHERE
+				`users`.`id` = '".$id."'
+			LIMIT 1
+		";
+
+		return $this->connection->query($sql);
+	}
+
+	public function getCurrentDepartmentOfUserByUserId($id) { }
+	public function getUserByDepartmentByDepartmentId($id) { }
+	public function getUserByStatus($status) { }
+	public function searchUserByName($name) { }
+
+	/**
+	 * Get User By Type
+	 *
+	 * @param String $userType
+	 * 
+	 * @return Mysqli Query
+	 */
+	public function getUserByType($userType) { 
+
+		$sql = "
+			SELECT
+				*
+			FROM
+				`users`
+			WHERE
+				`users`.`type` = '".$userType."'
+		";
+
+		return $this->connection->query($sql);
+	}
+
+	/** 
+	 * Get All User Except This User By User Id
+	 *
+	 * @param Int $id
+	 * @param String $email
+	 *
+	 * @return Myqsli Connection
+	 */
+	public function getAllUserExceptThisUserByUserId($id, $email)
 	{
 		$sql = "
 			SELECT 
@@ -26,11 +111,11 @@ Class User extends Base
 			FROM 
 				users 
 			WHERE 
-				`users`.`id` != $userId
+				`users`.`id` != $id
 			AND
 				`users`.`email`= '".$email."'
-			";
+		";
 
-		return $this->raw($sql);
+		return $this->connection->query($sql);
 	}
 }

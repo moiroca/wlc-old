@@ -84,7 +84,7 @@ class StockService
 					isRequest,
 					datetime_added) 
 			VALUES (
-				".time().",
+				'".$this->connection->real_escape_string($data['control_number'])."',
 				'".$this->connection->real_escape_string($data['name'])."',
 				'".$this->connection->real_escape_string($data['type'])."',
 				'".$this->connection->real_escape_string($data['price'])."',
@@ -126,7 +126,18 @@ class StockService
 	 */
 	public function updateStockLocation($itemId, $areaId)
 	{
-		
+		$sql = "
+			UPDATE
+				`area_items`
+			SET
+				`area_items`.`deleted_at` = '".date_create()->format('Y-m-d H:i:s')."'
+			WHERE
+				`area_items`.`item_id` = $itemId
+			AND
+				`area_items`.`area_id` = $areaId
+		";
+
+		return $this->connection->query($sql);
 	}
 
 	/**
@@ -157,9 +168,39 @@ class StockService
 	 * @param Int $itemId
 	 * @param String $status
 	 */
-	public function updateStockStatus($itemId, $status)
+	public function updateStockStatus($itemId)
 	{
-		
+		$sql = "
+			UPDATE
+				`stocks_status`
+			SET
+				`stocks_status`.`deleted_at` = '".date_create()->format('Y-m-d H:i:s')."'
+			WHERE
+				`stocks_status`.`stock_id` = $itemId
+			AND
+				`stocks_status`.`deleted_at` IS NULL
+		";
+
+		return $this->connection->query($sql);
 	}
 
+	/**
+	 * Save Replaced Item
+	 *
+	 * @param Int $replacedItemId
+	 * @param Int $replacementItemId
+	 */
+	public function saveReplacementItem($replacedItemId, $replacementItemId)
+	{
+		$sql = "
+			INSERT
+			INTO
+				`item_replacement`
+				(replaced_item_id, replacement_item_id, created_at)
+			VALUES
+				($replacedItemId, $replacementItemId, '".date_create()->format('Y-m-d H:i:s')."')
+		";
+
+		return $this->connection->query($sql);
+	}
 }

@@ -356,7 +356,15 @@
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="<?php echo Link::createUrl('Pages/Reports/list.php'); ?>"><i class="fa fa-edit fa-fw"></i> Reports</a>
+                                <a href="#"><i class="fa fa-table fa-fw"></i> Reports<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="<?php echo Link::createUrl('Pages/Reports/requisition.php'); ?>"> Requisition</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> Stocks</a>
+                                    </li>
+                                </ul>
                             </li>
                         <?php } ?>
                         

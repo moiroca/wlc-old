@@ -58,6 +58,27 @@ class NotificationService
 
 		$this->connection->query($sql) or die(mysqli_error($this->connection));;		
 	}
+
+	/**
+	 * Notify President
+	 *
+	 * @param Array $data
+	 */
+	public function notifyPresident($data)
+	{
+		$userRepo = new User();
+		$fetch_president = $userRepo->getUserByType(Constant::USER_PRESIDENT);
+
+		if ($fetch_president->num_rows != 0) {
+			$president = $fetch_president->fetch_assoc();
+
+			return $this->saveNotification(array_merge([
+					'recepient_id' => $president['id']
+				],
+				$data));
+		} else 
+			return;
+	}
 }
 
 ?>

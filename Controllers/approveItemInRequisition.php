@@ -6,7 +6,7 @@ Login::sessionStart();
 $stocksRepo = new Stocks();
 $stockRequisitionService = new StockRequisitionService();
 $requisitionService = new RequisitionService();
-// $stockIds = isset($_POST['stockIds']) ? $_POST['stockIds'] : null;
+
 $requisitionRepo = new Requisitions();
 $requisitionId = (int)$_POST['requisitionId'];
 $requisition = $requisitionRepo->getAll(['requester_id'], ['id' => $requisitionId]);
@@ -17,6 +17,7 @@ $formItems = $_POST['items'];
 $formItems = array_reverse($formItems);
 
 foreach ($formItems as $key => $item) {
+
 	// Get Items In Requisition By Name
 	$items = $requisitionRepo->getRequisitionItems($requisitionId, $item['key']);
 
@@ -32,13 +33,13 @@ foreach ($formItems as $key => $item) {
 
 		for ($i=0; $i < $itemCount && $i < $itemCountFromRequisition; $i++) { 
 				
-				$dateTime = date_create()->format('Y-m-d H:i:s');
-				$stocksRepo->update(['datetime_updated' => $dateTime, 'isRequest' => 'FALSE'], ['id' => $itemIds[$i]]);
-				$requisitionService->updateItemRequisitionStatus($itemIds[$i], $requisitionId, Constant::STOCK_APPROVED);
+			$dateTime = date_create()->format('Y-m-d H:i:s');
+			$stocksRepo->update(['datetime_updated' => $dateTime, 'isRequest' => 'FALSE'], ['id' => $itemIds[$i]]);
+			$requisitionService->updateItemRequisitionStatus($itemIds[$i], $requisitionId, Constant::STOCK_APPROVED);
 		}
 
 		// Search Item in Name
-		$searchItems = $stocksRepo->getStockByStockName(false, $item['key'], []);
+		$searchItems = $stocksRepo->getAllStockByName($item['key']);
 
 		$searchItemsCount = ($searchItems) ? $searchItems->num_rows : 0;
 		$searchedItem = ($searchItems) ? $searchItems->fetch_all() : null;
@@ -49,16 +50,15 @@ foreach ($formItems as $key => $item) {
 			if (!$requisitionRepo->checkItemExist($requisitionId, $id)) {
 				$forApprovalItemIds[] = $id;
 			}
-		}	
-
-		if ($forApprovalItemIds) {
-			$stockRequisitionService->saveStockRequisition([
-				'items' => $forApprovalItemIds,
-				'requisition_id' => $requisitionId
-			]);	
 		}
 
 		foreach ($forApprovalItemIds as $key => $itemId) {
+			$stockRequisitionService->saveStockRequisition([
+				'item' 			 => $itemId,
+				'requisition_id' => $requisitionId,
+				'status' 		 => Constant::STOCK_APPROVED
+			]);	
+			
 			$requisitionService->updateItemRequisitionStatus($itemId, $requisitionId, Constant::STOCK_APPROVED);
 		}
 	}
@@ -67,10 +67,13 @@ foreach ($formItems as $key => $item) {
 $notificationService = new NotificationService();
 
 $notificationService->saveNotification([
-	          'sender_id'    => Login::getUserLoggedInId(),
-	          'recepient_id' => $requisition['requester_id'],
-	          'msg'          => Constant::NOTIFICATION_ITEM_VERIFIED_BY_PRESIDENT
-	        ]); 
+  'sender_id'    => Login::getUserLoggedInId(),
+  'recepient_id' => $requisition['requester_id'],
+  'msg'          => Constant::NOTIFICATION_ITEM_VERIFIED_BY_PRESIDENT
+]); 
+
+// Update Requisition Status
+$requisitionService->updateRequisitionStatus($requisitionId);
 
 // Update Requisition Status
 $requisitionService->saveRequisitionStatus(
@@ -78,13 +81,3 @@ $requisitionService->saveRequisitionStatus(
 	$requisitionId,
 	Constant::APPROVED_BY_PRESIDENT
 );
-
-sleep(1);
-
-// Update Requisition Status
-$requisitionService->saveRequisitionStatus(
-	Login::getUserLoggedInId(),
-	$requisitionId,
-	Constant::ITEM_VERIFIED_BY_PRESIDENT
-);
-

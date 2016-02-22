@@ -14,6 +14,9 @@ class UserService
 		$this->connection = DbConnection::connect()->getConnection();
 	}
 
+	public function saveUserDepartment($userId, $departmentId) { }
+	public function deleteUserDepartment($userId, $departmentId) { }
+	
 	/**
 	 * Save User
 	 * 

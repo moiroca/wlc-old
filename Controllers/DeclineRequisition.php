@@ -54,6 +54,7 @@ if ($requisitionId) {
 	$requisitionService = new RequisitionService();
 
 	if ($status && $requisitionId) {
+		$requisitionService->updateRequisitionStatus($requisitionId);
 		$requisitionService->saveRequisitionStatus(Login::getUserLoggedInId(), $requisitionId, $status);
 	}
 

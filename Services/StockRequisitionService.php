@@ -14,34 +14,18 @@ class StockRequisitionService
 	 */
 	public function saveStockRequisition($data, $isJobRequisition = false)
 	{	
-		if ($isJobRequisition) {
-			foreach ($data['items'] as $index => $item) {
-				$query = "INSERT 
-							INTO 
-								stock_requisitions(
-									requisition_id,
-									stock_id,
-									changeTo) 
-							VALUES (
-								".$data['requisition_id'].",
-								".$item.",
-								'".$data['statuses'][$index]."')";
-				
-				$this->connection->query($query);
-			}
-		} else {
-			foreach ($data['items'] as $item) {
-				$query = "INSERT 
-						INTO 
-							stock_requisitions(
-								requisition_id,
-								stock_id) 
-						VALUES (
-							".$data['requisition_id'].",
-							".$item.")";
+		$query = "
+				INSERT 
+				INTO 
+					stock_requisitions(
+						requisition_id,
+						stock_id,
+						status) 
+				VALUES (
+					".$data['requisition_id'].",
+					".$data['item'].",
+					'".$data['status']."')";
 
-				$this->connection->query($query);
-			}
-		}
+		$this->connection->query($query);
 	}
 }

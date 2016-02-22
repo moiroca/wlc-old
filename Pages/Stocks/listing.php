@@ -37,14 +37,14 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
 
             $result = $stocks->getStocks([
                           [
-                            'field' => '`stocks`.`status`',
-                            'value' => Constant::STOCK_DELETED,
-                            'isEqual' => false,
-                            'andOrWhere' => '',
-                          ],
-                          [
                             'field' => '`stocks`.`name`',
                             'value' => $_GET['name'],
+                            'isEqual' => true,
+                            'andOrWhere' => 'AND',
+                          ],
+                          [
+                            'field' => '`stocks`.`isRequest`',
+                            'value' => 'FALSE',
                             'isEqual' => true,
                             'andOrWhere' => 'AND',
                           ],
@@ -54,12 +54,6 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                             'isEqual' => true,
                             'andOrWhere' => 'AND',
                           ],
-                          [
-                            'field' => '`stocks`.`isRequest`',
-                            'value' => 'FALSE',
-                            'isEqual' => true,
-                            'andOrWhere' => 'AND'
-                          ]
                       ]);
         ?>
 
@@ -82,6 +76,7 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
                 <th> #</th>
                 <th> Control Number </th>
                 <th> Name</th>
+                <th> Location </th>
                 <th> Item Status</th>
                 <?php if (Login::getUserLoggedInType() == Constant::USER_INVENTORY_OFFICER): ?>
                   <th> Action </th>  
@@ -91,21 +86,42 @@ if (!Login::isLoggedIn()) { Login::redirectToLogin(); }
           </thead>
           <tbody>
             <?php if ($result && 0 != $result->num_rows) { ?>
+                <?php $stockRepo = new Stocks(); ?>
                 <?php $number = 1; ?>
                 <?php  while ($item = $result->fetch_assoc()) { ?>
                   <tr>
                     <td> <?php echo $number; ?></td>
-                    <td> <?php echo $item['stock_control_number']; ?></td>
-                    <td> <?php echo $item['stock_name']; ?></td>
-                    <td> <?php echo $item['stock_status']; ?></td>
+                    <td> <?php echo $item['control_number']; ?></td>
+                    <td> <?php echo $item['name']; ?></td>
+                    <td> 
+                       <?php $stockLocations = $stockRepo->getStockLocations($item['id']); ?>
+                        <ul>
+                            <?php while ($stockLocation = $stockLocations->fetch_assoc()): ?>
+                                <li>
+                                  <label class="label label-info"><?php echo $stockLocation['area_name']; ?></label>
+                                  <?php if (!$stockLocation['area_items_deleted_at']): ?>
+                                    <label class="label label-success">Current Location</label>
+                                  <?php endif ?>
+                                </li>
+                            <?php endwhile ?>
+                        </ul>
+                    </td>
+                    <td>  
+                          <?php $stockStatuses = $stockRepo->getStockStatus($item['id']); ?>
+                          <ul>
+                              <?php while ($stockStatus = $stockStatuses->fetch_assoc()): ?>
+                                  <li>
+                                    <label class="label label-info"><?php echo $stockStatus['status']; ?></label>
+                                    <?php if (!$stockStatus['deleted_at']): ?>
+                                      <label class="label label-success">Current Status</label>
+                                    <?php endif ?>
+                                  </li>
+                              <?php endwhile ?>
+                          </ul>
+                    </td>
                     <?php if (Login::getUserLoggedInType() == Constant::USER_INVENTORY_OFFICER): ?>
                       <td> 
-                        <a href="#" class='btn btn-sm btn-default'>
-                          <i class='fa fa-edit'></i> Edit
-                        </a> 
-                        <a href="#" class='btn btn-xs btn-warning'>
-                          <i class='fa fa-minus'></i> Delete
-                        </a>
+                        <a href="#" class='btn btn-sm btn-default'> <i class='fa fa-edit'></i> Edit </a>
                       </td>
                     <?php endif ?>
                   </tr>  

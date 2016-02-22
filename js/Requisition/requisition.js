@@ -18,6 +18,21 @@ $(document).ready(function() {
 		var item = $(this).closest('tr');
 		$(this).closest('tr').remove();
 	}
+	
+	/**
+	 * Append Item For Replace
+	 */
+	var addItemForReplace = function(event) {
+		var item = $(this).closest('tr'),
+			listItem = $('#tempItemsForApproval'),
+			itemAttachedGroup = $('#attached_item_group'),
+			itemForReplaceId = itemAttachedGroup.attr('data-item_id');
+			
+		itemForReplace = listItem.find('tr[data-id='+itemForReplaceId+']');
+		itemForReplace.find('span.item-for-replace').attr('data-item_id', $(item).attr('data-id')).text($(item).attr('data-control_number'));
+		itemForReplace.find('input.replacement-item-id').val($(item).attr('data-id'));
+		itemAttachedGroup.fadeOut();
+	}
 
 	/**
 	 * Add Item To List
@@ -93,7 +108,7 @@ $(document).ready(function() {
 
 		if (86 == e.keyCode || 13 == e.keyCode) { }
 	});
-
+	
 	$('#search_control_number').on('click', function() {
 
 		var itemControlNumber = $('#item_control_number'),
@@ -102,11 +117,11 @@ $(document).ready(function() {
 			itemIds = '';
 
 		//--. Comment Out For Testing .--//
-		// if (itemControlNumber.val().length != 16) {
-		// 	$('#attached_item_group').find('p.help-block').show();
-		// 	$('#attached_item_group').find('p.help-block').text('Item Control Number Not Valid.');
-		// 	return false;
-		// }
+		if (itemControlNumber.val().length != 10) {
+			$('#attached_item_group').find('p.help-block').show();
+			$('#attached_item_group').find('p.help-block').text('Item Control Number Not Valid.');
+			return false;
+		}
 
 
 		$.each(itemsList, function(index, itemInList) {
@@ -121,7 +136,6 @@ $(document).ready(function() {
 		});
 		
 		//--. Temporarily Remove For Debugging .--//
-		/*
 		$.each(itemsList, function(index, itemInList) {
 			if (itemControlNumber.val() == $(itemInList).attr('data-control_number')) {
 				isExistInItemsList = true;
@@ -134,7 +148,6 @@ $(document).ready(function() {
 			$('#attached_item_group').find('p.help-block').text('Item Already Exist.');
 			return false;
 		}
-		*/
 
 		if (0 === itemControlNumber.val().length) {
 			$('#attached_item_group').find('p.help-block').show();
@@ -160,7 +173,7 @@ $(document).ready(function() {
 
 					$('#loader').hide();
 
-					if (!data.isEmpty) {
+					if (data.isEmpty) {
 						$('#attached_item_group').find('p.help-block').show();
 						$('#attached_item_group').find('p.help-block').text('Item Not Found.');
 					} else {
@@ -202,7 +215,7 @@ $(document).ready(function() {
 				}
 			});
 	});
-	
+
 	/**
 	 * Approve Item Requisition
 	 */
@@ -541,25 +554,36 @@ $(document).ready(function() {
 			itemType 		= $('#type').val(),
 			areaId			= $('.area_id'),
 			requisitionItems = $('.requisitionItems'),
-			error 			= false;
+			error 			= false,
+			formValidation  = $('#form-validation');
+
+		
+		formValidation.fadeOut();
 
 		if (requisitionType == 'Job') {
 			purpose = $('#purpose').val();
 
-			error = (areaId.length == 0);
-
+			error = (purpose.length == 0);
 			if (!error) {
-				error = (areaId.val().length == 0);
+				
+				error = ($('.area_id').is(':visible'));
 
-				if (!error) {
+				if (error) {
+
 					error = (requisitionItems.find('tr:not(.itemForm)').length == 0);
 
-					console.log(error);
-					if (!error) {
-
-						error = (purpose.length == 0 );
-					};
+					if (error) {
+						formValidation.show();
+						formValidation.find('b').text(' Job Requisition Item Required.');
+					}
+				} else {
+					formValidation.show();
+					formValidation.find('b').text(' Job Requisition Area Required.');
 				}
+
+			} else {
+				formValidation.show();
+				formValidation.find('b').text(' Job Requisition Purpose Required.');
 			}
 
 		} else if(requisitionType == 'Item') {
@@ -657,6 +681,7 @@ $(document).ready(function() {
 
 		var key = ApproveItemsUtility.getKey(this);
 
+		console.log();
 		// Subtract item for approval temp
 		if (!ApproveItemsUtility.itemCountIsZero(key)) {
 
@@ -970,4 +995,113 @@ $(document).ready(function() {
 			return (ApproveItemsUtility.getTotalItemCount(key) == ApproveItemsUtility.getItemCount(key));
 		},
 	};
+
+	$('#search_control_number_for_replace').on('click', function() {
+
+		var itemControlNumber = $('#item_control_number'),
+			itemsList = $('#item_list').find('tr'),
+			isExistInItemsList = false;
+			itemIds = '';
+
+		//--. Comment Out For Testing .--//
+		if (itemControlNumber.val().length != 10) {
+			$('#attached_item_group').find('p.help-block').show();
+			$('#attached_item_group').find('p.help-block').text('Item Control Number Not Valid.');
+			return false;
+		}
+
+		$.each(itemsList, function(index, itemInList) {
+			console.log(index);
+			var id = $(itemInList).attr('data-id')
+
+			if (index == 0) {
+				itemIds += id;
+			} else if (index > 0) {
+				itemIds += '&'+ id;
+			}
+		});
+		
+		//--. Temporarily Remove For Debugging .--//
+		$.each(itemsList, function(index, itemInList) {
+			if (itemControlNumber.val() == $(itemInList).attr('data-control_number')) {
+				isExistInItemsList = true;
+				return false;
+			}
+		})
+
+		if (isExistInItemsList) {
+			$('#attached_item_group').find('p.help-block').show();
+			$('#attached_item_group').find('p.help-block').text('Item Already Exist.');
+			return false;
+		}
+
+		if (0 === itemControlNumber.val().length) {
+			$('#attached_item_group').find('p.help-block').show();
+			$('#attached_item_group').find('p.help-block').addClass('warning').text('Please Enter Item Name.');
+			return false;
+		} else {
+			$('#attached_item_group').find('p.help-block').text('Item Name Required').hide();
+		}
+
+
+		Requisition.search(
+			{
+				itemIds : itemIds,
+				itemControlNumber : itemControlNumber.val()
+			}, 
+			{	
+				beforeSend: function() {
+					$('#loader').show();					
+					$('#empty').hide();
+					$('#result').empty();
+				},
+				success: function(data) {
+
+					$('#loader').hide();
+
+					if (data.isEmpty) {
+						$('#attached_item_group').find('p.help-block').show();
+						$('#attached_item_group').find('p.help-block').text('Item Not Found.');
+					} else {
+						$('#item_table').show();
+						
+						if ('object' == typeof data && null != data) {
+							
+							var td = $('<td />'),
+								tr = $('#result');
+
+							tr.attr('data-id', data.stock_id);
+							tr.attr('data-control_number', data.stock_control_number);
+
+							tr.prepend('<td><button type="button" data-stock_id="'+data.stock_id+'" class="add_item_for_replace btn btn-sm btn-primary"><i class="fa fa-plus"></i> Use Item For Replace </button></td>');
+							tr.prepend('<td>'+data.stock_type+'</td>');
+							tr.prepend('<td>'+data.stock_status+'</td>');
+							tr.prepend('<td>'+data.area_name+'</td>');
+							tr.prepend('<td>'+data.stock_name+'</td>');
+							tr.prepend('<td>'+data.stock_control_number+'</td>');
+
+							$('#result').prepend(tr);
+
+							$('.add_item_for_replace').bind('click', addItemForReplace);
+
+						} else {  
+							$('#empty').show().fadeOut(1600);
+						}
+					}
+
+					itemControlNumber.val('');
+				}
+			});
+	});
+
+	// Show Search Form
+	$('.replace-item-btn').on('click', function() {
+		var item = $(this).closest('tr'),
+			searchForm = $('#attached_item_group');
+
+		searchForm.attr('data-item_id', $(item).attr('data-id'));
+		searchForm.fadeIn();
+
+		console.log($(item).attr('data-id'));
+	});
 });

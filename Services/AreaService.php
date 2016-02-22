@@ -45,8 +45,32 @@ class AreaService
 
 		return $departmentAreaService->save([
 				'department_id' => $departmentId,
-				'area_id'	=> $areaId
+				'area_id'		=> $areaId,
+				'created_at' 	=> date_create()->format('Y-m-d H:i:s')
 			]);
+	}
+
+	/**
+	 * Delete Item in Area
+	 *
+	 * @param Int $areaId
+	 */
+	public function deleteItemInArea($areaId, $itemId)
+	{
+		$sql = "
+			UPDATE
+				`area_items`
+			SET
+				`deleted_at` = '".date_create()->format('Y-m-d H:i:s')."'
+			WHERE
+				`area_id` = $areaId
+			AND
+				`item_id` = $itemId
+			AND
+				`deleted_at` IS NULL
+		";
+
+		return $this->connection->query($sql);
 	}
 	/**
 	 * Delete Area

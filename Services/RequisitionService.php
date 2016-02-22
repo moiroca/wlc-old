@@ -27,22 +27,23 @@ class RequisitionService
 		$requester_id   = Login::getUserLoggedInId();
 		$resultQuery = false;
 
-		$query = "INSERT 
-					INTO 
-						requisitions(
-							requester_id,
-							purpose,  
-							type, 
-							datetime_added,
-							control_identifier,
-							area_id) 
-					VALUES (
-						".$this->connection->real_escape_string($requester_id).",
-						'".$this->connection->real_escape_string($data['purpose'])."', 
-						'".$this->connection->real_escape_string($data['type'])."',
-						'".$datetime_added."',
-						'".time()."',
-						".$this->connection->real_escape_string($data['area_id']).")";
+		$query = "
+			INSERT 
+				INTO 
+					requisitions(
+						requester_id,
+						purpose,  
+						type, 
+						datetime_added,
+						control_identifier,
+						area_id) 
+			VALUES (
+				".$this->connection->real_escape_string($requester_id).",
+				'".$this->connection->real_escape_string($data['purpose'])."', 
+				'".$this->connection->real_escape_string($data['type'])."',
+				'".$datetime_added."',
+				'".time()."',
+				".$this->connection->real_escape_string($data['area_id']).")";
 
 		$insertRequistionQUery = $this->connection->query($query) or die(mysqli_error($this->connection));
 
@@ -72,6 +73,8 @@ class RequisitionService
 			$status = Constant::NOTED_BY_DEPARTMENT_HEAD;
 		}
 
+		$this->updateRequisitionStatus($data['requisition_id']);
+		
 		$this->saveRequisitionStatus(
 			$data['approved_by'],
 			$data['requisition_id'],
@@ -91,6 +94,9 @@ class RequisitionService
 		} elseif ($data['approver_type'] == Constant::USER_PROPERTY_CUSTODIAN) {
 			$status = Constant::RELEASED_BY_PROPERTY_CUSTODIAN;
 		}
+		
+		// Update Requisition Status Then Save
+		$this->updateRequisitionStatus($data['requisition_id']);
 
 		if ($status) {
 			$this->saveRequisitionStatus(
@@ -112,13 +118,47 @@ class RequisitionService
 		foreach ($data['itemIds'] as $item) {
 			$decodedItem = json_decode($item);
 			$this->updateItemRequisitionStatus((int)$decodedItem->id, $data['requisition_id'], ($decodedItem->isChecked) ? Constant::STOCK_RECEIVED : Constant::STOCK_APPROVED);
+			
+			$requisitionRepo = new Requisitions();
+			$stockService = new StockService();
+
+			$requisition = $requisitionRepo->getRequisitionById((int)$data['requisition_id'])->fetch_assoc();
+
+			// Update Item Location
+			$stockService->updateStockLocation((int)$decodedItem->id, (int)$requisition['area_id']);
+				
+			// Save New Item Location
+			$stockService->saveStockLocation((int)$decodedItem->id, (int)$requisition['area_id'], Login::getUserLoggedInId());
 		}
 
+		// Update Requisition Status
+		$this->updateRequisitionStatus((int)$data['requisition_id']);
+
+		// Save Requistion Status
 		$this->saveRequisitionStatus(
 			$data['approved_by'],
 			$data['requisition_id'],
 			Constant::RECEIVED_BY_REQUESTER
 		);
+	}
+
+	/** 
+	 * Update Requisition Status
+	 */
+	public function updateRequisitionStatus($requisitionId)
+	{
+		$sql = "
+			UPDATE
+				`requisition_status`
+			SET
+				`requisition_status`.`datetime_deleted` = '".date_create()->format('Y-m-d H:i:s')."'
+			WHERE
+				`requisition_status`.`datetime_deleted` IS NULL
+			AND
+				`requisition_status`.`requisition_id` = $requisitionId
+		";
+
+		return $this->connection->query($sql);
 	}
 
 	/**

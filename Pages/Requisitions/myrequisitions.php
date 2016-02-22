@@ -38,12 +38,7 @@ $userRequisition = $requisitions->getRequisitionByUserType(null, null, Login::ge
                     <thead>
                         <tr id='th'>
                             <th> Control Identifier </th>
-                            <th> Requester Name </th>
                             <th> Requisition Type </th>
-                            <!-- <th> Department Head Details</th> -->
-                            <th> <?php echo Constant::USER_PROPERTY_CUSTODIAN.'/ '.Constant::USER_GSD_OFFICER; ?></th>
-                            <!-- <th> Approved By Comptroller </th> -->
-                            <th> Approved By President </th>
                             <th> Status </th>
                             <th> Action </th>
                         </tr>
@@ -56,88 +51,40 @@ $userRequisition = $requisitions->getRequisitionByUserType(null, null, Login::ge
                                 $stocksRepo = new Stocks();
                                 $itemsInRequisition = $stocksRepo->getStockByRequisitionId($item['requisition_id']);
                                 
+                                $requisitionCurrentStatus = $requisitions->getCurrentRequisitionStatus($item['requisition_id']);
                                 $firstItem = '';
 
                                 if ($itemsInRequisition) {
                                   $firstItem = $itemsInRequisition->fetch_assoc();
                                 }
 
-                                //--. Get Requisition Current Status .--//
-                                $requisitionCurrentStatus = $requisitions->getCurrentRequisitionStatus($item['requisition_id']);
                             ?>
                             <tr data-id="<?php echo $item['requisition_id']; ?>" data-type='<?php echo Constant::REQUISITION_ITEM; ?>'>
                               <td> 
-                                  <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
+                                  <a title="View Details Of Requisition" href="<?php echo Link::createUrl('Pages/Requisitions/requisition.php?control_identifier='.$item['requisition_control_identifier'].'&requisition='.$item['requisition_type']); ?>"><?php echo $item['requisition_control_identifier']; ?></a>
                               </td>
-                              <td> <?php echo RequesterUtility::getFullName($item); ?></td>
                               <td> <?php echo $item['requisition_type']; ?></td>
-                              <!-- <td>
-                                  <?php
-                                      $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::NOTED_BY_DEPARTMENT_HEAD, Constant::DECLINED_BY_DEPARTMENT_HEAD], true);
-                                  ?>
-                                  <?php if ($actor) { ?>
-                                        <?php echo RequesterUtility::getFullName($actor);  ?>
-                                  <?php } else { ?>
-                                      <label class='label label-info'>Not Available</label>
-                                  <?php } ?>
-                              </td> -->
-                              <td>
-
-                                  <?php if ($firstItem && $firstItem['stock_type'] == Constant::ITEM_MATERIAL_EQUIPMENT): ?>
-                                        <?php 
-                                              $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::VERIFIED_BY_GSD_OFFICER, Constant::DECLINED_BY_GSD_OFFICER], true);
-                                        ?> 
-                                        <?php if ($actor) { ?>
-                                              <b>GSD OFFICER: </b><?php echo RequesterUtility::getFullName($actor);  ?>
-                                        <?php } else { ?>
-                                            <label class='label label-info'>Not Available</label>
-                                        <?php } ?>
-                                  <?php else: ?>
-                                        <?php 
-                                              $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::VERIFIED_BY_PROPERTY_CUSTODIAN, Constant::DECLINED_BY_PROPERTY_CUSTODIAN], true);
-                                        ?> 
-                                        <?php if ($actor) { ?>
-                                              <b>PROPERTY CUSTODIAN: </b><?php echo RequesterUtility::getFullName($actor);  ?>
-                                        <?php } else { ?>
-                                            <label class='label label-info'>Not Available</label>
-                                        <?php } ?>
-                                  <?php endif ?>
-                              </td>
-                              <!-- <td>
-                                  <?php 
-                                        $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::APPROVED_BY_COMPTROLLER, Constant::DECLINED_BY_COMPTROLLER], true);
-                                  ?>
-                                  <?php if ($actor) { ?>
-                                      <?php echo RequesterUtility::getFullName($actor); ?>
-                                  <?php } else { ?>
-                                      <label class='label label-info'>Not Available</label>
-                                  <?php } ?>
-                              </td> -->
-                              <td>
-                                  <?php 
-                                        $actor = $requisitions->getRequisitionActorByStatus($item['requisition_id'], [Constant::APPROVED_BY_PRESIDENT, Constant::DECLINED_BY_PRESIDENT], true);
-                                  ?>
-                                  <?php if ($actor) { ?>
-                                      <?php echo RequesterUtility::getFullName($actor); ?>
-                                  <?php } else { ?>
-                                      <label class='label label-info'>Not Available</label>
-                                  <?php } ?>
-                              </td>
                               <td>
                                   <?php echo RequisitionDecorator::status($requisitionCurrentStatus) ;?>
                               </td>
 
                               <td>
                                   <?php if ($item['requisition_type'] == Constant::REQUISITION_ITEM): ?>
-                                    <?php if ($requisitionCurrentStatus == Constant::RELEASED_BY_GSD_OFFICER || $requisitionCurrentStatus == Constant::RELEASED_BY_PROPERTY_CUSTODIAN): ?>
-                                        <button class='btn btn-default btn-lg approve_item_requisition'>Receive</button>
-                                    <?php elseif($requisitionCurrentStatus == Constant::RECEIVED_BY_REQUESTER) : ?>
-                                        <label class='label label-info'>Received By Requester</label>
-                                    <?php else: ?>
-                                        <label class='label label-info'>Receive Not Yet Available</label>
-                                    <?php endif ?>
+                                      <?php if ($requisitionCurrentStatus == Constant::RELEASED_BY_GSD_OFFICER || $requisitionCurrentStatus == Constant::RELEASED_BY_PROPERTY_CUSTODIAN): ?>
+                                          <button class='btn btn-default btn-lg approve_item_requisition'>Receive</button>
+                                      <?php elseif($requisitionCurrentStatus == Constant::RECEIVED_BY_REQUESTER) : ?>
+                                          <label class='label label-info'>Received By Requester</label>
+                                      <?php else: ?>
+                                          <label class='label label-info'>Receive Not Yet Available</label>
+                                      <?php endif ?>
                                   <?php else: ?>
-                                      <label class='label label-info'>Action is for Item Requisition Only</label>
+                                      <?php if ($requisitionCurrentStatus == Constant::RELEASED_BY_GSD_OFFICER || $requisitionCurrentStatus == Constant::RELEASED_BY_PROPERTY_CUSTODIAN): ?>
+                                          <button class='btn btn-default btn-lg approve_item_requisition'>Receive</button>
+                                      <?php elseif($requisitionCurrentStatus == Constant::RECEIVED_BY_REQUESTER) : ?>
+                                          <label class='label label-info'>Received By Requester</label>
+                                      <?php else: ?>
+                                          <label class='label label-info'>Receive Not Yet Available</label>
+                                    <?php endif ?>
                                   <?php endif ?>
                               </td>  
                               
