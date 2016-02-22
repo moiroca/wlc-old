@@ -31,15 +31,15 @@
 		$status = false;
 	}
 
-	$itemsInRequisition = ($requisition['requisition_type'] == Constant::REQUISITION_JOB) ? 
-							$stocksRepo->getAllStockByRequisitionIdTypeJOB($requisition['requisition_id']) :
-							$stocksRepo->getApprovedItemInRequisition($requisition['requisition_id'], $status); 				
-
-	$firstItem = ($itemsInRequisition) ? $itemsInRequisition->fetch_assoc() : null; 
-
-	$itemsInRequisition = ($requisition['requisition_type'] == Constant::REQUISITION_JOB) ? 
-							$stocksRepo->getAllStockByRequisitionIdTypeJOB($requisition['requisition_id']) :
-							$stocksRepo->getApprovedItemInRequisition($requisition['requisition_id'], $status);
+	if ($requisition['requisition_type'] == Constant::REQUISITION_JOB) {
+		$itemsInRequisition = $stocksRepo->getAllStockByRequisitionIdTypeJOB($requisition['requisition_id']);
+		$firstItem = ($itemsInRequisition) ? $itemsInRequisition->fetch_assoc() : null; 
+		$itemsInRequisition = $stocksRepo->getAllStockByRequisitionIdTypeJOB($requisition['requisition_id']);
+	} else {
+		$itemsInRequisition = $stocksRepo->getAllStockByRequisitionIdTypeITEM($requisition['requisition_id']);
+		$firstItem = ($itemsInRequisition) ? $itemsInRequisition->fetch_assoc() : null; 
+		$itemsInRequisition = $stocksRepo->getAllStockByRequisitionIdTypeITEM($requisition['requisition_id']);
+	}
 ?>
 <!DOCTYPE html>
 <head>
@@ -167,13 +167,21 @@
                                     <td><?php echo $item['stock_price'] ?></td>
                                     <?php $total += $item['stock_price']; ?>
                                     <td><?php echo $item['stock_type'] ?></td>
-                                    <td><?php echo $item['area_name']; ?></td>
+                                    <td>
+                                    	<?php 
+                                    		$stockRepo = new Stocks();
+
+                                    		$area = $stockRepo->getStockCurrentLocation($item['stock_id'])->fetch_assoc();
+
+                                    		echo $area['area_name'];
+                                    	?>
+                                    </td>
                                     <td><?php echo $item['stock_status']; ?></td>
                                     <td class='status'>
-                                        <?php if ($item['stock_requisition_status'] == Constant::STOCK_APPROVED): ?>
-                                            <label class="label label-info"><?php echo $item['stock_requisition_status']; ?></label>    
-                                        <?php elseif($item['stock_requisition_status'] == Constant::STOCK_RECEIVED): ?>
-                                            <label class="label label-success"><?php echo $item['stock_requisition_status']; ?></label>    
+                                        <?php if ($item['stock_status'] == Constant::STOCK_APPROVED): ?>
+                                            <label class="label label-info"><?php echo $item['stock_status']; ?></label>    
+                                        <?php elseif($item['stock_status'] == Constant::STOCK_RECEIVED): ?>
+                                            <label class="label label-success"><?php echo $item['stock_status']; ?></label>    
                                         <?php else: ?>
                                         	<label class="label label-info">Item not yet received or approved</label>    
                                         <?php endif ?>
@@ -366,7 +374,10 @@
 				<div class="col-lg-2"></div>
 				<div class="col-lg-4">
 					<?php if ($requisition['requisition_type'] == Constant::REQUISITION_JOB): ?>
-						
+						<?php 
+							$treasurer = $userObj->getAll(['firstname as user_firstname', 'lastname as user_lastname'], ['type' => Constant::USER_TREASURER]);
+							$treasurer = ($treasurer) ? $treasurer->fetch_assoc() : $treasurer;
+						?>
 						<p class='local-signee'><i>
 							<?php if ($treasurer): ?>
 								<?php echo RequesterUtility::getFullName($treasurer);?>
