@@ -362,7 +362,7 @@
                                         <a href="<?php echo Link::createUrl('Pages/Reports/requisition.php'); ?>"> Requisition</a>
                                     </li>
                                     <li>
-                                        <a href="#"> Stocks</a>
+                                        <a href="<?php echo Link::createUrl('Pages/Reports/stocks.php'); ?>"> Stocks</a>
                                     </li>
                                 </ul>
                             </li>

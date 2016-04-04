@@ -9,6 +9,75 @@ Class Stocks extends Base
 		parent::__construct();
 	}
 
+  /**
+   * Get All Stocks By Type
+   * @param Array $filters
+   */
+  public function getAllStockForReport($filters = [])
+  {
+    $sql = "
+              SELECT 
+                *
+              FROM 
+                stocks
+              JOIN
+                `stocks_status`
+              ON
+                `stocks_status`.`stock_id` = `stocks`.`id`
+              WHERE
+                `stocks`.`id` IS NOT NULL";
+
+    if ($filters) {
+        if (isset($filters['name'])) {
+            $sql .= "
+              AND `stocks`.`name` like '%".$filters['name']."%'
+            ";
+        }
+
+        if (isset($filters['status'])) {
+
+            $sql .= "
+              AND `stocks_status`.`status` like '%".$filters['status']."%'
+            ";
+        }
+
+        if (isset($filters['type'])) {
+
+            $sql .= "
+              AND `stocks`.`type` like '%".$filters['type']."%'
+            ";
+        }
+
+
+        if (isset($filters['start_date']) && isset($filters['end_date'])) {
+            $startDatetime = date_create($filters['start_date'])->format('Y-m-d H:i:s');
+            $endDatetime = date_create($filters['end_date'])->format('Y-m-d H:i:s');
+
+            $sql .= "
+                AND
+                  `$this->table`.`datetime_added` between '".$startDatetime."' and '".$endDatetime."'
+            ";
+        } else if (isset($filters['start_date']) && !isset($filters['end_date'])) {
+            $startDatetime = date_create($filters['start_date'])->format('Y-m-d H:i:s');
+
+            $sql .= "
+                AND
+                  `$this->table`.`datetime_added` > '".$startDatetime."'
+            ";
+        } else if (!isset($filters['start_date']) && isset($filters['end_date'])) {
+            $endDatetime = date_create($filters['end_date'])->format('Y-m-d H:i:s');
+            $sql .= "
+                AND
+                  `$this->table`.`datetime_added` < '".$endDatetime."'
+            ";
+        }
+    }
+
+    $result = $this->raw($sql);
+
+    return $result;
+  }
+
   public function getStockById($id) { }
   public function getCurrentItemType($id) { }
   public function getStockByStatus($status) { }

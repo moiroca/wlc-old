@@ -25,8 +25,6 @@ if (isset($_GET['start_date']) && !empty($_GET['start_date'])) {
   try {
     $mockDate = date_create($_GET['start_date']);
 
-    // var_dump($mockDate);
-    // die();
     if (!$mockDate) {
       throw new Exception('Invalid Start Date Format');
     }

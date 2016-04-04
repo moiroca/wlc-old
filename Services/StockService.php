@@ -68,9 +68,8 @@ class StockService
 	 */
 	public function saveStock($data)
 	{
-		$datetime_added = new Datetime();
-		$datetime_added = $datetime_added->format('Y-m-d H:i:s');
-		$isRequired = ($data['isRequest']) ? 'TRUE' : 'FALSE';
+		$datetime_added = date_create()->format('Y-m-d H:i:s');
+		$isRequired = (isset($data['isRequest']) && $data['isRequest']) ? 'TRUE' : 'FALSE';
 
 		$query = "
 			INSERT 
