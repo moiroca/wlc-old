@@ -10,7 +10,7 @@ Class Constant {
 		// Database Credentials
 		DB_NAME = 'wlcinventory',
 		DB_HOST = 'localhost',
-		DB_USER = 'moiroca',
+		DB_USER = 'root',
 		DB_PASS = '',
 
 		// User Types
